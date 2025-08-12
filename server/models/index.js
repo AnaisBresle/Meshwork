@@ -1,19 +1,7 @@
 const User = require("./user");
-const Profile = require("./profile");
+const Post = require("./post");
 
-// Association
-User.hasOne(Profile, {
-  foreignKey: "userId", // FK in Profile table
-  as: "profile"         // optional alias
-});
+User.hasMany(Post, { foreignKey: "userId", onDelete: "CASCADE" });
+Post.belongsTo(User, { foreignKey: "userId" });
 
-Profile.belongsTo(User, {
-  foreignKey: "userId",
-  as: "user"
-});
-
-
-module.exports = {
-  User,
-  Profile
-};
+module.exports = { User, Post };
