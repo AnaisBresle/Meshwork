@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database"); // adjust the path to your Sequelize instance
+const sequelize = require("../config/database");
 
 const Profile = sequelize.define("Profile", {
   id: {
@@ -42,11 +42,13 @@ const Profile = sequelize.define("Profile", {
     allowNull: true,
     validate: { isUrl: true }
   },
+
+  ///////////////Will need to add something for kudos feature
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Users", // must match the name of your User table
+      model: "User", // must match the name of your User table
       key: "id"
     },
     onDelete: "CASCADE"
