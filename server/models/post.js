@@ -7,18 +7,32 @@ const Post = sequelize.define("Post", {
     autoIncrement: true,
     primaryKey: true
   },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: true
+  topicId: {
+    type: DataTypes.INTEGER, // or UUID if Topic uses UUID
+    allowNull: false,
+    references: {
+      model: 'Topics',  // your topics table name
+      key: 'id',
+    },
+    onDelete: 'SET NULL', // or CASCADE depending on your rules
   },
-  body: {
+
+  
+parentId: {
+  type: DataTypes.INTEGER,
+  allowNull: true,
+  references: {
+    model: 'Posts', // self-reference to the posts table - means comments are also part of this table. 
+    key: 'id'
+  },
+  onDelete: 'CASCADE' // choose 'SET NULL' or 'CASCADE' as per your needs
+},
+ 
+  content: {
     type: DataTypes.TEXT,
     allowNull: false
   },
-  isHelpRequest: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
+ 
 
   userId: {
     type: DataTypes.INTEGER,
