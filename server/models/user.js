@@ -41,6 +41,10 @@ User.init(
       allowNull: false,
       defaultValue: Sequelize.NOW,
     },
+
+    lastLogin: {
+    type: DataTypes.DATE,
+  },
   },
   {
     sequelize,
