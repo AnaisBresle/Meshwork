@@ -48,7 +48,7 @@ const Profile = sequelize.define("Profile", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: "Users", // must match the name of your User table
+      model: "User", // must match the name of your User table
       key: "id"
     },
     onDelete: "CASCADE"
