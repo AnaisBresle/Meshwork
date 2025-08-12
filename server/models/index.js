@@ -1,32 +1,19 @@
-// import all models
-const Course = require("./course");
-const Category = require("./category");
 const User = require("./user");
-const EnrolledUser = require("./enrolled_user");
+const Profile = require("./profile");
 
-Course.belongsTo(Category, {
-  foreignKey: "categoryId",
-  as: "category",
+// Association
+User.hasOne(Profile, {
+  foreignKey: "userId", // FK in Profile table
+  as: "profile"         // optional alias
 });
 
-Category.hasMany(Course, {
-  foreignKey: "categoryId",
-  as: "courses",
-});
-
-User.belongsToMany(Course, {
-  through: EnrolledUser,
+Profile.belongsTo(User, {
   foreignKey: "userId",
+  as: "user"
 });
 
-Course.belongsToMany(User, {
-  through: EnrolledUser,
-  foreignKey: "courseId",
-});
 
 module.exports = {
-  Course,
-  Category,
   User,
-  EnrolledUser,
+  Profile
 };
