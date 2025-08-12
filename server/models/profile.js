@@ -42,6 +42,8 @@ const Profile = sequelize.define("Profile", {
     allowNull: true,
     validate: { isUrl: true }
   },
+
+  ///////////////Will need to add something for kudos feature
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
