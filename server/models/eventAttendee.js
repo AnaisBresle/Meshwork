@@ -33,7 +33,9 @@ const EventAttendee = sequelize.define("EventAttendee", {
     defaultValue: 'registered',
   },
 
-}, {
+}, 
+
+{
   tableName: "attendees",
   timestamps: true // adds createdAt and updatedAt
 });
