@@ -41,6 +41,10 @@ router.get("/:id/comments", async (req, res) => {
 });
 
 
+/// Create a post
 
+/// Add Commnent
+
+/// Delete post (broad sense) - only owner can 
 
 module.exports = router;
