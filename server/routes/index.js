@@ -1,7 +1,12 @@
 const router = require("express").Router();
 
 const userRoutes = require("./user.js");
-const profileRoutes = require("./profile");
+const profileRoutes = require("./profile.js");
+const postRoutes = require("./posts.js");
+const topicRoutes = require("./topics.js");
+const interactionRoutes = require("./interactions.js");
+const eventRoutes = require("./events.js");
+const eventAttendeeRoutes = require("./eventAttendees.js");
 
 // create a default route for /api
 router.get("/api", (req, res) => {
@@ -9,6 +14,12 @@ router.get("/api", (req, res) => {
 });
 
 router.use("/api/users", userRoutes);
-router.use("/api/profile", userRoutes);
+router.use("/api/profile", profileRoutes); 
+router.use("/api/posts", postRoutes);
+router.use("/api/topics", topicRoutes);
+router.use("/api/interactions", interactionRoutes);
+router.use("/api/events", eventRoutes);
+router.use("/api/attendees", eventAttendeeRoutes);
+
 
 module.exports = router;
