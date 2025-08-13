@@ -1,49 +1,42 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database"); 
+const sequelize = require("../config/connection");
 
-const Interaction = sequelize.define("Interaction", {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true
-  },
-
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "User", 
-      key: "id",
+const Interaction = sequelize.define(
+  "Interaction",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    onDelete: "CASCADE",
-  },
-
-  postId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "Post", 
-      key: "id",
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "User", // matches User table
+        key: "id",
+      },
+      onDelete: "CASCADE",
     },
-    onDelete: "CASCADE",
-  },
-
-
-  ///////////////to revisit - unfinished
- interactionType: {
+    postId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "posts", // ✅ must match Post tableName exactly
+        key: "id",
+      },
+      onDelete: "CASCADE",
+    },
+    interactionType: {
       type: DataTypes.ENUM("thanks", "like"),
       allowNull: false,
     },
- 
-  
-}, {
-  tableName: "interactions",
-  timestamps: false, // does not add createdAt and updatedAt
-  indexes: [
-  {
-    unique: true,
-    fields: ["userId", "postId", "interactionType"], // unique combination - so user can ony have 1 interaction with 1 post. 
   },
-],
-});
+  {
+    tableName: "interactions",
+    timestamps: true,
+    freezeTableName: true, // ensures table name is exactly 'interactions'
+  }
+);
 
 module.exports = Interaction;

@@ -6,8 +6,9 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 
-const sequelize = require("./config/connection");
-const routes = require("./routes");
+const sequelize = require('./server/config/connection');
+const routes = require('./server/routes');
+
 
 // Initialize Express application
 const app = express();
