@@ -1,51 +1,48 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database"); 
+const sequelize = require("../config/connection");
 
-const Post = sequelize.define("Post", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  topicId: {
-    type: DataTypes.INTEGER, // or UUID if Topic uses UUID
-    allowNull: false,
-    references: {
-      model: 'Topics',  // your topics table name
-      key: 'id',
+const Post = sequelize.define(
+  "Post",
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    onDelete: 'SET NULL', // or CASCADE depending on your rules
-  },
-
-  
-parentId: {
+    topicId: {
   type: DataTypes.INTEGER,
-  allowNull: true,
-  references: {
-    model: 'Posts', // self-reference to the posts table - means comments are also part of this table. 
-    key: 'id'
-  },
-  onDelete: 'CASCADE' // choose 'SET NULL' or 'CASCADE' as per your needs
+  allowNull: true, // change from false to true
+  references: { model: 'topics', key: 'id' },
+  onDelete: 'SET NULL',
 },
- 
-  content: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
- 
-
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "Users", // must match the name of your User table
-      key: "id"
+    parentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "posts",  // self-reference to Post model
+        key: "id",
+      },
+      onDelete: "CASCADE",
     },
-    onDelete: "CASCADE"
-  }
-}, {
-  tableName: "posts",
-  timestamps: true // adds createdAt and updatedAt
-});
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "User",  // capitalized
+        key: "id",
+      },
+      onDelete: "CASCADE",
+    },
+  },
+  {
+    tableName: "posts",
+    timestamps: true,
+    freezeTableName: true,
+  },
+);
 
 module.exports = Post;

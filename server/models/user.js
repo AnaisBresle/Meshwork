@@ -1,6 +1,5 @@
 const { Model, Sequelize, DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
-
 const sequelize = require("../config/connection");
 
 class User extends Model {
@@ -41,19 +40,17 @@ User.init(
       allowNull: false,
       defaultValue: Sequelize.NOW,
     },
-
     lastLogin: {
-    type: DataTypes.DATE,
-  },
+      type: DataTypes.DATE,
+    },
   },
   {
     sequelize,
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: "user",
+    modelName: "User",  // **Capitalized to match other references**
   }
 );
 
-// Export User model
 module.exports = User;

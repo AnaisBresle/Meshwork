@@ -1,123 +1,103 @@
 const router = require("express").Router();
-const { User, EnrolledUser } = require("../models");
+const { User, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 
-// Get current authenticated user
-router.get("/me", authMiddleware, async (req, res) => {
+// SIGNUP
+
+router.post("/signup", async (req, res) => {
   try {
-    const user = await User.getOne(req.user.id);
-    if (!user) return res.status(401).json({ message: "Token expired" });
-    return res.status(200).json({ user });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+    const { first_name, last_name, email, password } = req.body;
 
-router.post("/enroll", authMiddleware, async (req, res) => {
-  try {
-    const { courseId } = req.body;
-    const user = await User.getOne(req.user.id);
-    if (!user) return res.status(401).json({ message: "Token expired" });
-
-    await EnrolledUser.create({
-      userId: req.user.id,
-      courseId,
-      enrollment_date: new Date(),
-    });
-
-    res.status(200).json({ message: "Course enrolled" });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// GET the User record
-router.get("/:id", authMiddleware, async (req, res) => {
-  console.log("looking for user", req.params.id);
-  try {
-    const userData = await User.getOne(req.params.id);
-
-    if (!userData) {
-      res.status(404).json({ message: "No User found with this id" });
-      return;
+    // Check if email already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
     }
 
-    res.status(200).json(userData);
+    // Create user
+    const newUser = await User.create({ first_name, last_name, email, password });
+
+    // Generate JWT token
+    const token = signToken(newUser);
+
+    res.status(201).json({ token, user: newUser });
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(400).json({ message: "Signup failed", error: err.message });
   }
 });
 
-router.get("/", authMiddleware, async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
 
-router.post("/", authMiddleware, async (req, res) => {
+// LOGIN
+
+router.post("/login", async (req, res) => {
   try {
-    const userData = await User.create(req.body);
+    const userData = await User.findOne({ where: { email: req.body.email } });
+    if (!userData) {
+      return res.status(400).json({ message: "Incorrect email or password" });
+    }
+
+    const validPassword = await userData.checkPassword(req.body.password);
+    if (!validPassword) {
+      return res.status(400).json({ message: "Incorrect email or password" });
+    }
 
     const token = signToken(userData);
     res.status(200).json({ token, user: userData });
   } catch (err) {
-    res.status(400).json(err);
+    console.error(err);
+    res.status(400).json({ message: "Login failed", error: err.message });
   }
 });
 
-// UDPATE the User record
-router.put("/:id", authMiddleware, async (req, res) => {
+
+// LOGOUT (JWT — client deletes token)
+
+router.post("/logout", authMiddleware, (req, res) => {
+  res.status(204).end();
+});
+
+
+// GET Current User
+
+router.get("/me", authMiddleware, async (req, res) => {
   try {
-    const userData = await User.update(req.body, {
-      where: {
-        id: req.params.id,
-      },
-      individualHooks: true
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ["password"] },
+      include: [{ model: Post }],
     });
-
-    if (!userData) {
-      res.status(404).json({ message: "No User found with this id" });
-      return;
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-
-    res.status(200).json(userData);
+    res.json(user);
   } catch (err) {
     console.error(err);
     res.status(500).json(err);
   }
 });
 
-router.post("/login", async (req, res) => {
+
+// CREATE a Post
+
+router.post("/posts", authMiddleware, async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
-    if (!userData) {
-      res
-        .status(400)
-        .json({ message: "Incorrect email or password, please try again" });
-      return;
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ message: "Title and content are required" });
     }
 
-    const validPassword = await userData.checkPassword(req.body.password);
+    const newPost = await Post.create({
+      title,
+      content,
+      userId: req.user.id, // from JWT
+    });
 
-    if (!validPassword) {
-      res
-        .status(400)
-        .json({ message: "Incorrect email or password, please try again" });
-      return;
-    }
-
-    const token = signToken(userData);
-    res.status(200).json({ token, user: userData });
+    res.status(201).json(newPost);
   } catch (err) {
-    res.status(400).json(err);
+    console.error(err);
+    res.status(500).json({ message: "Failed to create post" });
   }
-});
-
-router.post("/logout", authMiddleware, (req, res) => {
-  res.status(204).end();
 });
 
 module.exports = router;
