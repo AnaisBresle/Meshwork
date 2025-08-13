@@ -1,48 +1,28 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/connection");
+const express = require("express");
+const { Post, Topic, User, Interaction } = require("../models");
+const { authMiddleware } = require("../middleware/auth"); // JWT authentication middleware - Needed to get post deleted by their owners only. 
+const router = express.Router();
 
-const Post = sequelize.define(
-  "Post",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    topicId: {
-  type: DataTypes.INTEGER,
-  allowNull: true, // change from false to true
-  references: { model: 'topics', key: 'id' },
-  onDelete: 'SET NULL',
-},
-    parentId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: "posts",  // self-reference to Post model
-        key: "id",
-      },
-      onDelete: "CASCADE",
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "User",  // capitalized
-        key: "id",
-      },
-      onDelete: "CASCADE",
-    },
-  },
-  {
-    tableName: "posts",
-    timestamps: true,
-    freezeTableName: true,
-  },
-);
 
-module.exports = Post;
+/// Get all top-level posts (parentId = null)
+router.get("/", async (req, res) => {
+  try {
+    const posts = await Post.findAll({
+      where: { parentId: null },
+      include: [
+        { model: User, attributes: ["id", "username"] },
+        { model: Topic, attributes: ["id", "name"] },
+        { model: Interaction }
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+
+module.exports = router;
