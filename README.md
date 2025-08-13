@@ -18,7 +18,7 @@ A Twitter/Clubhouse-inspired platform helping small businesses share updates, ne
 
 ## 👥 Team 
  - Anais Bresle
- - Kerry S-J
+ - Kerry Steele-Jones
  - Rashid Subhani
  - Isabelle Rouxelin
 
