@@ -1,48 +1,29 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/connection");
+const express = require("express");
+const { Event, EventAttendee, User } = require("../models");
+const router = express.Router();
 
-const Event = sequelize.define(
-  "Event",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    eventDate: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
-    eventTime: {
-      type: DataTypes.TIME,
-      allowNull: false,
-    },
-    location: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    createdBy: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "User",  // capitalized
-        key: "id",
-      },
-      onDelete: "CASCADE",
-    },
-  },
-  {
-    tableName: "events",
-    timestamps: true,
+// Create event
+router.post("/", async (req, res) => {
+  try {
+    const event = await Event.create({ ...req.body, createdBy: req.user.id });
+    res.json(event);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
-);
+});
 
-module.exports = Event;
+// List events
+router.get("/", async (req, res) => {
+  const events = await Event.findAll({ include: User });
+  res.json(events);
+});
+
+// Get specific event with attendees
+router.get("/:id", async (req, res) => {
+  const event = await Event.findByPk(req.params.id, {
+    include: [{ model: User, through: { attributes: ["status"] } }]
+  });
+  res.json(event);
+});
+
+module.exports = router;
