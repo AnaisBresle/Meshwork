@@ -78,5 +78,26 @@ router.post("/:id/comments", authMiddleware, async (req, res) => {
 
 
 /// Delete post (broad sense) - only owner can 
+router.delete("/:id", authMiddleware, async (req, res) => { ///checking post ide as this route is for deleted any type of post (aprent or comment)
+  try {
+    const post = await Post.findByPk(req.params.id);
+
+    if (!post) return res.status(404).json({ error: "Post not found" });
+
+    //IMPORTANT!!!!!!!!!!!!!!! Check if the logged-in user is the owner
+    if (post.userId !== req.user.id) {
+      return res.status(403).json({ error: "You are not authorised to delete this post" });
+    }
+
+    await post.destroy();
+    res.json({ message: "Post deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+
 
 module.exports = router;
