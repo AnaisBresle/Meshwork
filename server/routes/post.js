@@ -42,6 +42,28 @@ router.get("/:id/comments", async (req, res) => {
 
 
 /// Create a post
+router.post("/posts", authMiddleware, async (req, res) => {
+  try {
+    const { title, content } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ message: "Title and content are required" });
+    }
+
+    const newPost = await Post.create({
+      title,
+      content,
+      userId: req.user.id, // from JWT
+    });
+
+    res.status(201).json(newPost);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to create post" });
+  }
+});
+
+
 
 /// Add Commnent
 
