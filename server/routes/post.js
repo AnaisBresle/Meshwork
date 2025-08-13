@@ -42,18 +42,13 @@ router.get("/:id/comments", async (req, res) => {
 
 
 /// Create a post
-router.post("/posts", authMiddleware, async (req, res) => {
+router.post("/",authMiddleware, async (req, res) => {
   try {
-    const { title, content } = req.body;
-
-    if (!title || !content) {
-      return res.status(400).json({ message: "Title and content are required" });
-    }
-
-    const newPost = await Post.create({
-      title,
-      content,
-      userId: req.user.id, // from JWT
+     const newPost = await Post.create({
+      content: req.body.content,
+      topicId: req.body.topicId || null, // if topic selected otherwise default to null value
+      parentId: null, // set to null as this is not a comment but a top level post
+      userId: req.user.id// from JWT
     });
 
     res.status(201).json(newPost);
@@ -64,8 +59,23 @@ router.post("/posts", authMiddleware, async (req, res) => {
 });
 
 
-
 /// Add Commnent
+router.post("/:id/comments", authMiddleware, async (req, res) => {
+  try {
+     const comment = await Post.create({
+      content: req.body.content,
+      parentId: req.params.id, //need the id of the post which now becomes the parent id since we are created a comment. 
+      userId: req.user.id// from JWT
+    });
+
+    res.status(201).json(comment);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to post comment" });
+  }
+});
+
+
 
 /// Delete post (broad sense) - only owner can 
 
