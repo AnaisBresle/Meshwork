@@ -22,6 +22,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+/// Get all comments for a given post
+
+router.get("/:id/comments", async (req, res) => {
+  try {
+    const comments = await Post.findAll({
+      where: { parentId: req.params.id }, /// only postst that are in fact comments will have a parentId
+      include: [
+        { model: User, attributes: ["id", "username"] },
+        { model: Interaction }
+      ],
+      order: [["createdAt", "ASC"]],
+    });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 
 
