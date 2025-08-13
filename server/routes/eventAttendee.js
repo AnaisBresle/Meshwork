@@ -1,43 +1,27 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/connection"); 
+const express = require("express");
+const { EventAttendee } = require("../models");
+const router = express.Router();
 
-const EventAttendee = sequelize.define("EventAttendee", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-
-  eventId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "Event", // must match the name of your User table
-      key: "id"
-    },
-    onDelete: "CASCADE"
-  },
-
-  userId: {
-    type: DataTypes.INTEGER,  
-    allowNull: false,
-    references: {
-      model: 'User',
-      key: 'id',
-    },
-    onDelete: 'CASCADE',
-  },
-
-  status: {
-    type: DataTypes.ENUM('registered', 'attended', 'cancelled'),
-    defaultValue: 'registered',
-  },
-
-}, 
-
-{
-  tableName: "attendees",
-  timestamps: true // adds createdAt and updatedAt
+// Register for event
+router.post("/", async (req, res) => {
+  try {
+    const attendee = await EventAttendee.create({
+      eventId: req.body.eventId,
+      userId: req.user.id,
+      status: "registered"
+    });
+    res.json(attendee);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
-module.exports = EventAttendee;
+// Update attendance status
+router.put("/:id", async (req, res) => {
+  const attendee = await EventAttendee.findByPk(req.params.id);
+  if (!attendee) return res.status(404).json({ error: "Not found" });
+  await attendee.update({ status: req.body.status });
+  res.json(attendee);
+});
+
+module.exports = router;
