@@ -52,13 +52,17 @@ router.post("/login", async (req, res) => {
     const token = signToken(userData);
 
     // Remove password before sending response
-    res.status(201).json({ token, user: newUser });
+    const userSafe = userData.get({ plain: true });
+    delete userSafe.password;
+
+    res.status(200).json({ token, user: userSafe });
 
   } catch (err) {
     console.error(err);
     res.status(400).json({ message: "Login failed", error: err.message });
   }
 });
+
 
 // LOGOUT (JWT — client deletes token)
 router.post("/logout", authMiddleware, (req, res) => {
