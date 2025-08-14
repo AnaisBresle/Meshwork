@@ -4,14 +4,26 @@ const sequelize = require("../config/connection");
 const bcrypt = require("bcrypt");
 
 // import models
-const { Course, Category, User, EnrolledUser } = require("../models");
+// Import models
+const {
+  User,
+  Profile,
+  Topic,
+  Post,
+  Interaction,
+  Event,
+  EventAttendee
+} = require("../models");
+
 
 // import seed data
-const coursesData = require("./courses.json");
-
-const usersData = require("./users.json");
-
-const categoriesData = require("./categories.json");
+const usersData = require("./user.json");
+const profilesData = require("./profile.json");
+const topicsData = require("./topic.json");
+const postsData = require("./post.json");
+const interactionsData = require("./interaction.json");
+const eventsData = require("./event.json");
+const attendeesData = require("./eventAttendee.json");
 
 // Seed database
 const seedDatabase = async () => {
@@ -24,37 +36,45 @@ const seedDatabase = async () => {
     user.password = await bcrypt.hash(user.password, 10);
   }
 
+
+  // Create Users
   const users = await User.bulkCreate(usersData);
+  console.log(`Seeded ${users.length} users.`);
 
-  for (const course of coursesData) {
-    course.categoryId =
-      categories[Math.floor(Math.random() * categories.length)].id;
-    course.created_by = users[Math.floor(Math.random() * users.length)].id;
+  // Create Profiles
+    const profiles = await Profile.bulkCreate(profilesData);
+    console.log(`Seeded ${profiles.length} profiles.`);
 
-    await Course.create(course);
+    // Create Topics
+    const topics = await Topic.bulkCreate(topicsData);
+    console.log(`Seeded ${topics.length} topics.`);
 
-    // pick random number of users to enroll in the course
-    const usersToEnroll = Math.floor(Math.random() * users.length);
+    // Create Posts
+    const posts = await Post.bulkCreate(postsData);
+    console.log(`Seeded ${posts.length} posts.`);
 
-    const potentialUsers = [...users];
+    // Create Interactions
+    const interactions = await Interaction.bulkCreate(interactionsData);
+    console.log(`Seeded ${interactions.length} interactions.`);
 
-    for (let i = 0; i < usersToEnroll; i++) {
-      const user =
-        potentialUsers[Math.floor(Math.random() * potentialUsers.length)];
+    // Create Events
+    const events = await Event.bulkCreate(eventsData);
+    console.log(`Seeded ${events.length} events.`);
 
-      // remove user from potential users so it can't be enrolled again
-      potentialUsers.splice(potentialUsers.indexOf(user), 1);
+    // Create Event Attendees
+    const attendees = await EventAttendee.bulkCreate(attendeesData);
+    console.log(`Seeded ${attendees.length} event attendees.`);
 
-      await EnrolledUser.create({
-        userId: user.id,
-        courseId: course.id,
-        enrollment_date: new Date(),
-      });
-    }
-  }
+    console.log("All seed data inserted successfully!");
+    process.exit(0);
 
-  process.exit(0);
-};
+  } catch (err) {
+    console.error("Seeding failed:", err);
+    process.exit(0);
+
+ }
 
 // Call seedDatabase function
 seedDatabase();
+
+
