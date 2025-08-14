@@ -1,24 +1,20 @@
-{ "name": "Meshwork", 
-"version": "1.0.0", 
-"main": "server.js", 
-"scripts": { 
-"test": "echo \"Error: no test specified\" && exit 1", 
-"start": "node server.js", 
-"dev": "nodemon server.js", 
-"seed": "node seeds/seed.js", 
-"rebuild": "nodemon server.js --rebuild" }, 
-"keywords": [], 
-"author": "", 
-"license": "ISC", 
-"description": "", 
-"dependencies": { 
-  "bcrypt": "^5.1.1", 
-  "cors": "^2.8.5", 
-  "dotenv": "^16.4.7", 
-  "express": "^5.1.0", 
-  "express-session": "^1.18.2", 
-  "jsonwebtoken": "^9.0.2", 
-  "mysql2": "^3.12.0", 
-  "nodemon": "^3.1.9", 
-  "sequelize": "^6.37.7", 
-  "vite": "^7.1.2" } }
+{
+  "name": "meshwork",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js --ignore client",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+   
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
