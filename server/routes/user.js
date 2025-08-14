@@ -3,10 +3,9 @@ const { User, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 
 // SIGNUP
-
 router.post("/signup", async (req, res) => {
   try {
-    const { first_name, last_name, email, password } = req.body;
+    const { first_name, last_name, username, email, password } = req.body;
 
     // Check if email already exists
     const existingUser = await User.findOne({ where: { email } });
@@ -15,21 +14,29 @@ router.post("/signup", async (req, res) => {
     }
 
     // Create user
-    const newUser = await User.create({ first_name, last_name, email, password });
+    const newUser = await User.create({
+      first_name,
+      last_name,
+      username,
+      email,
+      password
+    });
 
     // Generate JWT token
     const token = signToken(newUser);
 
-    res.status(201).json({ token, user: newUser });
+    // Remove password before sending response
+    const userSafe = newUser.get({ plain: true });
+    delete userSafe.password;
+
+    res.status(201).json({ token, user: userSafe });
   } catch (err) {
     console.error(err);
     res.status(400).json({ message: "Signup failed", error: err.message });
   }
 });
 
-
 // LOGIN
-
 router.post("/login", async (req, res) => {
   try {
     const userData = await User.findOne({ where: { email: req.body.email } });
@@ -43,23 +50,22 @@ router.post("/login", async (req, res) => {
     }
 
     const token = signToken(userData);
-    res.status(200).json({ token, user: userData });
+
+    // Remove password before sending response
+    res.status(201).json({ token, user: newUser });
+
   } catch (err) {
     console.error(err);
     res.status(400).json({ message: "Login failed", error: err.message });
   }
 });
 
-
 // LOGOUT (JWT — client deletes token)
-
 router.post("/logout", authMiddleware, (req, res) => {
   res.status(204).end();
 });
 
-
 // GET Current User
-
 router.get("/me", authMiddleware, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {
@@ -76,9 +82,7 @@ router.get("/me", authMiddleware, async (req, res) => {
   }
 });
 
-
 // CREATE a Post
-
 router.post("/posts", authMiddleware, async (req, res) => {
   try {
     const { title, content } = req.body;
