@@ -6,8 +6,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 
-const sequelize = require('./server/config/connection');
-const routes = require('./server/routes');
+const sequelize = require('./config/connection');
+const routes = require('./routes');
 
 
 // Initialize Express application
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, "../client/public")));
 
 // Handle GET request at the root route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.htm"));
+  res.sendFile(path.join(__dirname, "client", "public", "index.html"));
 });
 
 // Add routes
@@ -36,5 +36,5 @@ app.use(routes);
 
 // Sync database
 sequelize.sync({ force: rebuild }).then(() => {
-  app.listen(PORT, () => console.log("Now listening"));
+  app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`));
 });
