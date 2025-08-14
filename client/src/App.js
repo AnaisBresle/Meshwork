@@ -1,0 +1,66 @@
+
+import { useState } from "react";
+import { Routes, Route, Outlet } from "react-router-dom";
+
+import Header from "./components/Header";
+import Sidebar from "./components/SideBar";
+import FilterBar from "./components/FilterBar";
+import Footer from "./components/Footer";
+
+import MainFeed from "./pages/MainFeed";
+import ProfilePage from "./pages/ProfilePage";
+import DirectoryPage from "./pages/DirectoryPage";
+import EventsPage from "./pages/EventsPage";
+
+// Layout = header + filters + (sidebar | page slot)
+function Layout() {
+  const [filters, setFilters] = useState({
+    category: "all",
+    industry: "all",  
+    sort: "newest",
+  });
+
+  const handleFilters = (change) => {
+    setFilters((prev) => ({ ...prev, ...change }));
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",                  
+        display: "grid",
+        gridTemplateRows: "auto auto 1fr auto" // header, filter, main, footer
+      }}
+    >
+      <Header />
+      <FilterBar onChange={handleFilters} />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "220px 1fr",
+          minHeight: 0                       
+        }}
+      >
+        <Sidebar />
+        <main style={{ padding: 16 }}>
+          <Outlet context={{ filters }} />
+        </main>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<MainFeed />} />
+        <Route path="profile/:id" element={<ProfilePage />} />
+        <Route path="directory" element={<DirectoryPage />} />
+        <Route path="events" element={<EventsPage />} />
+      </Route>
+    </Routes>
+  );
+}
