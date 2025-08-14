@@ -2,11 +2,11 @@ const router = require("express").Router();
 
 const userRoutes = require("./user.js");
 const profileRoutes = require("./profile.js");
-const postRoutes = require("./posts.js");
-const topicRoutes = require("./topics.js");
-const interactionRoutes = require("./interactions.js");
-const eventRoutes = require("./events.js");
-const eventAttendeeRoutes = require("./eventAttendees.js");
+const postRoutes = require("./post.js");
+const topicRoutes = require("./topic.js");
+const interactionRoutes = require("./interaction.js");
+const eventRoutes = require("./event.js");
+const eventAttendeeRoutes = require("./eventAttendee.js");
 
 // default /api route
 router.get("/api", (req, res) => {

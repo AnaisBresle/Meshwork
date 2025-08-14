@@ -1,6 +1,6 @@
 const express = require("express");
 const { Post, Topic, User, Interaction } = require("../models");
-const { authMiddleware } = require("../middleware/auth"); // JWT authentication middleware - Needed to get post deleted by their owners only. 
+const { authMiddleware } = require("../utils/auth"); // JWT authentication middleware - Needed to get post deleted by their owners only. 
 const router = express.Router();
 
 
