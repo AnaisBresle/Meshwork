@@ -3,12 +3,15 @@ const router = require("express").Router();
 const userRoutes = require("./user.js");
 const profileRoutes = require("./profile");
 
-// create a default route for /api
+// default /api route
 router.get("/api", (req, res) => {
   res.json({ message: "Welcome to the Meshwork" });
 });
 
+// user-related routes
 router.use("/api/users", userRoutes);
-router.use("/api/profile", userRoutes);
+
+// profile-related routes
+router.use("/api/profile", profileRoutes);
 
 module.exports = router;
