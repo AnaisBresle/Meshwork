@@ -45,11 +45,25 @@ User.init(
     },
   },
   {
+    hooks: {
+      // Hash password before creating a user
+      beforeCreate: async (newUserData) => {
+        newUserData.password = await bcrypt.hash(newUserData.password, 10);
+        return newUserData;
+      },
+      // Hash password if it’s updated
+      beforeUpdate: async (updatedUserData) => {
+        if (updatedUserData.changed("password")) {
+          updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
+        }
+        return updatedUserData;
+      },
+    },
     sequelize,
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: "User",  // **Capitalized to match other references**
+    modelName: "User",
   }
 );
 
