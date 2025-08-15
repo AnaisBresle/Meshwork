@@ -1,12 +1,36 @@
 
 import { useOutletContext } from "react-router-dom";
-import { useState } from "react";
-import postsData from "../data/posts"; 
+import { useState, useEffect } from "react";
+
 
 export default function MainFeed() {
   // filters provided by <Outlet context={{ filters }} />
   const { filters } = useOutletContext(); // { category, industry, sort }
-  const [posts] = useState(postsData);
+  const [posts, SetPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // Declaring error
+
+  useEffect(() => {
+    fetch("/api/post") // <-- update this path to match your backend endpoint
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then((data) => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+
+   // loader UI
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
 
   // Start with everything
   let list = [...posts];

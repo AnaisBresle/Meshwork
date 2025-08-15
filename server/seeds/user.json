@@ -137,5 +137,13 @@
     "username": "clara_art",           
     "email": "clara@inspiregallery.com", 
     "password": "ColorSplash3" 
+  },
+
+
+   {
+    "id": 21,
+    "username": "LiamK",
+    "email": "LK@floralondon.com", 
+    "password": "Daisy1234" 
   }
 ]

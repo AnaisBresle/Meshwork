@@ -1,26 +1,26 @@
 const express = require("express");
-const { Interaction } = require("../models");
+const { Reaction } = require("../models");
 const router = express.Router();
 
 // Like or celebrate... a post
 router.post("/", async (req, res) => {
   try {
-    const interaction = await Interaction.create({
+    const reaction = await Reaction.create({
       userId: req.user.id, // who does the interaction
       postId: req.body.postId, // on which post
-      interactionType: req.body.interactionType
+      reactionType: req.body.reactionType
     });
-    res.json(interaction);
+    res.json(reaction);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// Remove interaction
+// Remove reaction
 router.delete("/:id", async (req, res) => {
-  const interaction = await Interaction.findByPk(req.params.id);
-  if (!interaction) return res.status(404).json({ error: "Not found" });
-  await interaction.destroy();
+  const reaction = await Reaction.findByPk(req.params.id);
+  if (!reaction) return res.status(404).json({ error: "Not found" });
+  await reaction.destroy();
   res.json({ message: "Removed" });
 });
 

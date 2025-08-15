@@ -27,8 +27,19 @@ const Event = sequelize.define(
     },
     location: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
+
+    type: {
+      type: DataTypes.ENUM("in-person", "online"),
+  allowNull: false,
+},
+
+     link: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     createdBy: {
       type: DataTypes.INTEGER,
       allowNull: false,

@@ -238,5 +238,17 @@
     "website": null,
     "linkedIn": null,
     "userId": 20
-  }
+  },
+{
+    "id": 21,
+  "company": "Flora London",
+  "jobTitle": "Florist",
+  "industry": "Floral Design",
+  "picture": "/profile/userId-21.jpg",
+  "bio": "Designing bespoke floral arrangements that bring colour, fragrance, and joy to every occasion.",
+  "location": "Brighton, UK",
+  "website": null,
+  "linkedIn": null,
+  "userId": 21
+}
 ]

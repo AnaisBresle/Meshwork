@@ -4,7 +4,7 @@ const userRoutes = require("./user.js");
 const profileRoutes = require("./profile.js");
 const postRoutes = require("./post.js");
 const topicRoutes = require("./topic.js");
-const interactionRoutes = require("./interaction.js");
+const reactionRoutes = require("./reaction.js");
 const eventRoutes = require("./event.js");
 const eventAttendeeRoutes = require("./eventAttendee.js");
 
@@ -19,7 +19,7 @@ router.use("/api/users", userRoutes);
 router.use("/api/profile", profileRoutes); 
 router.use("/api/posts", postRoutes);
 router.use("/api/topics", topicRoutes);
-router.use("/api/interactions", interactionRoutes);
+router.use("/api/reactions", reactionRoutes);
 router.use("/api/events", eventRoutes);
 router.use("/api/attendees", eventAttendeeRoutes);
 

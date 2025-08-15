@@ -1,16 +1,14 @@
 // Import required packages
 const sequelize = require("../config/connection");
-
 const bcrypt = require("bcrypt");
 
-// import models
 // Import models
 const {
   User,
   Profile,
   Topic,
   Post,
-  Interaction,
+  Reaction,
   Event,
   EventAttendee
 } = require("../models");
@@ -21,27 +19,35 @@ const usersData = require("./user.json");
 const profilesData = require("./profile.json");
 const topicsData = require("./topic.json");
 const postsData = require("./post.json");
-const interactionsData = require("./interaction.json");
+const reactionsData = require("./reaction.json");
 const eventsData = require("./event.json");
 const attendeesData = require("./eventAttendee.json");
 
 // Seed database
 const seedDatabase = async () => {
-  await sequelize.sync({ force: true });
+  try {
+    // Disable FK checks temporarily
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
 
-  const categories = await Category.bulkCreate(categoriesData);
+    // Drop all tables in the correct order
+    await sequelize.drop(); // drops all tables
 
-  // Hash the password for each user
-  for (const user of usersData) {
-    user.password = await bcrypt.hash(user.password, 10);
-  }
+    // Re-enable FK checks
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
+    // Re-sync all models
+    await sequelize.sync({ force: true });
 
-  // Create Users
-  const users = await User.bulkCreate(usersData);
-  console.log(`Seeded ${users.length} users.`);
+    // Hash the password for each user
+    for (const user of usersData) {
+      user.password = await bcrypt.hash(user.password, 10);
+    }
 
-  // Create Profiles
+    // Create Users
+    const users = await User.bulkCreate(usersData);
+    console.log(`Seeded ${users.length} users.`);
+
+    // Create Profiles
     const profiles = await Profile.bulkCreate(profilesData);
     console.log(`Seeded ${profiles.length} profiles.`);
 
@@ -53,9 +59,9 @@ const seedDatabase = async () => {
     const posts = await Post.bulkCreate(postsData);
     console.log(`Seeded ${posts.length} posts.`);
 
-    // Create Interactions
-    const interactions = await Interaction.bulkCreate(interactionsData);
-    console.log(`Seeded ${interactions.length} interactions.`);
+    // Create Reactions
+    const reactions = await Reaction.bulkCreate(reactionsData);
+    console.log(`Seeded ${reactions.length} reactions.`);
 
     // Create Events
     const events = await Event.bulkCreate(eventsData);
@@ -66,13 +72,11 @@ const seedDatabase = async () => {
     console.log(`Seeded ${attendees.length} event attendees.`);
 
     console.log("All seed data inserted successfully!");
-    process.exit(0);
-
   } catch (err) {
     console.error("Seeding failed:", err);
-    process.exit(0);
-
- }
+    process.exit(1); // Exit with error code
+  }
+};
 
 // Call seedDatabase function
 seedDatabase();
