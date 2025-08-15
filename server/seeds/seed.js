@@ -1,9 +1,7 @@
 // Import required packages
 const sequelize = require("../config/connection");
-
 const bcrypt = require("bcrypt");
 
-// import models
 // Import models
 const {
   User,
@@ -28,8 +26,17 @@ const attendeesData = require("./eventAttendee.json");
 // Seed database
 const seedDatabase = async () => {
   try {
+    // Disable FK checks temporarily
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
+
+    // Drop all tables in the correct order
+    await sequelize.drop(); // drops all tables
+
+    // Re-enable FK checks
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+
+    // Re-sync all models
     await sequelize.sync({ force: true });
-    await sequelize.drop({ cascade: true }); // dropping tables in correct order (e.g. post before reactions, user before profile etc..)
 
     // Hash the password for each user
     for (const user of usersData) {
