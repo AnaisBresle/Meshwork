@@ -69,6 +69,7 @@ foreignKey: "userId",
 /// Post - Reactions
 Post.hasMany(Reaction, { 
 foreignKey: "postId", 
+onDelete: 'CASCADE'
 });
 
 Reaction.belongsTo(Post, { 

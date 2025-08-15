@@ -29,6 +29,7 @@ const attendeesData = require("./eventAttendee.json");
 const seedDatabase = async () => {
   try {
     await sequelize.sync({ force: true });
+    await sequelize.drop({ cascade: true }); // dropping tables in correct order (e.g. post before reactions, user before profile etc..)
 
     // Hash the password for each user
     for (const user of usersData) {
