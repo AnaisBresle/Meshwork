@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "title": null,
     "topicId": 1,
     "parentId": null,
     "content": "What are some affordable yet effective marketing strategies for a small local business?",
@@ -9,6 +10,7 @@
   },
   {
     "id": 2,
+    "title": null,
     "topicId": 1,
     "parentId": 1,
     "content": "I found that a good mix of social media ads combined with community events really helps.",
@@ -17,6 +19,7 @@
   },
   {
     "id": 3,
+    "title": null,
     "topicId": 1,
     "parentId": 1,
     "content": "Also, don't underestimate the power of local SEO optimization to get found by nearby customers.",
@@ -25,6 +28,7 @@
   },
   {
     "id": 4,
+    "title": null,
     "topicId": 2,
     "parentId": null,
     "content": "What tips do you have for managing cash flow in a small business without a dedicated finance team?",
@@ -33,6 +37,7 @@
   },
   {
     "id": 5,
+    "title": null,
     "topicId": 2,
     "parentId": 4,
     "content": "Invoice promptly and follow up regularly. Using accounting software like QuickBooks really helps track everything.",
@@ -41,6 +46,7 @@
   },
   {
     "id": 6,
+    "title": null,
     "topicId": 5,
     "parentId": null,
     "content": "What are some best practices for improving website SEO for a new e-commerce store?",
@@ -49,6 +55,7 @@
   },
   {
     "id": 7,
+    "title": null,
     "topicId": 5,
     "parentId": 6,
     "content": "Focus on product descriptions using keywords your audience searches for and get backlinks from relevant sites.",
@@ -57,6 +64,7 @@
   },
   {
     "id": 8,
+    "title": null,
     "topicId": 6,
     "parentId": null,
     "content": "Which e-commerce platforms would you recommend for a small business just starting out with limited budget?",
@@ -65,6 +73,7 @@
   },
   {
     "id": 9,
+    "title": null,
     "topicId": 6,
     "parentId": 8,
     "content": "Shopify and BigCommerce are great for newbies. WooCommerce is solid if you already have a WordPress site.",
@@ -73,6 +82,7 @@
   },
   {
     "id": 10,
+    "title": null,
     "topicId": 11,
     "parentId": null,
     "content": "What’s the best way to keep accounting simple but accurate for a freelancer working from home?",
@@ -81,6 +91,7 @@
   },
   {
     "id": 11,
+    "title": null,
     "topicId": 11,
     "parentId": 10,
     "content": "Use cloud accounting tools like Xero or FreshBooks, and make sure to record every invoice and receipt.",
@@ -89,6 +100,7 @@
   },
   {
     "id": 12,
+    "title": null,
     "topicId": 16,
     "parentId": null,
     "content": "How do you effectively recruit talent when you have a tiny HR budget?",
@@ -97,6 +109,7 @@
   },
   {
     "id": 13,
+    "title": null,
     "topicId": 16,
     "parentId": 12,
     "content": "Leverage your network, attend local business events, and use free job boards like Indeed or LinkedIn.",
@@ -105,6 +118,7 @@
   },
   {
     "id": 14,
+    "title": null,
     "topicId": 14,
     "parentId": null,
     "content": "Any suggestions for choosing payroll software for a small team of 5-10 employees?",
@@ -113,10 +127,36 @@
   },
   {
     "id": 15,
+    "title": null,
     "topicId": 14,
     "parentId": 14,
     "content": "Gusto and Paychex are user-friendly and affordable options designed for small businesses.",
     "userId": 15,
     "createdAt": "2025-08-10T09:40:00Z"
-  }
+  },
+
+    {
+    "id": 16,
+    "title": "5 Ways to Boost Your Instagram Engagement This Month",
+    "topicId": 1,
+    "parentId": null,
+    "content": "Your content might be great, but if no one’s engaging with it, it’s like throwing a party and forgetting to send invites. Here’s how to get your followers double-tapping, commenting, and actually caring about your posts — starting now.\n\n1. Post When Your Audience Is Actually Online\nCheck Instagram Insights to see when your followers are active. Posting at peak times increases visibility — and visibility drives engagement.\n\n2. Start Conversations in Stories\nPolls, quizzes, sliders — these interactive stickers are gold. They take seconds to create, but they turn passive viewers into active participants.\n\n3. Share More Reels\nInstagram is pushing Reels hard. Short, snappy videos get more reach, which means more opportunities for likes, comments, and shares.\n\n4. Reply to Every Comment (Fast)\nDon’t just post and ghost. The quicker you respond, the more your post stays in the algorithm’s active zone. Plus, people love being acknowledged.\n\n5. Collaborate with Another Creator\nCollab posts appear on both profiles and combine audiences. It’s like borrowing a friend’s megaphone — instant exposure to a new crowd.\n\nQuick Win: Pick just one of these and start today. Engagement builds momentum — and the sooner you start, the sooner the algorithm notices.",
+    "userId": 4,
+    "createdAt": "2025-08-10T11:40:00Z",
+            
+  },
+ 
+ 
+   {
+    "id": 17,
+    "title": "How to Prepare Your Shop for the Holiday Rush",
+    "topicId": 3,
+    "parentId": null,
+    "content": "The holiday season can make or break your yearly sales. Preparation now means fewer headaches and more profit later. Here’s how to get your shop holiday-ready without the last-minute panic.\n\n1. Stock Up Early\nCheck last year’s sales data to forecast demand and order your inventory in advance. Running out of bestsellers mid-season is the ultimate buzzkill.\n\n2. Optimize Your Website for Speed\nA slow site means lost sales. Test your load times and fix issues before the big rush hits.\n\n3. Create Gift Guides\nHelp customers decide faster by grouping products into themed gift collections — perfect for the indecisive shopper.\n\n4. Train Your Staff\nWhether in-store or online, make sure your team is ready for increased customer queries and sales volume.\n\n5. Plan Your Promotions\nMap out discounts, bundles, and campaigns now so you can focus on fulfillment when the rush begins.\n\nQuick Win: Pick one key task — like creating your gift guide — and complete it this week. Small steps now will pay off big when the orders start pouring in.",
+    "userId": 8,
+    "createdAt": "2025-08-09T14:20:00Z",
+    
+  },
+
+ 
 ]
