@@ -15,7 +15,13 @@ router.post("/", async (req, res) => {
 // Get all profiles -Needed for direcctory
 router.get("/", async (req, res) => {
   try {
-    const profiles = await Profile.findAll({ include: User });
+    const profiles = await Profile.findAll({ 
+      
+      include: {
+        model: User,
+        attributes: ["firstname", "lastname", "email"] 
+      },
+    });
     res.json(profiles);
   } catch (err) {
     res.status(500).json({ error: err.message });
