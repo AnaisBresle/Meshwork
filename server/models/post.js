@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
+const Topic = require("./topic");
+const User = require("./user");
 
 const Post = sequelize.define(
   "Post",
@@ -12,7 +14,7 @@ const Post = sequelize.define(
     topicId: {
   type: DataTypes.INTEGER,
   allowNull: true, 
-  references: { model: 'topics', key: 'id' },
+  references: { model: Topic, key: 'id' },
   onDelete: 'SET NULL',
 },
     parentId: {
@@ -36,7 +38,7 @@ const Post = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "users", 
+        model: User, 
         key: "id",
       },
       onDelete: "CASCADE",
