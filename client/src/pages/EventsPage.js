@@ -8,6 +8,7 @@ export default function EventsPage() {
   const { filters } = useOutletContext(); // { topic, sort }
   
   return (
+    <>
     <div>
       <h1>Events</h1>
     <EventsList filters={filters} />
@@ -15,5 +16,6 @@ export default function EventsPage() {
 
     <div><CreateEvent />
     </div>
+    </>
   );
 }
