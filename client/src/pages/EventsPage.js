@@ -1,5 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import EventsList from "../components/EventsList";
+import CreateEvent from "../components/NewEvent";
 
 
 export default function EventsPage() {
@@ -10,6 +11,9 @@ export default function EventsPage() {
     <div>
       <h1>Events</h1>
     <EventsList filters={filters} />
+    </div>
+
+    <div><CreateEvent />
     </div>
   );
 }
