@@ -24,7 +24,17 @@ const CreateEvent = () => {
     e.preventDefault();
 
     if (!title || !description || !type || !eventDate  || !eventTime ) {
-      displayError('Please fill in all fields.');
+      displayError('Please fill in all required fields.');
+      return;
+    }
+
+     if (type === "online" && !link) {
+      displayError("Link is required for online events.");
+      return;
+    }
+
+    if (type === "in-person" && !location) {
+      displayError("Location is required for in-person events.");
       return;
     }
 
@@ -32,7 +42,7 @@ const CreateEvent = () => {
       title,
       description,
       type,
-      eventData,
+      eventDate,
       eventTime,
       location,
       link
@@ -95,7 +105,7 @@ const CreateEvent = () => {
         <select
           id="type"
           value={type}
-          onChange={(e) => setCategoryId(e.target.value)}
+          onChange={(e) => setEventType(e.target.value)}
           required
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
@@ -112,8 +122,7 @@ const CreateEvent = () => {
           id="location"
           placeholder="Enter event location"
           value={location}
-          onChange={(e) => setDescription(e.target.value)}
-          required
+          onChange={(e) => setEventLocation(e.target.value)}
           rows="2"
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         ></textarea>
