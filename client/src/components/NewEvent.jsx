@@ -28,8 +28,8 @@ const CreateEvent = () => {
     e.preventDefault();
 
     // dates/times = model correct format
-  const eventDate = new Date(date).toISOString().split("T")[0]; // YYYY-MM-DD
-  const eventTime = time + ":00"; // HH:MM:SS
+  const formattedDate = new Date(eventDate).toISOString().split("T")[0]; // YYYY-MM-DD
+  const formattedTime = eventTime + ":00"; // HH:MM:SS
 
     if (!title || !description || !type || !eventDate  || !eventTime ) {
       displayError('Please fill in all required fields.');
@@ -50,8 +50,8 @@ const CreateEvent = () => {
       title,
       description,
       type,
-      eventDate,
-      eventTime,
+      eventDate: formattedDate,
+      eventTime: formattedTime,
       ...(type === "in-person" && { location }),
       ...(type === "online" && { link }),
       createdBy: user?.id || null, // safe fallback if no user
