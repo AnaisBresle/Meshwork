@@ -4,6 +4,7 @@ const { authMiddleware } = require("../utils/auth"); // JWT authentication middl
 const router = express.Router();
 
 
+
 /// Get all top-level posts (parentId = null)
 router.get("/", async (req, res) => {
   try {
@@ -15,9 +16,16 @@ router.get("/", async (req, res) => {
         { model: Post, as: "comments" },
         { model: Reaction }
       ],
-      order: [["createdAt", "DESC"]],
-    });
-    res.json(posts);
+      order: [["createdAt", "DESC"]]
+   });
+
+const formattedPosts = posts.map(post => ({
+  ...post.toJSON(),
+  created_date: post.createdAt.toISOString().split("T")[0] // YYYY-MM-DD
+}));
+
+res.json(formattedPosts);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

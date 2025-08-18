@@ -55,7 +55,7 @@ export default function PostsList() {
         <ul>
         {list.map((post) => (
           <li key={post.id}>
-            <strong>{post.title}</strong> — {post.topicId} · {new Date(post.created_at + 'Z').toLocaleDateString()}<br />
+            <strong>{post.title}</strong> — {post.topicId} · {post.created_date}<br />
             {post.content}
           </li>
         ))}
