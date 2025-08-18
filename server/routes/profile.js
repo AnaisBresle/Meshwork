@@ -22,7 +22,17 @@ router.get("/", async (req, res) => {
         attributes: ["firstname", "lastname", "email"] 
       },
     });
-    res.json(profiles);
+
+ // add picture URL dynamically
+    const profilesWithPics = profiles.map(p => {
+      return {
+        ...p.toJSON(),
+        picture: `/profile/userId-${p.userId}.jpg`  // adjust extension if needed
+      };
+    });
+
+    res.json(profilesWithPics);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -32,7 +42,14 @@ router.get("/", async (req, res) => {
 router.get("/:userId", async (req, res) => {
   try {
     const profile = await Profile.findOne({ where: { userId: req.params.userId }, include: User });
-    res.json(profile);
+   const profileWithPic = {
+      ...profile.toJSON(),
+      picture: `/profile/userId-${profile.userId}.jpg`
+    };
+
+    res.json(profileWithPic);
+    
+
   } catch (err) {
     res.status(404).json({ error: "Profile not found" });
   }
