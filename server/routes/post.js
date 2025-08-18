@@ -1,7 +1,8 @@
 const express = require("express");
-const { Post, Topic, User, Interaction } = require("../models");
+const { Post, Topic, User, Reaction } = require("../models");
 const { authMiddleware } = require("../utils/auth"); // JWT authentication middleware - Needed to get post deleted by their owners only. 
 const router = express.Router();
+
 
 
 /// Get all top-level posts (parentId = null)
@@ -12,11 +13,19 @@ router.get("/", async (req, res) => {
       include: [
         { model: User, attributes: ["id", "username"] },
         { model: Topic, attributes: ["id", "name"] },
-        { model: Interaction }
+        { model: Post, as: "comments" },
+        { model: Reaction }
       ],
-      order: [["createdAt", "DESC"]],
-    });
-    res.json(posts);
+      order: [["createdAt", "DESC"]]
+   });
+
+const formattedPosts = posts.map(post => ({
+  ...post.toJSON(),
+  created_date: post.createdAt.toISOString().split("T")[0] // YYYY-MM-DD
+}));
+
+res.json(formattedPosts);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -30,7 +39,7 @@ router.get("/:id/comments", async (req, res) => {
       where: { parentId: req.params.id }, /// only postst that are in fact comments will have a parentId
       include: [
         { model: User, attributes: ["id", "username"] },
-        { model: Interaction }
+        { model: Reaction }
       ],
       order: [["createdAt", "ASC"]],
     });
