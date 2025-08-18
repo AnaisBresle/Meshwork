@@ -2,7 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import EventsList from "../components/EventsList";
 
 
-export default function EventsList() {
+export default function EventsPage() {
   // filters provided by <Outlet context={{ filters }} />
   const { filters } = useOutletContext(); // { topic, sort }
   
