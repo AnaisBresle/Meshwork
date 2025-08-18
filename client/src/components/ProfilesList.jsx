@@ -60,7 +60,7 @@ export default function DirectoryPage() {
             >
               {/* header row */}
               <div style={{ display: "grid", gridTemplateColumns: "48px 1fr", gap: 12, alignItems: "center" }}>
-                <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#ddd" }} />
+                <img    src={p.picture} alt={`${p.User.firstname} ${p.User.lastname}`} style={{ width: 48, height: 48, borderRadius: "50%", background: "#ddd" }} />
                 <div>
                   <h2 style={{ margin: 0, fontSize: 18 }}>{p.User.firstname} {p.User.lastname}</h2>
                   <div style={{ fontSize: 12, color: "#666" }}>
