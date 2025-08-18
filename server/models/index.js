@@ -2,7 +2,7 @@ const User = require("./user");
 const Profile = require("./profile");
 const Event = require("./event");
 const EventAttendee = require("./eventAttendee");
-const Interaction = require("./interaction");
+const Reaction = require("./reaction");
 const Topic = require("./topic");
 const Post = require("./post");
 
@@ -54,24 +54,25 @@ as: "parent", foreignKey: "parentId"
 
 
 
-///Interactions - User
-User.hasMany(Interaction, { 
+///Reactions - User
+User.hasMany(Reaction, { 
 foreignKey: "userId",  
 
 });
 
-Interaction.belongsTo(User, { 
+Reaction.belongsTo(User, { 
 foreignKey: "userId",
 
 });
 
 
-/// Post - Interactions
-Post.hasMany(Interaction, { 
+/// Post - Reactions
+Post.hasMany(Reaction, { 
 foreignKey: "postId", 
+onDelete: 'CASCADE'
 });
 
-Interaction.belongsTo(Post, { 
+Reaction.belongsTo(Post, { 
 foreignKey: "postId", 
 });
 
@@ -103,7 +104,7 @@ module.exports = {
   Profile,
   Event,
   EventAttendee,
-  Interaction,
+  Reaction,
   Topic,
   Post
   

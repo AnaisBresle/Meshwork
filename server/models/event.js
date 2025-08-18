@@ -27,8 +27,19 @@ const Event = sequelize.define(
     },
     location: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
+
+    type: {
+      type: DataTypes.ENUM("in-person", "online"),
+  allowNull: false,
+},
+
+     link: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     createdBy: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -42,6 +53,16 @@ const Event = sequelize.define(
   {
     tableName: "events",
     timestamps: true,
+    validate: {
+      async locationOrLinkRequired() {
+        if (this.type === "in-person" && !this.location) {
+          throw new Error("Location is required for in-person events.");
+        }
+        if (this.type === "online" && !this.link) {
+          throw new Error("Link is required for online events.");
+        }
+  },
+},
   }
 );
 

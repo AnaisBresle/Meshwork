@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
-const Interaction = sequelize.define(
-  "Interaction",
+const Reaction = sequelize.define(
+  "Reaction",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -27,16 +27,17 @@ const Interaction = sequelize.define(
       },
       onDelete: "CASCADE",
     },
-    interactionType: {
-      type: DataTypes.ENUM("thanks", "like"),
+    reactionType: {
+      type: DataTypes.ENUM("like", "celebrate", "support", "love", "insightful", "curious"),
       allowNull: false,
     },
+
   },
   {
-    tableName: "interactions",
+    tableName: "reactions",
     timestamps: true,
-    freezeTableName: true, // ensures table name is exactly 'interactions'
+    freezeTableName: true, // ensures table name is exactly 'reactions'
   }
 );
 
-module.exports = Interaction;
+module.exports = Reaction;

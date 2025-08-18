@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
+const Topic = require("./topic");
+const User = require("./user");
 
 const Post = sequelize.define(
   "Post",
@@ -11,18 +13,22 @@ const Post = sequelize.define(
     },
     topicId: {
   type: DataTypes.INTEGER,
-  allowNull: true, // change from false to true
-  references: { model: 'topics', key: 'id' },
+  allowNull: true, 
+  references: { model: Topic, key: 'id' },
   onDelete: 'SET NULL',
 },
     parentId: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: "posts",  // self-reference to Post model
+        model: "posts",  
         key: "id",
       },
       onDelete: "CASCADE",
+    },
+     title: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     content: {
       type: DataTypes.TEXT,
@@ -32,7 +38,7 @@ const Post = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "User",  // capitalized
+        model: User, 
         key: "id",
       },
       onDelete: "CASCADE",

@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "postId": 1,
+    "userId": 2,
+    "type": "like",
+    "createdAt": "2025-08-04T09:15:00Z"
+  },
+  {
+    "id": 2,
+    "postId": 1,
+    "userId": 3,
+    "type": "insightful",
+    "createdAt": "2025-08-04T09:20:00Z"
+  },
+  {
+    "id": 3,
+    "postId": 1,
+    "userId": 5,
+    "type": "love",
+    "createdAt": "2025-08-04T09:25:00Z"
+  },
+  {
+    "id": 4,
+    "postId": 2,
+    "userId": 1,
+    "type": "like",
+    "createdAt": "2025-08-04T10:30:00Z"
+  },
+  {
+    "id": 5,
+    "postId": 2,
+    "userId": 4,
+    "type": "celebrate",
+    "createdAt": "2025-08-04T10:35:00Z"
+  },
+  {
+    "id": 6,
+    "postId": 2,
+    "userId": 3,
+    "type": "love",
+    "createdAt": "2025-08-04T10:40:00Z"
+  },
+  {
+    "id": 7,
+    "postId": 3,
+    "userId": 2,
+    "type": "insightful",
+    "createdAt": "2025-08-04T11:40:00Z"
+  },
+  {
+    "id": 8,
+    "postId": 3,
+    "userId": 4,
+    "type": "like",
+    "createdAt": "2025-08-04T11:45:00Z"
+  },
+  {
+    "id": 9,
+    "postId": 3,
+    "userId": 5,
+    "type": "curious",
+    "createdAt": "2025-08-04T11:50:00Z"
+  },
+  {
+    "id": 10,
+    "postId": 4,
+    "userId": 1,
+    "type": "love",
+    "createdAt": "2025-08-04T12:00:00Z"
+  },
+  {
+    "id": 11,
+    "postId": 4,
+    "userId": 2,
+    "type": "celebrate",
+    "createdAt": "2025-08-04T12:05:00Z"
+  },
+  {
+    "id": 12,
+    "postId": 4,
+    "userId": 3,
+    "type": "like",
+    "createdAt": "2025-08-04T12:10:00Z"
+  },
+  {
+    "id": 13,
+    "postId": 5,
+    "userId": 2,
+    "type": "like",
+    "createdAt": "2025-08-04T13:15:00Z"
+  },
+  {
+    "id": 14,
+    "postId": 5,
+    "userId": 3,
+    "type": "insightful",
+    "createdAt": "2025-08-04T13:20:00Z"
+  },
+  {
+    "id": 15,
+    "postId": 5,
+    "userId": 4,
+    "type": "love",
+    "createdAt": "2025-08-04T13:25:00Z"
+  },
+  {
+    "id": 16,
+    "postId": 6,
+    "userId": 1,
+    "type": "like",
+    "createdAt": "2025-08-04T14:30:00Z"
+  },
+  {
+    "id": 17,
+    "postId": 6,
+    "userId": 5,
+    "type": "celebrate",
+    "createdAt": "2025-08-04T14:35:00Z"
+  },
+  {
+    "id": 18,
+    "postId": 6,
+    "userId": 3,
+    "type": "curious",
+    "createdAt": "2025-08-04T14:40:00Z"
+  },
+  {
+    "id": 19,
+    "postId": 7,
+    "userId": 2,
+    "type": "love",
+    "createdAt": "2025-08-04T15:00:00Z"
+  },
+  {
+    "id": 20,
+    "postId": 7,
+    "userId": 4,
+    "type": "like",
+    "createdAt": "2025-08-04T15:05:00Z"
+  },
+  {
+    "id": 21,
+    "postId": 7,
+    "userId": 5,
+    "type": "insightful",
+    "createdAt": "2025-08-04T15:10:00Z"
+  },
+  {
+    "id": 22,
+    "postId": 8,
+    "userId": 1,
+    "type": "celebrate",
+    "createdAt": "2025-08-04T16:00:00Z"
+  },
+  {
+    "id": 23,
+    "postId": 8,
+    "userId": 2,
+    "type": "like",
+    "createdAt": "2025-08-04T16:05:00Z"
+  },
+  {
+    "id": 24,
+    "postId": 8,
+    "userId": 3,
+    "type": "love",
+    "createdAt": "2025-08-04T16:10:00Z"
+  },
+  {
+    "id": 25,
+    "postId": 9,
+    "userId": 4,
+    "type": "like",
+    "createdAt": "2025-08-04T17:00:00Z"
+  },
+  {
+    "id": 26,
+    "postId": 9,
+    "userId": 5,
+    "type": "insightful",
+    "createdAt": "2025-08-04T17:05:00Z"
+  },
+  {
+    "id": 27,
+    "postId": 9,
+    "userId": 1,
+    "type": "love",
+    "createdAt": "2025-08-04T17:10:00Z"
+  },
+  {
+    "id": 28,
+    "postId": 10,
+    "userId": 2,
+    "type": "like",
+    "createdAt": "2025-08-04T18:00:00Z"
+  },
+  {
+    "id": 29,
+    "postId": 10,
+    "userId": 3,
+    "type": "celebrate",
+    "createdAt": "2025-08-04T18:05:00Z"
+  },
+  {
+    "id": 30,
+    "postId": 10,
+    "userId": 4,
+    "type": "curious",
+    "createdAt": "2025-08-04T18:10:00Z"
+  }
+]

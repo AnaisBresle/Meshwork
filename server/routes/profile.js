@@ -1,123 +1,70 @@
-const router = require("express").Router();
-const { User, EnrolledUser } = require("../models");
-const { signToken, authMiddleware } = require("../utils/auth");
+const express = require("express");
+const { Profile, User } = require("../models");
+const router = express.Router();
 
-// Get current authenticated user
-router.get("/me", authMiddleware, async (req, res) => {
+// Create Profile
+router.post("/", async (req, res) => {
   try {
-    const user = await User.getOne(req.user.id);
-    if (!user) return res.status(401).json({ message: "Token expired" });
-    return res.status(200).json({ user });
+    const profile = await Profile.create({ ...req.body, userId: req.user.id });
+    res.json(profile);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json({ error: err.message });
   }
 });
 
-router.post("/enroll", authMiddleware, async (req, res) => {
+// Get all profiles -Needed for direcctory
+router.get("/", async (req, res) => {
   try {
-    const { courseId } = req.body;
-    const user = await User.getOne(req.user.id);
-    if (!user) return res.status(401).json({ message: "Token expired" });
-
-    await EnrolledUser.create({
-      userId: req.user.id,
-      courseId,
-      enrollment_date: new Date(),
-    });
-
-    res.status(200).json({ message: "Course enrolled" });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// GET the User record
-router.get("/:id", authMiddleware, async (req, res) => {
-  console.log("looking for user", req.params.id);
-  try {
-    const userData = await User.getOne(req.params.id);
-
-    if (!userData) {
-      res.status(404).json({ message: "No User found with this id" });
-      return;
-    }
-
-    res.status(200).json(userData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-router.get("/", authMiddleware, async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
-
-router.post("/", authMiddleware, async (req, res) => {
-  try {
-    const userData = await User.create(req.body);
-
-    const token = signToken(userData);
-    res.status(200).json({ token, user: userData });
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
-
-// UDPATE the User record
-router.put("/:id", authMiddleware, async (req, res) => {
-  try {
-    const userData = await User.update(req.body, {
-      where: {
-        id: req.params.id,
+    const profiles = await Profile.findAll({ 
+      
+      include: {
+        model: User,
+        attributes: ["firstname", "lastname", "email"] 
       },
-      individualHooks: true
     });
 
-    if (!userData) {
-      res.status(404).json({ message: "No User found with this id" });
-      return;
-    }
+ // add picture URL dynamically
+    const profilesWithPics = profiles.map(p => {
+      return {
+        ...p.toJSON(),
+        picture: `/profile/userId-${p.userId}.jpg`  // adjust extension if needed
+      };
+    });
 
-    res.status(200).json(userData);
+    res.json(profilesWithPics);
+
   } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
+    res.status(500).json({ error: err.message });
   }
 });
 
-router.post("/login", async (req, res) => {
+// Get Profile by User ID
+router.get("/:userId", async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
-    if (!userData) {
-      res
-        .status(400)
-        .json({ message: "Incorrect email or password, please try again" });
-      return;
-    }
+    const profile = await Profile.findOne({ where: { userId: req.params.userId }, include: User });
+   const profileWithPic = {
+      ...profile.toJSON(),
+      picture: `/profile/userId-${profile.userId}.jpg`
+    };
 
-    const validPassword = await userData.checkPassword(req.body.password);
+    res.json(profileWithPic);
+    
 
-    if (!validPassword) {
-      res
-        .status(400)
-        .json({ message: "Incorrect email or password, please try again" });
-      return;
-    }
-
-    const token = signToken(userData);
-    res.status(200).json({ token, user: userData });
   } catch (err) {
-    res.status(400).json(err);
+    res.status(404).json({ error: "Profile not found" });
   }
 });
 
-router.post("/logout", authMiddleware, (req, res) => {
-  res.status(204).end();
+// Update Profile
+router.put("/:id", async (req, res) => {
+  try {
+    const profile = await Profile.findByPk(req.params.id);
+    if (!profile) return res.status(404).json({ error: "Not found" });
+    await profile.update(req.body);
+    res.json(profile);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 module.exports = router;

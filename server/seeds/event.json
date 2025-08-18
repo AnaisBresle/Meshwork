@@ -1,0 +1,95 @@
+[
+  {
+    "id": 1,
+    "title": "Small Business Networking Evening",
+    "description": "An informal meetup for local entrepreneurs and freelancers to share ideas, challenges, and opportunities over drinks.",
+    "eventDate": "2025-08-25",
+    "eventTime": "18:30:00",
+    "type": "in-person",
+    "link": null,
+    "location": "The Business Lounge, London",
+    "createdBy": 1
+  },
+  {
+    "id": 2,
+    "title": "Funding Opportunities in 2025",
+    "description": "An expert‑led webinar on the latest grants, loans, and investment opportunities available for SMEs in the UK.",
+    "eventDate": "2025-08-28",
+    "eventTime": "11:00:00",
+     "type": "online",
+    "link": "https://zoom.us/j/1258996690",
+    "location": null,
+    "createdBy": 4
+  },
+  {
+    "id": 3,
+    "title": "Digital Marketing Bootcamp for SMEs",
+    "description": "A one‑day workshop to master social media, PPC, and SEO strategies for small‑business growth.",
+    "eventDate": "2025-09-02",
+    "eventTime": "09:00:00",
+    "type": "in-person",
+    "link": null,
+    "location": "Manchester Innovation Hub",
+    "createdBy": 2
+  },
+  {
+    "id": 4,
+    "title": "Operations Efficiency Summit",
+    "description": "Panel discussions and case studies on streamlining processes, supply chain optimisation, and leveraging automation.",
+    "eventDate": "2025-09-15",
+    "eventTime": "10:00:00",
+    "type": "in-person",
+    "link": null,
+    "location": "Birmingham Enterprise Centre",
+    "createdBy": 3
+  },
+  {
+    "id": 5,
+    "title": "Future Tech for Small Business",
+    "description": "An expo showcasing affordable AI, automation, and cloud tools that can help SMEs thrive in a competitive market.",
+    "eventDate": "2025-10-05",
+    "eventTime": "13:00:00",
+    "type": "in-person",
+    "link": null,
+    "location": "TechCity Conference Hall, Leeds",
+    "createdBy": 5
+  },
+
+  {
+    "id": 6,
+    "title": "Instagram Reels Masterclass",
+    "description":"Learn how to boost your brand's reach using trending Instagram Reels techniques.",
+    "eventDate":"2025-08-20",
+    "eventTime":"18:00",
+    "type": "online",
+    "link": "https://zoom.us/j/1234567890",
+    "location": null,
+    "createdBy": 4
+  },
+ 
+  {
+    "id": 7,
+    "title": "Small Biz Tech Trends 2025",
+    "description":"Discover the latest tools and trends to help your small business thrive.",
+    "eventDate": "2025-08-25",
+    "eventTime": "14:00",
+    "type": "online",
+    
+    "link": "https://meet.google.com/abc-defg-hij",
+    "location": null,
+    "createdBy": 18
+  },
+  {
+    "id":8,
+    "title": "Floral Arrangement Workshop",
+    "description": "Hands-on session creating seasonal floral arrangements to take home.",
+    "eventDate": "2025-08-28",
+    "eventTime":"13:00",
+    "type": "in-person",
+    
+    "link": null,
+    "location": "Bloom Florists Studio, Winchester, UK",
+    "createdBy": 21
+  }
+
+]

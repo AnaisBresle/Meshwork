@@ -1,60 +1,84 @@
 // Import required packages
 const sequelize = require("../config/connection");
-
 const bcrypt = require("bcrypt");
 
-// import models
-const { Course, Category, User, EnrolledUser } = require("../models");
+// Import models
+const {
+  User,
+  Profile,
+  Topic,
+  Post,
+  Reaction,
+  Event,
+  EventAttendee
+} = require("../models");
+
 
 // import seed data
-const coursesData = require("./courses.json");
-
-const usersData = require("./users.json");
-
-const categoriesData = require("./categories.json");
+const usersData = require("./user.json");
+const profilesData = require("./profile.json");
+const topicsData = require("./topic.json");
+const postsData = require("./post.json");
+const reactionsData = require("./reaction.json");
+const eventsData = require("./event.json");
+const attendeesData = require("./eventAttendee.json");
 
 // Seed database
 const seedDatabase = async () => {
-  await sequelize.sync({ force: true });
+  try {
+    // Disable FK checks temporarily
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
 
-  const categories = await Category.bulkCreate(categoriesData);
+    // Drop all tables in the correct order
+    await sequelize.drop(); // drops all tables
 
-  // Hash the password for each user
-  for (const user of usersData) {
-    user.password = await bcrypt.hash(user.password, 10);
-  }
+    // Re-enable FK checks
+    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
-  const users = await User.bulkCreate(usersData);
+    // Re-sync all models
+    await sequelize.sync({ force: true });
 
-  for (const course of coursesData) {
-    course.categoryId =
-      categories[Math.floor(Math.random() * categories.length)].id;
-    course.created_by = users[Math.floor(Math.random() * users.length)].id;
-
-    await Course.create(course);
-
-    // pick random number of users to enroll in the course
-    const usersToEnroll = Math.floor(Math.random() * users.length);
-
-    const potentialUsers = [...users];
-
-    for (let i = 0; i < usersToEnroll; i++) {
-      const user =
-        potentialUsers[Math.floor(Math.random() * potentialUsers.length)];
-
-      // remove user from potential users so it can't be enrolled again
-      potentialUsers.splice(potentialUsers.indexOf(user), 1);
-
-      await EnrolledUser.create({
-        userId: user.id,
-        courseId: course.id,
-        enrollment_date: new Date(),
-      });
+    // Hash the password for each user
+    for (const user of usersData) {
+      user.password = await bcrypt.hash(user.password, 10);
     }
-  }
 
-  process.exit(0);
+    // Create Users
+    const users = await User.bulkCreate(usersData);
+    console.log(`Seeded ${users.length} users.`);
+
+    // Create Profiles
+    const profiles = await Profile.bulkCreate(profilesData);
+    console.log(`Seeded ${profiles.length} profiles.`);
+
+    // Create Topics
+    const topics = await Topic.bulkCreate(topicsData);
+    console.log(`Seeded ${topics.length} topics.`);
+
+    // Create Posts
+    const posts = await Post.bulkCreate(postsData);
+    console.log(`Seeded ${posts.length} posts.`);
+
+    // Create Reactions
+    const reactions = await Reaction.bulkCreate(reactionsData);
+    console.log(`Seeded ${reactions.length} reactions.`);
+
+    // Create Events
+    const events = await Event.bulkCreate(eventsData);
+    console.log(`Seeded ${events.length} events.`);
+
+    // Create Event Attendees
+    const attendees = await EventAttendee.bulkCreate(attendeesData);
+    console.log(`Seeded ${attendees.length} event attendees.`);
+
+    console.log("All seed data inserted successfully!");
+  } catch (err) {
+    console.error("Seeding failed:", err);
+    process.exit(1); // Exit with error code
+  }
 };
 
 // Call seedDatabase function
 seedDatabase();
+
+

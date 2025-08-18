@@ -1,90 +1,107 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
 
 const Signup = () => {
-  const [email, setEmail] = useState('jason@fl1.digital');
-  const [userName, setUserName] = useState('fl1jason');
-  const [password, setPassword] = useState('Letmein123!');
-  const [password2, setPassword2] = useState('Letmein123!');
-
-  const { setUser } = useSession();
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
+    username: '',
+    email: '',
+    password: '',
+  });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useSession();
 
-  const displayError = (message) => {
-    setError(message);
-    setTimeout(() => {
-        setError('');
-    }, 3000);
-};
-
-  const validatePassword = () => {
-    if (password !== password2) {
-        displayError('Passwords do not match');
-        return false;
-    }
-    return true;
-    };
-
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
-    // run any validation checks
-    if (!validatePassword()) {
-        return;
+    // Debug: log the data before sending
+    console.log('Sending signup data:', formData);
+
+    // Simple client-side validation
+    const emptyFields = Object.entries(formData)
+      .filter(([key, value]) => !value)
+      .map(([key]) => key);
+
+    if (emptyFields.length > 0) {
+      setError(`Please fill out: ${emptyFields.join(', ')}`);
+      return;
     }
 
     try {
-      const response = await api.post('/api/users', { username: userName, email: email, password: password, password2: password2 });
+      const response = await api.post('/api/users/signup', formData);
       const data = response.data;
-      // Update the user in the context
+
+      // Save user in context
       setUser({
         username: data.user.username,
         id: data.user.id,
       });
 
-      navigate('/');
-    } catch (error) {
-      console.error('Signup failed', error);
+      localStorage.setItem('authToken', data.token);
+      navigate('/'); // Redirect to blog/home page
+    } catch (err) {
+      // Show backend validation errors
+      setError(err.response?.data?.message || 'Signup failed');
+      console.error('Signup error:', err.response?.data || err.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Signup</h2>
+      <h2>Create Blog Account</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
       <input
         type="text"
+        name="firstname"
+        placeholder="First Name"
+        value={formData.firstname}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="text"
+        name="lastname"
+        placeholder="Last Name"
+        value={formData.lastname}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="text"
+        name="username"
         placeholder="Username"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
+        value={formData.username}
+        onChange={handleChange}
         required
       />
       <input
         type="email"
+        name="email"
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={formData.email}
+        onChange={handleChange}
         required
       />
       <input
         type="password"
+        name="password"
         placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={formData.password}
+        onChange={handleChange}
         required
       />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={password2}
-        onChange={(e) => setPassword2(e.target.value)}
-        required
-      />
-      {error && <p>{error}</p>}
-      <button type="submit">Signup</button>
+
+      <button type="submit">Sign Up</button>
     </form>
   );
 };
