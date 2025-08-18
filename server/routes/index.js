@@ -16,7 +16,7 @@ router.get("/api", (req, res) => {
 // user-related routes
 router.use("/api/users", userRoutes);
 // profile-related routes
-router.use("/api/profile", profileRoutes); 
+router.use("/api/profiles", profileRoutes); 
 router.use("/api/posts", postRoutes);
 router.use("/api/topics", topicRoutes);
 router.use("/api/reactions", reactionRoutes);
