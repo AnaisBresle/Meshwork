@@ -12,6 +12,7 @@ import DirectoryPage from "./pages/DirectoryPage";
 import EventsPage from "./pages/EventsPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";   
+import CreateProfilePage from "./pages/CreateProfilePage"; 
 
 // Layout = header + filters + (sidebar | page slot)
 function Layout() {
@@ -56,33 +57,37 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <Routes>
-      {/* If not logged in → show Login/Signup */}
-      {!isLoggedIn ? (
-        <>
-          <Route
-            path="/login"
-            element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
-          />
-          <Route
-            path="/signup"
-            element={<SignupPage onSignup={() => setIsLoggedIn(true)} />}
-          />
-          {/* Redirect unknown paths to login */}
-          <Route
-            path="*"
-            element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
-          />
-        </>
-      ) : (
-        // If logged in → show full app shell
-        <Route element={<Layout />}>
-          <Route index element={<MainFeed />} />
-          <Route path="profile/:id" element={<ProfilePage />} />
-          <Route path="directory" element={<DirectoryPage />} />
-          <Route path="events" element={<EventsPage />} />
-        </Route>
-      )}
-    </Routes>
-  );
+  <Routes>
+    {!isLoggedIn ? (
+      <>
+        <Route
+          path="/login"
+          element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+        />
+        <Route
+          path="/signup"
+          element={<SignupPage onSignup={() => setIsLoggedIn(true)} />}
+        />
+        <Route path="/create-profile" element={<CreateProfilePage />} /> 
+        {/* Allow access even if not logged in */}
+
+        {/* Redirect unknown paths */}
+        <Route
+          path="*"
+          element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+        />
+      </>
+    ) : (
+      <Route element={<Layout />}>
+        <Route index element={<MainFeed />} />
+        <Route path="profile/:id" element={<ProfilePage />} />
+        <Route path="directory" element={<DirectoryPage />} />
+        <Route path="events" element={<EventsPage />} />
+        <Route path="create-profile" element={<CreateProfilePage />} /> 
+        {/* Also accessible after login */}
+      </Route>
+    )}
+  </Routes>
+);
+
 }
