@@ -74,11 +74,11 @@ export default function EventsList() {
 
            <h2 style={{ margin: 0 }}>{ev.title}</h2>
             <div style={{ fontSize: 14, color: "#666" }}>
-              {ev.businessName} • {ev.type === "online" ? "Online" : ev.location}
+              <strong>Location:</strong> {ev.type === "online" ? "Online" : ev.location}
             </div>
             <div style={{ fontSize: 14 }}>
-              <strong>Date:</strong> {ev.date} <br />
-              <strong>Time:</strong> {ev.time}
+              <strong>Date:</strong> {ev.eventDate} <br />
+              <strong>Time:</strong> {ev.eventTime}
             </div>
             <p style={{ fontSize: 14, margin: 0 }}>{ev.description}</p>
             {ev.link && (
