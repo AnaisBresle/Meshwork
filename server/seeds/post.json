@@ -156,6 +156,43 @@
     "userId": 8,
     "createdAt": "2025-08-09T14:20:00Z"
     
+  },
+
+  {
+    "id": 18,
+    "title": null,
+    "topicId": 1,
+    "parentId": 16,
+    "content": "I love the idea of focusing on just one tip at a time — keeps it manageable and not overwhelming.",
+    "userId": 9,
+    "createdAt": "2025-08-18T10:00:00Z"
+  },
+  {
+    "id": 19,
+    "title": null,
+    "topicId": 1,
+    "parentId": 16,
+    "content": "Collabs are gold! Any tips on finding creators with a similar audience?",
+    "userId": 5,
+    "createdAt": "2025-08-18T10:15:00Z"
+  },
+  {
+    "id": 20,
+    "title": null,
+    "topicId": 3,
+    "parentId": 17,
+    "content": "Great reminder about website speed — I often forget how much it impacts conversions!",
+    "userId": 2,
+    "createdAt": "2025-08-18T10:30:00Z"
+  },
+  {
+    "id": 21,
+    "title": null,
+    "topicId": 3,
+    "parentId": 17,
+    "content": "Creating gift guides is so smart. Even a small shop can boost sales by making choices easier for customers.",
+    "userId": 6,
+    "createdAt": "2025-08-18T10:45:00Z"
   }
 
  
