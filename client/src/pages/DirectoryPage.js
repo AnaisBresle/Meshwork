@@ -1,11 +1,18 @@
 
-import { useMemo, useState } from "react";
+import {useMemo, useEffect, useMemo} from "react";
 import { Link } from "react-router-dom";
-import people from "../data/people";
-import profiles from "../data/profiles"; 
+
 
 export default function DirectoryPage() {
   const [q, setQ] = useState("");
+  const [people, setPeople] = useSate([]);
+
+  useEffect(() => {
+    fetch("/api/http://localhost:3001/api/users")
+      .then((res) => res.json())
+      .then((data) => setPeople(data))
+      .catch(console.error);
+  }, []);
 
   const visible = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -14,10 +21,8 @@ export default function DirectoryPage() {
       const hay = `${p.name} ${p.role} ${p.bio} ${p.location} ${p.industry}`.toLowerCase();
       return hay.includes(term);
     });
-  }, [q]);
+  }, [q, people]);
 
-  const companyOf = (companyId) =>
-    profiles.find((x) => x.id === companyId);
 
   return (
     <div style={{ display: "grid", gap: 16 }}>
