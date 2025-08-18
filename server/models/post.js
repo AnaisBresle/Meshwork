@@ -11,7 +11,7 @@ const Post = sequelize.define(
     },
     topicId: {
   type: DataTypes.INTEGER,
-  allowNull: true, // change from false to true
+  allowNull: true, 
   references: { model: 'topics', key: 'id' },
   onDelete: 'SET NULL',
 },
@@ -19,7 +19,7 @@ const Post = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: "posts",  // self-reference to Post model
+        model: "posts",  
         key: "id",
       },
       onDelete: "CASCADE",
@@ -36,7 +36,7 @@ const Post = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "User",  // capitalized
+        model: "users", 
         key: "id",
       },
       onDelete: "CASCADE",
