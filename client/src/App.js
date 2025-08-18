@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 
+
+import { SessionProvider } from './contexts/SessionContext';
+
+import Header from "./components/Header";
+
 import NavBar from "./components/NavBar";
+
 import Sidebar from "./components/SideBar";
 import FilterBar from "./components/FilterBar";
 import Footer from "./components/Footer";
@@ -57,7 +63,10 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-  <Routes>
+
+    <SessionProvider>
+    <Routes>
+
     {!isLoggedIn ? (
       <>
         <Route
@@ -78,6 +87,7 @@ export default function App() {
         />
       </>
     ) : (
+
       <Route element={<Layout />}>
         <Route index element={<MainFeed />} />
         <Route path="profile/:id" element={<ProfilePage />} />
@@ -86,8 +96,9 @@ export default function App() {
         <Route path="create-profile" element={<CreateProfilePage />} /> 
         {/* Also accessible after login */}
       </Route>
-    )}
-  </Routes>
-);
 
+    </Routes>
+    </SessionProvider>
+  );
 }
+
