@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 
+import { SessionProvider } from './contexts/SessionContext';
+
 import Header from "./components/Header";
 import Sidebar from "./components/SideBar";
 import FilterBar from "./components/FilterBar";
@@ -54,6 +56,7 @@ function Layout() {
 
 export default function App() {
   return (
+    <SessionProvider>
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<MainFeed />} />
@@ -62,5 +65,6 @@ export default function App() {
         <Route path="events" element={<EventsPage />} />
       </Route>
     </Routes>
+    </SessionProvider>
   );
 }
