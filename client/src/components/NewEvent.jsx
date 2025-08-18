@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import api from '../api'; 
+import { useState } from "react";
+
 
 
 const CreateEvent = () => {
@@ -170,7 +170,7 @@ const CreateEvent = () => {
         </label>
         <input
           id="eventTime"
-          type="date"
+          type="time"
           value={eventTime}
           onChange={(e) => setEventTime(e.target.value)}
           required
