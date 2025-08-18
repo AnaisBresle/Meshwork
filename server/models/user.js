@@ -12,9 +12,17 @@ User.init(
   {
     id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false,
+    },
+    first_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     username: {
       type: DataTypes.STRING,
@@ -24,46 +32,30 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      validate: {
-        isEmail: true,
-      },
+      validate: { isEmail: true },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [8],
-      },
-    },
-    createdOn: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.NOW,
-    },
-    lastLogin: {
-      type: DataTypes.DATE,
+      validate: { len: [8] },
     },
   },
   {
-    hooks: {
-      // Hash password before creating a user
-      beforeCreate: async (newUserData) => {
-        newUserData.password = await bcrypt.hash(newUserData.password, 10);
-        return newUserData;
-      },
-      // Hash password if it’s updated
-      beforeUpdate: async (updatedUserData) => {
-        if (updatedUserData.changed("password")) {
-          updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-        }
-        return updatedUserData;
-      },
-    },
     sequelize,
     timestamps: false,
     freezeTableName: true,
     underscored: true,
     modelName: "User",
+    hooks: {
+      beforeCreate: async (user) => {
+        user.password = await bcrypt.hash(user.password, 10);
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed("password")) {
+          user.password = await bcrypt.hash(user.password, 10);
+        }
+      },
+    },
   }
 );
 

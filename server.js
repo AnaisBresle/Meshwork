@@ -1,40 +1,40 @@
-// Import required packages
+// server.js
 require("dotenv").config();
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 
-const sequelize = require('./server/config/connection');
-const routes = require('./server/routes');
+const sequelize = require("./server/config/connection");
+const routes = require("./server/routes");
 
-
-// Initialize Express application
 const app = express();
-app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Enable CORS for any paths from the client
-app.use(cors());
-
 const PORT = process.env.PORT || 3001;
 
-// has the --rebuild parameter been passed as a command line param?
-const rebuild = process.argv[2] === "--rebuild";
+// Middleware
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-// Serve static files from the 'public' directory
+// Serve static files from client/public
 app.use(express.static(path.join(__dirname, "../client/public")));
 
-// Handle GET request at the root route
+// Root route
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.htm"));
+  res.sendFile(path.join(__dirname, "../client/public/index.html"));
 });
 
-// Add routes
-app.use(routes);
 
-// Sync database
-sequelize.sync({ force: rebuild }).then(() => {
-  app.listen(PORT, () => console.log("Now listening"));
+// API routes
+app.use("/api", routes);
+
+// Fallback route for root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/public/index.html"));
+});
+
+
+// Sync database and start server
+sequelize.sync().then(() => {
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 });
