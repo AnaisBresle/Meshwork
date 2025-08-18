@@ -110,8 +110,8 @@ const CreateEvent = () => {
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="">Select a Type</option>
-          <option value="1">Online</option>
-          <option value="2">In-person</option>
+          <option value="online">Online</option>
+          <option value="in-person">In-person</option>
          
         </select>
       </div>
