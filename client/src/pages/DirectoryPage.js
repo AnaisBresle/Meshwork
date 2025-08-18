@@ -2,26 +2,26 @@
 import {useState, useEffect, useMemo} from "react";
 import { Link } from "react-router-dom";
 
-
 export default function DirectoryPage() {
   const [q, setQ] = useState("");
-  const [profile, setProfile] = useState([]);
+  const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/api/profiles")
       .then((res) => res.json())
-      .then((data) => setProfile(data))
+      .then((data) => setProfiles(data))
       .catch(console.error);
   }, []);
 
   const visible = useMemo(() => {
     const term = q.trim().toLowerCase();
-    if (!term) return profile;
-    return profile.filter((p) => {
+    if (!term) return profiles;
+    return profiles.filter((p) => {
       const hay = `${p.User.firstname} ${p.User.lastname} ${p.jobtitle} ${p.company} ${p.bio} ${p.location} ${p.industry} ${p.website} ${p.linkedIn}`.toLowerCase();
+      
       return hay.includes(term);
     });
-  }, [q, profile]);
+  }, [q, profiles]);
 
 
   return (
@@ -63,9 +63,11 @@ export default function DirectoryPage() {
               <div style={{ display: "grid", gridTemplateColumns: "48px 1fr", gap: 12, alignItems: "center" }}>
                 <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#ddd" }} />
                 <div>
-                  <h2 style={{ margin: 0, fontSize: 18 }}>{p.name}</h2>
+                  <h2 style={{ margin: 0, fontSize: 18 }}>{p.User.firstname} {p.User.lastname}</h2>
                   <div style={{ fontSize: 12, color: "#666" }}>
-                    {p.role} • {p.industry} • {p.location}
+                    {p.jobtitle} • {p.company} • {p.industry}
+                    <br />{p.location}
+ 
                   </div>
                 </div>
               </div>
@@ -74,6 +76,10 @@ export default function DirectoryPage() {
               <p style={{ margin: 0, fontSize: 14, color: "#444" }}>{p.bio}</p>
 
             
+            {/* links */}
+            <p><Link to={p.website} style={{ fontSize: 14 }}>{p.website}</Link></p>
+             <p><Link to={p.linkedIn} style={{ fontSize: 14 }}>{p.linkedIn}</Link></p>
+      
 
               {/* stats row --- no such data yet
               <div style={{ display: "flex", gap: 16, fontSize: 12 }}>
