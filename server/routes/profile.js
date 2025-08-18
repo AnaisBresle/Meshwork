@@ -12,6 +12,16 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Get all profiles -Needed for direcctory
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.findAll({ include: User });
+    res.json(profiles);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Get Profile by User ID
 router.get("/:userId", async (req, res) => {
   try {
