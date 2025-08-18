@@ -6,6 +6,10 @@ const CreateEvent = () => {
 
   const { user } = useSession();
 
+ if (!user) {
+  return <p>Loading user info...</p>; 
+}
+
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
