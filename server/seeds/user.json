@@ -3,147 +3,168 @@
     "id": 1, 
     "username": "sarah_entrepreneur",  
     "email": "sarah@greensprout.co",     
-    "password": "GrowBiz#2025"
+    "password": "GrowBiz#2025",
+    "firstname": "Sarah",
+    "lastname": "Green"
   },
-  
   { 
     "id": 2,  
-    "username": "mark_freelance",      
+    "username": "mark_freelance",       
     "email": "mark@digitalhorizons.io",  
-    "password": "DevStack@84" 
+    "password": "DevStack@84",
+    "firstname": "Mark",
+    "lastname": "Johnson"
   },
-  
   {
     "id": 3, 
     "username": "priya_ops",           
-    "email": "priya@chaihouse.com",      
-    "password": "OpsQueen99" 
+    "email": "priya@chaihouse.com",       
+    "password": "OpsQueen99",
+    "firstname": "Priya",
+    "lastname": "Desai"
   },
-  
   {
     "id": 4,  
     "username": "david_marketing",     
     "email": "david@brightbuzzmedia.com",
-    "password": "BrandBuzz21"
+    "password": "BrandBuzz21",
+    "firstname": "David",
+    "lastname": "Lee"
   },
-  
    {
     "id": 5, 
     "username": "alex_startup",        
     "email": "alex@innoventures.co.uk",  
-    "password": "Innovate88"
+    "password": "Innovate88",
+    "firstname": "Alex",
+    "lastname": "Turner"
   },
-  
   {
     "id": 6, 
     "username": "emma_finance",        
     "email": "emma@finwiseadvisory.com", 
-    "password": "MoneyMatters1!" 
+    "password": "MoneyMatters1!",
+    "firstname": "Emma",
+    "lastname": "Baker"
   },
-
   {
     "id": 7, 
     "username": "tom_builder",         
     "email": "tom@skylinebuilders.com",  
-    "password": "BuildIt2025" 
+    "password": "BuildIt2025",
+    "firstname": "Tom",
+    "lastname": "Campbell"
     },
-  
   {
     "id": 8, 
     "username": "lucy_retail",         
     "email": "lucy@trendologyfashion.com",
-    "password": "ShopSmart*22" 
+    "password": "ShopSmart*22",
+    "firstname": "Lucy",
+    "lastname": "Perez"
     },
-  
   { 
     "id": 9,  
     "username": "james_itconsult",    
-    "email": "james@nextbyteit.co",      
-    "password": "TechPro77" 
+    "email": "james@nextbyteit.co",       
+    "password": "TechPro77",
+    "firstname": "James",
+    "lastname": "Morris"
   },
-
   { 
     "id": 10, 
     "username": "hannah_wellness",     
     "email": "hannah@mindfulmoves.co",   
-    "password": "Wellness!23" 
+    "password": "Wellness!23",
+    "firstname": "Hannah",
+    "lastname": "Wright"
   },
-
   { 
     "id": 11, 
     "username": "li_chef",             
     "email": "li@eastwokbistro.com",     
-    "password": "ChefLife#8" 
+    "password": "ChefLife#8",
+    "firstname": "Li",
+    "lastname": "Chen"
   },
-
   { 
     "id": 12, 
     "username": "kate_hr",             
     "email": "kate@peoplepulsehr.com",   
-    "password": "TalentTalk55" 
+    "password": "TalentTalk55",
+    "firstname": "Kate",
+    "lastname": "Smith"
   },
-
   { 
     "id": 13, 
     "username": "samuel_events",       
     "email": "samuel@gatherhub.com",     
-    "password": "EventPro!01" 
+    "password": "EventPro!01",
+    "firstname": "Samuel",
+    "lastname": "Murphy"
   },
-
   { 
     "id": 14, 
     "username": "isabella_design",     
     "email": "isabella@creativestudio.io", 
-    "password": "DesignMinds9" 
+    "password": "DesignMinds9",
+    "firstname": "Isabella",
+    "lastname": "Ross"
   },
-
   { 
     "id": 15, 
     "username": "michael_fitness",     
     "email": "michael@peakperformgym.com", 
-    "password": "FitLifeX2" 
+    "password": "FitLifeX2",
+    "firstname": "Michael",
+    "lastname": "Davis"
   },
-
   { 
     "id": 16, 
     "username": "zoe_marketresearch", 
     "email": "zoe@insightanalytics.co",  
-    "password": "DataDive42" 
+    "password": "DataDive42",
+    "firstname": "Zoe",
+    "lastname": "Miller"
   },
-
   { 
     "id": 17, 
     "username": "harry_photography",   
     "email": "harry@lenscraftmedia.com", 
-    "password": "SnapShot88" 
+    "password": "SnapShot88",
+    "firstname": "Harry",
+    "lastname": "Morgan"
   },
-
   { 
     "id": 18, 
     "username": "nina_consultant",    
     "email": "nina@bizboostsolutions.com",
-    "password": "BizBoost44" 
+    "password": "BizBoost44",
+    "firstname": "Nina",
+    "lastname": "Patel"
   },
-
   {
     "id": 19, 
     "username": "peter_transport",    
     "email": "peter@fasttracklogistics.co",
-    "password": "MoveItFast5" 
+    "password": "MoveItFast5",
+    "firstname": "Peter",
+    "lastname": "Carter"
   },
-
   { 
     "id": 20, 
     "username": "clara_art",           
     "email": "clara@inspiregallery.com", 
-    "password": "ColorSplash3" 
+    "password": "ColorSplash3",
+    "firstname": "Clara",
+    "lastname": "Evans"
   },
-
-
    {
     "id": 21,
     "username": "LiamK",
     "email": "LK@floralondon.com", 
-    "password": "Daisy1234" 
+    "password": "Daisy1234",
+    "firstname": "Liam",
+    "lastname": "Khan"
   }
 ]
