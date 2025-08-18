@@ -7,6 +7,7 @@ export default function EventsList() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // Declaring error
+  const { filters } = useOutletContext(); // { topics, sort }
 
   useEffect(() => {
     fetch("http://localhost:3001/api/events") 
@@ -57,7 +58,21 @@ export default function EventsList() {
           gap: 16,
         }}
       >
-            <h2 style={{ margin: 0 }}>{ev.title}</h2>
+
+          {list.map((ev) => (
+          <article
+            key={ev.id}
+            style={{
+              border: "1px solid #eee",
+              borderRadius: 12,
+              background: "white",
+              padding: 16,
+              display: "grid",
+              gap: 10,
+            }}
+          >
+
+           <h2 style={{ margin: 0 }}>{ev.title}</h2>
             <div style={{ fontSize: 14, color: "#666" }}>
               {ev.businessName} • {ev.type === "online" ? "Online" : ev.location}
             </div>
@@ -77,8 +92,9 @@ export default function EventsList() {
               </a>
             )}
           </article>
-        ))}
-      </div>
+            ))}
+          </div>
     </div>
+    
   );
 }
