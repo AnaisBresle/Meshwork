@@ -162,15 +162,17 @@ const CreateEvent = () => {
           className="w-full px-4 py-2 border rounded-md"
         />
       </div>
+      
+      <div>
 
        <label htmlFor="eventTime" className="block text-gray-700">
-          Date
+          Time
         </label>
         <input
           id="eventTime"
           type="date"
-          value={eventDate}
-          onChange={(e) => setEventDate(e.target.value)}
+          value={eventTime}
+          onChange={(e) => setEventTime(e.target.value)}
           required
           className="w-full px-4 py-2 border rounded-md"
         />
