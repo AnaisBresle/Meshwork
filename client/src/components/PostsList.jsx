@@ -55,7 +55,7 @@ export default function PostsList() {
         <ul>
         {list.map((post) => (
           <li key={post.id}>
-            <strong>{post.title}</strong> — {post.topic} · {post.date}<br />
+            <strong>{post.title}</strong> — {post.topicId} · {post.createdAt}<br />
             {post.content}
           </li>
         ))}
