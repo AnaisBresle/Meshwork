@@ -1,10 +1,11 @@
 
 import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 
 
-
+export default function PostsList() {
   // filters provided by <Outlet context={{ filters }} />
-  const { filters } = useOutletContext(); // { category, industry, sort }
+  const { filters } = useOutletContext(); // { topics, sort }
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // Declaring error
@@ -61,4 +62,4 @@ import { useState, useEffect } from "react";
       </ul>
     </div>
   );
-};
+}
