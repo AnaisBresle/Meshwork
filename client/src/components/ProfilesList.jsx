@@ -26,8 +26,7 @@ export default function DirectoryPage() {
 
   return (
     <div style={{ display: "grid", gap: 16 }}>
-      <h1 style={{ margin: 0 }}>Members Directory </h1>
-
+      
       {/* simple search (TODO: add industry filter here later) */}
       <div style={{ display: "flex", gap: 8 }}>
         <input
