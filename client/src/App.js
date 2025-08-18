@@ -65,10 +65,10 @@ export default function App() {
   return (
 
     <SessionProvider>
-    <Routes>
+    
 
     {!isLoggedIn ? (
-      <>
+      <Routes>
         <Route
           path="/login"
           element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
@@ -85,9 +85,9 @@ export default function App() {
           path="*"
           element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
         />
-      </>
+    </Routes>
     ) : (
-
+<Routes>
       <Route element={<Layout />}>
         <Route index element={<MainFeed />} />
         <Route path="profile/:id" element={<ProfilePage />} />
@@ -96,9 +96,10 @@ export default function App() {
         <Route path="create-profile" element={<CreateProfilePage />} /> 
         {/* Also accessible after login */}
       </Route>
-
-    </Routes>
+      </Routes>
+  )}
+  
     </SessionProvider>
-  );
-}
 
+      );
+}
