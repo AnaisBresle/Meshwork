@@ -1,12 +1,11 @@
 
-import { useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 
-export default function MainFeed() {
+
   // filters provided by <Outlet context={{ filters }} />
   const { filters } = useOutletContext(); // { category, industry, sort }
-  const [posts, SetPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null); // Declaring error
 
@@ -35,17 +34,13 @@ export default function MainFeed() {
   // Start with everything
   let list = [...posts];
 
-  // 1) Category filter (advice/trends/events/community)
-  if (filters?.category && filters.category !== "all") {
-    list = list.filter((p) => p.category === filters.category);
+  // 1) Topic filter
+  if (filters?.topic && filters.topic !== "all") {
+    list = list.filter((p) => p.topic === filters.topic);
   }
 
-  // 2) Industry filter (florists/design/technology/Beauty/fashion)
-  if (filters?.industry && filters.industry !== "all") {
-    list = list.filter((p) => p.industry === filters.industry);
-  }
 
-  // 3) Sort (newest/popular/nearby)
+  // 2) Sort (newest/popular/nearby)
   if (filters?.sort === "newest") {
     list.sort((a, b) => new Date(b.date) - new Date(a.date));
   } else if (filters?.sort === "popular") {
@@ -56,14 +51,14 @@ export default function MainFeed() {
 
   return (
     <div>
-      <h1>Main Feed</h1>
-      <ul>
+        <ul>
         {list.map((post) => (
           <li key={post.id}>
-            <strong>{post.title}</strong> — {post.category} · {post.industry} · {post.date}
+            <strong>{post.title}</strong> — {post.topic} · {post.date}<br />
+            {post.content}
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
