@@ -1,8 +1,12 @@
 import { useState } from "react";
-
+import { useSession } from "../contexts/SessionContext";
 
 
 const CreateEvent = () => {
+
+  const { user } = useSession();
+
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -22,6 +26,10 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // dates/times = model correct format
+  const eventDate = new Date(date).toISOString().split("T")[0]; // YYYY-MM-DD
+  const eventTime = time + ":00"; // HH:MM:SS
 
     if (!title || !description || !type || !eventDate  || !eventTime ) {
       displayError('Please fill in all required fields.');
@@ -46,7 +54,7 @@ const CreateEvent = () => {
       eventTime,
       ...(type === "in-person" && { location }),
       ...(type === "online" && { link }),
-      createdBy: user?.id 
+      createdBy: user?.id || null, // safe fallback if no user
     };
 
     try {    const response = await fetch("http://localhost:3001/api/events", {
