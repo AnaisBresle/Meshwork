@@ -7,13 +7,9 @@ export default function DirectoryPage() {
   const { filters } = useOutletContext(); // { name, indsutry, location }
   
   return (
-    <div>
-     <h1 style={{ margin: 0 }}>Members Directory </h1>
-
-      
+    <div className="container mx-auto px-4 py-8">
+    <h1 className="text-3xl font-bold text-gray-900 mb-6">Members Directory</h1>
     <ProfilesList filters={filters} />
-    </div>
-   
+  </div>
   );
-
 }
