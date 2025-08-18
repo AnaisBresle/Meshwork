@@ -46,6 +46,7 @@ const CreateEvent = () => {
       eventTime,
       ...(type === "in-person" && { location }),
       ...(type === "online" && { link }),
+      createdBy: user?.id 
     };
 
     try {    const response = await fetch("http://localhost:3001/api/events", {
