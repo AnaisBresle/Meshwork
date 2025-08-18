@@ -18,7 +18,7 @@ export default function DirectoryPage() {
     const term = q.trim().toLowerCase();
     if (!term) return profile;
     return profile.filter((p) => {
-      const hay = `${p.User.firstname} ${p.User.lastname} ${p.jobTtitle} ${p.company} ${p.bio} ${p.location} ${p.industry} ${p.website} ${p.linkedIn}`.toLowerCase();
+      const hay = `${p.User.firstname} ${p.User.lastname} ${p.jobtitle} ${p.company} ${p.bio} ${p.location} ${p.industry} ${p.website} ${p.linkedIn}`.toLowerCase();
       return hay.includes(term);
     });
   }, [q, profile]);
