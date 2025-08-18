@@ -44,8 +44,8 @@ const CreateEvent = () => {
       type,
       eventDate,
       eventTime,
-      location,
-      link
+      location: type === "in-person" ? location : null, /// to handle condition 
+      link: type === "online" ? link : null,
     };
 
     try {
@@ -95,7 +95,7 @@ const CreateEvent = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          rows="5"
+          rows="4"
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         ></textarea>
       </div>
@@ -116,30 +116,67 @@ const CreateEvent = () => {
         </select>
       </div>
 
+
+ {type === "in-person" && (
       <div className="space-y-1">
         <label htmlFor="location" className="block text-gray-700">Location</label>
-        <textarea
+        <input
           id="location"
+          type="text"
           placeholder="Enter event location"
           value={location}
           onChange={(e) => setEventLocation(e.target.value)}
-          rows="2"
+          required={type === "in-person"} //only if type is in person
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        ></textarea>
+        ></input>
+      </div>
+ )}
+
+{type === "online" && (
+        <div>
+          <label htmlFor="link" className="block text-gray-700">
+            Event Link
+          </label>
+          <input
+            id="link"
+            type="url"
+            value={link}
+            onChange={(e) => setEventLink(e.target.value)}
+            placeholder="https://example.com/event"
+            required={type === "online"}
+            className="w-full px-4 py-2 border rounded-md"
+          />
+        </div>
+      )}
+
+ <div>
+        <label htmlFor="eventDate" className="block text-gray-700">
+          Date
+        </label>
+        <input
+          id="eventDate"
+          type="date"
+          value={eventDate}
+          onChange={(e) => setEventDate(e.target.value)}
+          required
+          className="w-full px-4 py-2 border rounded-md"
+        />
       </div>
 
-
-
-
-
-
-
-     
-    
-      setEventDate ('');
-      setEventTime ('');
+       <label htmlFor="eventTime" className="block text-gray-700">
+          Date
+        </label>
+        <input
+          id="eventTime"
+          type="date"
+          value={eventDate}
+          onChange={(e) => setEventDate(e.target.value)}
+          required
+          className="w-full px-4 py-2 border rounded-md"
+        />
+      </div>
          
-      setEventLink ('');
+   
 
       {error && <p className="text-red-500 text-center">{error}</p>}
       
