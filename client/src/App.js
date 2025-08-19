@@ -1,18 +1,19 @@
-// App.js
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Sidebar from "./components/SideBar";
 import FilterBar from "./components/FilterBar";
 import Footer from "./components/Footer";
+import CreateEvent from "./components/NewEvent";  
+import NewPost from "./components/NewPost";       
 
 import MainFeed from "./pages/MainFeed";
 import ProfilePage from "./pages/ProfilePage";
 import DirectoryPage from "./pages/DirectoryPage";
 import EventsPage from "./pages/EventsPage";
 import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";   
-import CreateProfilePage from "./pages/CreateProfilePage"; 
+import SignupPage from "./pages/SignupPage";
+import CreateProfilePage from "./pages/CreateProfilePage";
 import { SessionProvider } from "./contexts/SessionContext";
 
 // Layout = header + filters + (sidebar | page slot)
@@ -31,7 +32,7 @@ function Layout() {
     <div className="min-h-screen flex flex-col bg-white text-[var(--text-primary)]">
       {/* Navbar */}
       <NavBar />
-      
+
       {/* Filters */}
       <FilterBar onChange={handleFilters} />
 
@@ -57,40 +58,46 @@ function Layout() {
 }
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // 👈 force logged in while developing
 
-  return ( <SessionProvider>
-    <Routes>
-      {!isLoggedIn ? (
-        <>
-          <Route
-            path="/login"
-            element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
-          />
-          <Route
-            path="/signup"
-            element={<SignupPage onSignup={() => setIsLoggedIn(true)} />}
-          />
-          <Route path="/create-profile" element={<CreateProfilePage />} /> 
-          {/* Allow access even if not logged in */}
+  return (
+    <SessionProvider>
+      <Routes>
+        {!isLoggedIn ? (
+          <>
+            <Route
+              path="/login"
+              element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+            />
+            <Route
+              path="/signup"
+              element={<SignupPage onSignup={() => setIsLoggedIn(true)} />}
+            />
+            <Route path="/create-profile" element={<CreateProfilePage />} />
 
-          {/* Redirect unknown paths */}
-          <Route
-            path="*"
-            element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
-          />
-        </>
-      ) : (
-        <Route element={<Layout />}>
-          <Route index element={<MainFeed />} />
-          <Route path="profile/:id" element={<ProfilePage />} />
-          <Route path="directory" element={<DirectoryPage />} />
-          <Route path="events" element={<EventsPage />} />
-          <Route path="create-profile" element={<CreateProfilePage />} /> 
-        </Route>
-      )}
-    </Routes>
+            {/* Redirect unknown paths */}
+            <Route
+              path="*"
+              element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+            />
+          </>
+        ) : (
+          <Route element={<Layout />}>
+            {/* Main feed */}
+            <Route index element={<MainFeed />} />
+
+            {/* Create routes */}
+            <Route path="/create-event" element={<CreateEvent />} />
+            <Route path="/create-post" element={<NewPost />} />
+
+            {/* Other app pages */}
+            <Route path="profile/:id" element={<ProfilePage />} />
+            <Route path="directory" element={<DirectoryPage />} />
+            <Route path="events" element={<EventsPage />} />
+            <Route path="create-profile" element={<CreateProfilePage />} />
+          </Route>
+        )}
+      </Routes>
     </SessionProvider>
   );
-  
 }

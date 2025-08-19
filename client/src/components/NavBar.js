@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { NavLink as RouterNavLink, Link } from "react-router-dom";
 import {
   HomeIcon,
@@ -28,14 +28,21 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Left: Brand + Navigation */}
           <div className="flex items-center space-x-6">
-            <Link to="/" className="flex-shrink-0 font-bold text-xl text-[var(--primary)]">
+            <Link
+              to="/"
+              className="flex-shrink-0 font-bold text-xl text-[var(--primary)]"
+            >
               {/* Desktop: text / Mobile: logo */}
               <span className="hidden md:inline">Meshwork</span>
               <img src={logo} alt="Meshwork Logo" className="h-8 md:hidden" />
             </Link>
             <nav className="hidden md:flex space-x-1">
               <NavItem icon={HomeIcon} text="Home" to="/" active />
-              <NavItem icon={MagnifyingGlassIcon} text="Explore" to="/explore" />
+              <NavItem
+                icon={MagnifyingGlassIcon}
+                text="Explore"
+                to="/explore"
+              />
               <NavItem
                 icon={BellIcon}
                 text="Notifications"
@@ -92,8 +99,8 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* Create Post */}
-            <CreatePostButton />
+            {/* Dropdown */}
+            <CreateMenu />
 
             {/* User Menu */}
             <div className="relative">
@@ -107,7 +114,7 @@ export default function Navbar() {
                   Username
                 </span>
               </button>
-              {/* Dropdown (example – can do later) */}
+              {/* Dropdown (placeholder – not hooked up yet) */}
               <div className="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-[var(--surface)] border border-[var(--border)]">
                 <Link
                   to="/profile"
@@ -133,7 +140,6 @@ export default function Navbar() {
   );
 }
 
-
 function NavItem({ icon: Icon, text, to, active, badge }) {
   return (
     <RouterNavLink
@@ -158,11 +164,55 @@ function NavItem({ icon: Icon, text, to, active, badge }) {
   );
 }
 
-function CreatePostButton() {
+// Dropdown for Post + Event
+function CreateMenu() {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  // Close on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <button className="flex items-center px-4 py-2 bg-[var(--primary)] text-white rounded-full hover:opacity-90 transition">
-      <PlusIcon className="h-5 w-5 mr-2" />
-      <span className="hidden md:inline">Create</span>
-    </button>
+    <div className="relative" ref={menuRef}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center px-4 py-2 bg-[var(--primary)] text-white rounded-full hover:opacity-90 transition shadow-md"
+      >
+        <PlusIcon className="h-5 w-5 mr-2" />
+        <span className="hidden md:inline font-medium">Create</span>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
+          <div className="divide-y divide-gray-100">
+            <Link
+              to="/create-post"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-5 py-3 text-[15px] text-gray-700 hover:bg-gray-50 transition"
+            >
+              <ChatBubbleOvalLeftIcon className="h-5 w-5 text-[var(--primary)]" />
+              <span>Create Post</span>
+            </Link>
+
+            <Link
+              to="/create-event"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-5 py-3 text-[15px] text-gray-700 hover:bg-gray-50 transition"
+            >
+              <BellIcon className="h-5 w-5 text-[var(--primary)]" />
+              <span>Create Event</span>
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
