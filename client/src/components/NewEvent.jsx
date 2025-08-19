@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useSession } from "../contexts/SessionContext";
 
@@ -7,7 +8,7 @@ const CreateEvent = () => {
   const { user } = useSession();
 
  if (!user) {
-  return <p>Loading user info...</p>; 
+ return <p>Loading user info...</p>; 
 }
 
 
