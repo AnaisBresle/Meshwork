@@ -4,8 +4,8 @@ import placeholder2 from "../images/placeholder2.png";
 
 export default function SignupPage({ onSignup }) {
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
@@ -62,20 +62,20 @@ export default function SignupPage({ onSignup }) {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <input
-                name="first_name"
+                name="firstname"
                 type="text"
                 required
                 placeholder="First Name"
-                value={formData.first_name}
+                value={formData.firstname}
                 onChange={handleChange}
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
-                name="last_name"
+                name="lastname"
                 type="text"
                 required
                 placeholder="Last Name"
-                value={formData.last_name}
+                value={formData.lastname}
                 onChange={handleChange}
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />

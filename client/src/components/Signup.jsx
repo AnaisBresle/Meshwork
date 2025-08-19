@@ -11,6 +11,8 @@ const Signup = () => {
 
   const { setUser } = useSession();
   const [error, setError] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const navigate = useNavigate();
 
   const displayError = (message) => {
@@ -38,7 +40,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await api.post('/api/users', { username: userName, email: email, password: password, password2: password2 });
+      const response = await api.post('http://localhost:3001/api/users/signup', { username, email, firstname, lastname, password,});
       const data = response.data;
       // Update the user in the context
       setUser({
