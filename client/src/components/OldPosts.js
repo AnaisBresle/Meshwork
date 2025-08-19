@@ -6,7 +6,7 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/24/outline";
 
-const NewPost = () => {
+const OldPosts = () => {
   const { user } = useSession();
 
   if (!user) return <p>Loading user info...</p>;
@@ -159,4 +159,4 @@ const NewPost = () => {
   );
 };
 
-export default NewPost;
+export default OldPosts;
