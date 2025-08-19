@@ -5,8 +5,9 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 
-const sequelize = require("./server/config/connection");
-const routes = require("./server/routes");
+const sequelize = require("./config/connection");
+const routes = require("./routes");
+
 
 
 const app = express();
@@ -27,6 +28,10 @@ app.get("/", (req, res) => {
 
 
 // Sync database
-sequelize.sync({ force: rebuild }).then(() => {
-  app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`));
-});
+sequelize.sync({ force: false })  // or true if you want to reset DB
+  .then(() => {
+    console.log("Database synced");
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => console.error(err));
+
