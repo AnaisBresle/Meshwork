@@ -5,6 +5,8 @@ import { useSession } from "../contexts/SessionContext";
 const CreateEvent = () => {
 
   const { user } = useSession();
+  const { token } = useSession();
+  console.log(token);
 
  if (!user) {
   return <p>Loading user info...</p>; 
@@ -28,70 +30,73 @@ const CreateEvent = () => {
     }, 3000);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // dates/times = model correct format
-  const formattedDate = new Date(eventDate).toISOString().split("T")[0]; // YYYY-MM-DD
-  const formattedTime = eventTime + ":00"; // HH:MM:SS
+  const formattedDate = new Date(eventDate).toISOString().split("T")[0];
+  const formattedTime = eventTime + ":00";
 
-    if (!title || !description || !type || !eventDate  || !eventTime ) {
-      displayError('Please fill in all required fields.');
-      return;
-    }
-
-     if (type === "online" && !link) {
-      displayError("Link is required for online events.");
-      return;
-    }
-
-    if (type === "in-person" && !location) {
-      displayError("Location is required for in-person events.");
-      return;
-    }
-
-    const newEventData = {
-      title,
-      description,
-      type,
-      eventDate: formattedDate,
-      eventTime: formattedTime,
-      ...(type === "in-person" && { location }),
-      ...(type === "online" && { link }),
-      createdBy: user.id
-    };
-
-    try { 
-    const response = await fetch("http://localhost:3001/api/events", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(newEventData),
-});
-   
-    const data = await response.json();
-
-    if (!response.ok) {
-    
-    throw new Error(errMsg || "Failed to create event");
+  // Validations
+  if (!title || !description || !type || !eventDate || !eventTime) {
+    displayError('Please fill in all required fields.');
+    return;
   }
 
-     
-      console.log('Event created successfully:', data);
+  if (type === "online" && !link) {
+    displayError("Link is required for online events.");
+    return;
+  }
 
-      //reset
-      setTitle('');
-      setDescription('');
-      setEventType ('');
-      setEventDate ('');
-      setEventTime ('');
-      setEventLocation ('');
-      setEventLink ('');
+  if (type === "in-person" && !location) {
+    displayError("Location is required for in-person events.");
+    return;
+  }
 
-    } catch (error) {
-      console.error('Event creation failed', error);
-      displayError('Failed to create event. Please try again.');
-    }
+  const newEventData = {
+    title,
+    description,
+    type,
+    eventDate: formattedDate,
+    eventTime: formattedTime,
+    ...(type === "in-person" && { location }),
+    ...(type === "online" && { link }),
+    createdBy: user.id
   };
+
+  try {
+    console.log("Sending token:", token);
+    const response = await fetch("http://localhost:3001/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`,  
+       },
+      body: JSON.stringify(newEventData),
+    });
+
+    const data = await response.json().catch(() => ({})); // never fails
+
+    if (!response.ok) {
+      const message = data.error || data.message || "Failed to create event";
+      throw new Error(message);
+    }
+
+    console.log("Event created successfully:", data);
+
+    // Reset form
+    setTitle('');
+    setDescription('');
+    setEventType('');
+    setEventDate('');
+    setEventTime('');
+    setEventLocation('');
+    setEventLink('');
+
+  } catch (error) {
+    console.error("Event creation failed", error.message);
+    displayError(error.message);
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="">
