@@ -1,44 +1,64 @@
 export default function FilterBar({ onChange }) {
-  const handleCategory = (e) => onChange?.({ category: e.target.value });
-  const handleIndustry = (e) => onChange?.({ industry: e.target.value }); // <-- new
-  const handleSort = (e) => onChange?.({ sort: e.target.value });
+  const handleChange = (e) => {
+    onChange({ [e.target.name]: e.target.value });
+  };
 
   return (
-    <div style={{ display: "flex", gap: 12, padding: "8px 16px", borderBottom: "1px solid #eee", background: "#fafafa" }}>
-      {/* Category */}
-      <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span style={{ fontSize: 14, color: "#555" }}>Category</span>
-        <select onChange={handleCategory} defaultValue="all">
-          <option value="all">All</option>
-          <option value="advice">Advice</option>
-          <option value="trends">Trend</option>
-          <option value="events">Events</option>
-          <option value="community">Community</option>
-        </select>
-      </label>
+    <div className="bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
+      <div className="flex flex-wrap gap-4 items-center">
+        {/* Category */}
+        <div>
+          <label htmlFor="category" className="text-sm font-medium text-gray-700 mr-2">
+            Category
+          </label>
+          <select
+            id="category"
+            name="category"
+            onChange={handleChange}
+            className="rounded-md border-gray-300 text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+          >
+            <option value="all">All</option>
+            <option value="marketing">Marketing</option>
+            <option value="operations">Operations</option>
+            <option value="finance">Finance</option>
+          </select>
+        </div>
 
-      {/* Industry */}
-      <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span style={{ fontSize: 14, color: "#555" }}>Industry</span>
-        <select onChange={handleIndustry} defaultValue="all"> {/* <-- use handleIndustry */}
-          <option value="all">All</option>
-          <option value="florists">Florists</option>
-          <option value="design">Design</option>
-          <option value="technology">Technology</option>
-          <option value="beauty">Hair &amp; Beauty</option>
-          <option value="fashion">Fashion</option>
-        </select>
-      </label>
+        {/* Industry */}
+        <div>
+          <label htmlFor="industry" className="text-sm font-medium text-gray-700 mr-2">
+            Industry
+          </label>
+          <select
+            id="industry"
+            name="industry"
+            onChange={handleChange}
+            className="rounded-md border-gray-300 text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+          >
+            <option value="all">All</option>
+            <option value="retail">Retail</option>
+            <option value="tech">Tech</option>
+            <option value="health">Health</option>
+          </select>
+        </div>
 
-      {/* Sort */}
-      <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span style={{ fontSize: 14, color: "#555" }}>Sort</span>
-        <select onChange={handleSort} defaultValue="newest">
-          <option value="newest">Newest</option>
-          <option value="popular">Popular</option>
-          <option value="nearby">Nearby</option>
-        </select>
-      </label>
+        {/* Sort */}
+        <div>
+          <label htmlFor="sort" className="text-sm font-medium text-gray-700 mr-2">
+            Sort
+          </label>
+          <select
+            id="sort"
+            name="sort"
+            onChange={handleChange}
+            className="rounded-md border-gray-300 text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+          >
+            <option value="newest">Newest</option>
+            <option value="popular">Popular</option>
+            <option value="nearby">Nearby</option>
+          </select>
+        </div>
+      </div>
     </div>
   );
 }
