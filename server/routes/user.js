@@ -2,10 +2,18 @@ const router = require("express").Router();
 const { User, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 
+// =======================
 // SIGNUP
+// =======================
 router.post("/signup", async (req, res) => {
   try {
     const { first_name, last_name, username, email, password } = req.body;
+
+
+    // Validate required fields
+    if (!firstname || !lastname || !username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     // Check if email already exists
     const existingUser = await User.findOne({ where: { email } });
@@ -15,11 +23,11 @@ router.post("/signup", async (req, res) => {
 
     // Create user
     const newUser = await User.create({
-      first_name,
-      last_name,
+      firstname,
+      lastname,
       username,
       email,
-      password
+      password,
     });
 
     // Generate JWT token
@@ -31,20 +39,24 @@ router.post("/signup", async (req, res) => {
 
     res.status(201).json({ token, user: userSafe });
   } catch (err) {
-    console.error(err);
+    console.error("Signup error:", err);
     res.status(400).json({ message: "Signup failed", error: err.message });
   }
 });
 
+// =======================
 // LOGIN
+// =======================
 router.post("/login", async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
+    const { email, password } = req.body;
+
+    const userData = await User.findOne({ where: { email } });
     if (!userData) {
       return res.status(400).json({ message: "Incorrect email or password" });
     }
 
-    const validPassword = await userData.checkPassword(req.body.password);
+    const validPassword = await userData.checkPassword(password);
     if (!validPassword) {
       return res.status(400).json({ message: "Incorrect email or password" });
     }
@@ -54,25 +66,26 @@ router.post("/login", async (req, res) => {
 
     const token = signToken(userData);
 
-    // Remove password before sending response
     const userSafe = userData.get({ plain: true });
     delete userSafe.password;
 
     res.status(200).json({ token, user: userSafe });
-
   } catch (err) {
-    console.error(err);
+    console.error("Login error:", err);
     res.status(400).json({ message: "Login failed", error: err.message });
   }
 });
 
-
-// LOGOUT (JWT — client deletes token)
+// =======================
+// LOGOUT (JWT – client deletes token)
+// =======================
 router.post("/logout", authMiddleware, (req, res) => {
   res.status(204).end();
 });
 
+// =======================
 // GET Current User
+// =======================
 router.get("/me", authMiddleware, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {
@@ -84,12 +97,14 @@ router.get("/me", authMiddleware, async (req, res) => {
     }
     res.json(user);
   } catch (err) {
-    console.error(err);
+    console.error("Get current user error:", err);
     res.status(500).json(err);
   }
 });
 
+// =======================
 // CREATE a Post
+// =======================
 router.post("/posts", authMiddleware, async (req, res) => {
   try {
     const { title, content } = req.body;
@@ -106,7 +121,7 @@ router.post("/posts", authMiddleware, async (req, res) => {
 
     res.status(201).json(newPost);
   } catch (err) {
-    console.error(err);
+    console.error("Create post error:", err);
     res.status(500).json({ message: "Failed to create post" });
   }
 });

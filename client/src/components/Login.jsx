@@ -3,17 +3,18 @@ import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
 
-const defaultUser = {
-  email: 'sarah@greensprout.co',
-  password: 'GrowBiz#2025',
-};
-
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState(defaultUser.email);
-  const [password, setPassword] = useState(defaultUser.password);
-  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
+  const navigate = useNavigate();
   const { setUser } = useSession();
+
+  const displayError = (message) => {
+    setError(message);
+    setTimeout(() => setError(''), 3000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,46 +22,54 @@ const Login = ({ onLogin }) => {
       const response = await api.post('/api/users/login', { email, password });
       const data = response.data;
 
-      
-    const loggedInUser = {
-      id: data.user.id,
-      firstname: data.user.firstname,
-      lastname: data.user.lastname,
-      username: data.user.username,
-      email: data.user.email,
-    };
+      const loggedInUser = {
+        id: data.user.id,
+        firstname: data.user.first_name,
+        lastname: data.user.last_name,
+        username: data.user.username,
+        email: data.user.email,
+      };
 
-    setUser(loggedInUser);
+      // Save user in context
+      setUser(loggedInUser);
+
+      // Save auth info to localStorage
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('user', JSON.stringify(loggedInUser));
 
+      if (onLogin) onLogin(); // for App.js state
 
-    onLogin(); //Call onLogin passed from App.js
-    
-    navigate('/');
-  } catch (error) {
-    console.error('Login failed', error);
-  }
-};
-
+      navigate('/');
+    } catch (err) {
+      console.error('Login failed:', err.response?.data || err.message);
+      displayError(err.response?.data?.message || 'Login failed');
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Login</h2>
+
       <input
-        type="text"
-        placeholder="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+  type="email"
+  placeholder="Email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  required
+  autoComplete="email"
+/>
+
+<input
+  type="password"
+  placeholder="Password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  required
+  autoComplete="current-password"
+/>
+
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <button type="submit">Login</button>
     </form>
   );

@@ -17,12 +17,12 @@ User.init(
       autoIncrement: true,
     },
 
-     firstname: {
+     first_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
 
-     lastname: {
+     last_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },

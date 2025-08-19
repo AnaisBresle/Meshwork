@@ -2,6 +2,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const app = express();
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
@@ -11,12 +12,15 @@ const routes = require('./routes');
 
 
 // Initialize Express application
-const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS for any paths from the client
 app.use(cors());
+
+
+// Add routes
+app.use(routes);
 
 const PORT = process.env.PORT || 3001;
 
@@ -31,8 +35,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "public", "index.html"));
 });
 
-// Add routes
-app.use(routes);
 
 // Sync database
 sequelize.sync({ force: rebuild }).then(() => {
