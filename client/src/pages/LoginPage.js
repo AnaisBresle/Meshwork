@@ -53,18 +53,6 @@ export default function LoginPage({ onLogin }) {
 };
 
 
-        onLogin();
-        navigate("/");
-      } else {
-        alert(data.message || "Login failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error during login");
-    }
-  };
-
-
   return (
     <div className="flex min-h-screen">
       {/* LEFT SIDE - LOGIN FORM */}
