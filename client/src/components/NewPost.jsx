@@ -34,7 +34,7 @@ const NewPost = ({ setPosts } ) => {
     setTimeout(() => {
       setError('');
     }, 3000);
-  
+  };
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -85,7 +85,7 @@ console.log("Post created successfully:", data);
       displayError(error.message);
     }
   };
-  };
+ 
 
 
   return (
