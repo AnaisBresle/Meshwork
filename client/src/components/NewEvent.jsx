@@ -95,8 +95,8 @@ const CreateEvent = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="">
-      <h2>Create a new Event</h2>
+    <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md space-y-4">
+      <h1> ✏️ Create a new Event</h1>
       
       <div >
         <label htmlFor="title" className="block text-gray-700">Event Name</label>
@@ -208,7 +208,7 @@ const CreateEvent = () => {
       
       <button
         type="submit"
-        className="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        className="w-full bg-[var(--primary)] text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
       >
         Create Event
       </button>

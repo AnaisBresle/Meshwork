@@ -1,4 +1,4 @@
-// App.js
+
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
@@ -14,6 +14,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";   
 import CreateProfilePage from "./pages/CreateProfilePage"; 
 import { SessionProvider } from "./contexts/SessionContext";
+import CreateEvent from "./components/NewEvent";
 
 // Layout = header + filters + (sidebar | page slot)
 function Layout() {
@@ -86,7 +87,9 @@ export default function App() {
           <Route path="profile/:id" element={<ProfilePage />} />
           <Route path="directory" element={<DirectoryPage />} />
           <Route path="events" element={<EventsPage />} />
-          <Route path="create-profile" element={<CreateProfilePage />} /> 
+          <Route path="create-profile" element={<CreateProfilePage />} />
+          <Route path="/create-event" element={<CreateEvent />} />
+          <Route path="/create-post" element={<div>Create Post form coming soon…</div>} /> 
         </Route>
       )}
     </Routes>
