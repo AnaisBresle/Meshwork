@@ -1,13 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSession } from "../contexts/SessionContext";
 import logo from "../images/logo.png"; 
+
 
 export default function LoginPage({ onLogin }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
+  const { setUser } = useSession();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -22,7 +27,17 @@ export default function LoginPage({ onLogin }) {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        setUser({
+          id: data.user.id,
+          firstname: data.user.firstname,
+          lastname: data.user.lastname,
+          username: data.user.username,
+          email: data.user.email,
+        });
+
         onLogin();
+
+        navigate("/");
       } else {
         alert(data.message || "Login failed");
       }
