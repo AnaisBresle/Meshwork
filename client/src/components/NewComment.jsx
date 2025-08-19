@@ -1,31 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "../contexts/SessionContext";
 
 
-const NewPost = ( ) => {
+const NewComment = ( ) => {
   const { user, token } = useSession();
 
-  useEffect(() => {
-    const fetchTopics = async () => {
-      try {
-        const res = await fetch("http://localhost:3001/api/topics");
-        const data = await res.json();
-        setTopics(data);
-      } catch (err) {
-
-        console.error("Failed to fetch topics:", err);
-      }
-    };
-    fetchTopics();
-  }, []);
-
   if (!user) return <p>Loading user info...</p>;
-
-
-  const [title, setTitle] = useState('');
+  
   const [content, setContent] = useState('');
-  const [topicId, setTopicId] = useState(null);
-  const [topics, setTopics] = useState([]);
   const [error, setError] = useState("");
     
 
@@ -41,16 +23,17 @@ const handleSubmit = async (e) => {
 
     // Validations
   if (!content) {
-    displayError('Post/Comment cannot be empty');
+    displayError('Comment cannot be empty');
     return;
   }
 
 
-  const newPostData = {
+  const newCommentData = {
     title,
     content,
     userId: user.id,
     topicId: topicId || null,
+    parentId: post.id
     };
 
   try {
