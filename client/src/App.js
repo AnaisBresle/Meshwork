@@ -1,13 +1,8 @@
+// App.js
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 
-
-import { SessionProvider } from './contexts/SessionContext';
-
-import Header from "./components/Header";
-
 import NavBar from "./components/NavBar";
-
 import Sidebar from "./components/SideBar";
 import FilterBar from "./components/FilterBar";
 import Footer from "./components/Footer";
@@ -19,6 +14,7 @@ import EventsPage from "./pages/EventsPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";   
 import CreateProfilePage from "./pages/CreateProfilePage"; 
+import { SessionProvider } from "./contexts/SessionContext";
 
 // Layout = header + filters + (sidebar | page slot)
 function Layout() {
@@ -33,73 +29,69 @@ function Layout() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "grid",
-        gridTemplateRows: "auto auto 1fr auto", // header, filter, main, footer
-      }}
-    >
+    <div className="min-h-screen flex flex-col bg-white text-[var(--text-primary)]">
+      {/* Navbar */}
       <NavBar />
+      
+      {/* Filters */}
       <FilterBar onChange={handleFilters} />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "220px 1fr",
-          minHeight: 0,
-        }}
-      >
+
+      {/* Main section with sidebar + page content */}
+      <div className="flex flex-1 bg-white">
         <Sidebar />
-        <main style={{ padding: 16 }}>
+        <main
+          className="
+            flex-1 p-6
+            md:ml-60
+            transition-all duration-300 ease-in-out
+            max-w-4xl mx-auto
+          "
+        >
           <Outlet context={{ filters }} />
         </main>
       </div>
+
+      {/* Footer */}
       <Footer />
     </div>
   );
 }
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-  return (
+  return ( <SessionProvider>
+    <Routes>
+      {!isLoggedIn ? (
+        <>
+          <Route
+            path="/login"
+            element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+          />
+          <Route
+            path="/signup"
+            element={<SignupPage onSignup={() => setIsLoggedIn(true)} />}
+          />
+          <Route path="/create-profile" element={<CreateProfilePage />} /> 
+          {/* Allow access even if not logged in */}
 
-    <SessionProvider>
-    
-
-    {!isLoggedIn ? (
-      <Routes>
-        <Route
-          path="/login"
-          element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
-        />
-        <Route
-          path="/signup"
-          element={<SignupPage onSignup={() => setIsLoggedIn(true)} />}
-        />
-        <Route path="/create-profile" element={<CreateProfilePage />} /> 
-        {/* Allow access even if not logged in */}
-
-        {/* Redirect unknown paths */}
-        <Route
-          path="*"
-          element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
-        />
+          {/* Redirect unknown paths */}
+          <Route
+            path="*"
+            element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+          />
+        </>
+      ) : (
+        <Route element={<Layout />}>
+          <Route index element={<MainFeed />} />
+          <Route path="profile/:id" element={<ProfilePage />} />
+          <Route path="directory" element={<DirectoryPage />} />
+          <Route path="events" element={<EventsPage />} />
+          <Route path="create-profile" element={<CreateProfilePage />} /> 
+        </Route>
+      )}
     </Routes>
-    ) : (
-<Routes>
-      <Route element={<Layout />}>
-        <Route index element={<MainFeed />} />
-        <Route path="profile/:id" element={<ProfilePage />} />
-        <Route path="directory" element={<DirectoryPage />} />
-        <Route path="events" element={<EventsPage />} />
-        <Route path="create-profile" element={<CreateProfilePage />} /> 
-        {/* Also accessible after login */}
-      </Route>
-      </Routes>
-  )}
-  
     </SessionProvider>
-
-      );
+  );
+  
 }

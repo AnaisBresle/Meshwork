@@ -1,111 +1,168 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { NavLink as RouterNavLink, Link } from "react-router-dom";
 import {
-  Navbar,
-  MobileNav,
-  Typography,
-  IconButton,
-} from "@material-tailwind/react";
+  HomeIcon,
+  MagnifyingGlassIcon,
+  BellIcon,
+  ChatBubbleOvalLeftIcon,
+  SunIcon,
+  MoonIcon,
+  PlusIcon,
+} from "@heroicons/react/24/outline";
 
-const NavBar = () => {
-  const [openNav, setOpenNav] = useState(false);
+import logo from "../images/logo.png";
 
-  useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => window.innerWidth >= 960 && setOpenNav(false)
-    );
-  }, []);
-
-  const navList = (
-    <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      <Typography as="li" variant="small" color="blue-gray" className="p-1 font-normal">
-        <a href="#" className="flex items-center">Pages</a>
-      </Typography>
-      <Typography as="li" variant="small" color="blue-gray" className="p-1 font-normal">
-        <a href="#" className="flex items-center">Account</a>
-      </Typography>
-      <Typography as="li" variant="small" color="blue-gray" className="p-1 font-normal">
-        <a href="#" className="flex items-center">Directory</a>
-      </Typography>
-      <Typography as="li" variant="small" color="blue-gray" className="p-1 font-normal">
-        <a href="#" className="flex items-center">Events</a>
-      </Typography>
-    </ul>
-  );
+export default function Navbar() {
+  const [unreadCounts, setUnreadCounts] = useState({
+    notifications: 5,
+    messages: 2,
+  });
+  const [showSearch, setShowSearch] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <Navbar className="max-w-screen-xl px-4 py-2 mx-auto lg:px-8 lg:py-4">
-      <div className="container flex items-center justify-between mx-auto text-blue-gray-900 gap-4">
-        {/* Brand */}
-        <Typography
-          as="a"
-          href="#"
-          variant="small"
-          className="mr-4 cursor-pointer py-1.5 font-bold text-xl"
-        >
-          Meshwork
-        </Typography>
+    <header
+      className={`sticky top-0 z-50 bg-[var(--surface)] border-b border-[var(--border)] shadow-sm`}
+    >
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Left: Brand + Navigation */}
+          <div className="flex items-center space-x-6">
+            <Link to="/" className="flex-shrink-0 font-bold text-xl text-[var(--primary)]">
+              {/* Desktop: text / Mobile: logo */}
+              <span className="hidden md:inline">Meshwork</span>
+              <img src={logo} alt="Meshwork Logo" className="h-8 md:hidden" />
+            </Link>
+            <nav className="hidden md:flex space-x-1">
+              <NavItem icon={HomeIcon} text="Home" to="/" active />
+              <NavItem icon={MagnifyingGlassIcon} text="Explore" to="/explore" />
+              <NavItem
+                icon={BellIcon}
+                text="Notifications"
+                to="/notifications"
+                badge={unreadCounts.notifications}
+              />
+              <NavItem
+                icon={ChatBubbleOvalLeftIcon}
+                text="Messages"
+                to="/messages"
+                badge={unreadCounts.messages}
+              />
+            </nav>
+          </div>
 
-        {/* Desktop nav links */}
-        <div className="hidden lg:block">{navList}</div>
+          {/* Center: Search */}
+          <div className="flex-1 max-w-xl mx-4">
+            {showSearch ? (
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search people, posts, #tags..."
+                  className="w-full pl-4 pr-10 py-2 rounded-full bg-[var(--background)] text-[var(--text-primary)] focus:outline-none"
+                />
+                <button
+                  onClick={() => setShowSearch(false)}
+                  className="absolute right-3 top-2.5 text-[var(--text-secondary)]"
+                >
+                  ✕
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowSearch(true)}
+                className="md:hidden p-2 text-[var(--text-secondary)]"
+              >
+                <MagnifyingGlassIcon className="h-5 w-5" />
+              </button>
+            )}
+          </div>
 
-        {/* Search + Create Post + Notifications + Avatar */}
-        <div className="flex items-center gap-4 flex-1 justify-end">
-          <input
-            placeholder="Search posts, businesses, events…"
-            className="hidden md:block flex-1 max-w-md px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-          <button className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100">
-            Create Post
-          </button>
-
-          <span role="img" aria-label="notifications" className="cursor-pointer">
-            🔔
-          </span>
-
-          <div className="w-8 h-8 rounded-full bg-gray-300" />
-        </div>
-
-        {/* Mobile toggle button */}
-        <IconButton
-          variant="text"
-          className="w-6 h-6 ml-auto text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-          ripple={false}
-          onClick={() => setOpenNav(!openNav)}
-        >
-          {openNav ? (
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" className="w-6 h-6"
-              viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none"
-              stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-          )}
-        </IconButton>
-      </div>
-
-      {/* Mobile nav */}
-      <MobileNav open={openNav}>
-        <div className="container mx-auto">
-          {navList}
-          <div className="flex flex-col gap-2 mt-4">
-            <input
-              placeholder="Search…"
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100">
-              Create Post
+          {/* Right: User Controls */}
+          <div className="flex items-center space-x-4">
+            {/* Dark mode toggle */}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 rounded-full hover:bg-[var(--background)]"
+              aria-label="Toggle dark mode"
+            >
+              {darkMode ? (
+                <SunIcon className="h-5 w-5 text-[var(--primary)]" />
+              ) : (
+                <MoonIcon className="h-5 w-5 text-[var(--text-secondary)]" />
+              )}
             </button>
+
+            {/* Create Post */}
+            <CreatePostButton />
+
+            {/* User Menu */}
+            <div className="relative">
+              <button className="flex items-center space-x-2 focus:outline-none">
+                <img
+                  src="/user-avatar.jpg"
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full"
+                />
+                <span className="hidden md:inline text-[var(--text-primary)]">
+                  Username
+                </span>
+              </button>
+              {/* Dropdown (example – can do later) */}
+              <div className="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-[var(--surface)] border border-[var(--border)]">
+                <Link
+                  to="/profile"
+                  className="dropdown-item block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
+                >
+                  Your Profile
+                </Link>
+                <Link
+                  to="/settings"
+                  className="dropdown-item block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
+                >
+                  Settings
+                </Link>
+                <button className="dropdown-item block w-full text-left px-4 py-2 text-sm text-[var(--error)] hover:bg-[var(--background)]">
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </MobileNav>
-    </Navbar>
+      </div>
+    </header>
   );
-};
+}
 
-export default NavBar;
 
+function NavItem({ icon: Icon, text, to, active, badge }) {
+  return (
+    <RouterNavLink
+      to={to}
+      className={({ isActive }) =>
+        `flex items-center px-3 py-2 rounded-md text-sm font-medium transition 
+        ${
+          isActive || active
+            ? "active-link"
+            : "text-[var(--text-secondary)] hover:bg-[var(--background)] hover:text-[var(--primary)]"
+        }`
+      }
+    >
+      <Icon className="h-5 w-5 mr-2" />
+      {text}
+      {badge > 0 && (
+        <span className="ml-2 bg-[var(--error)] text-white text-xs px-2 py-0.5 rounded-full">
+          {badge}
+        </span>
+      )}
+    </RouterNavLink>
+  );
+}
+
+function CreatePostButton() {
+  return (
+    <button className="flex items-center px-4 py-2 bg-[var(--primary)] text-white rounded-full hover:opacity-90 transition">
+      <PlusIcon className="h-5 w-5 mr-2" />
+      <span className="hidden md:inline">Create</span>
+    </button>
+  );
+}
