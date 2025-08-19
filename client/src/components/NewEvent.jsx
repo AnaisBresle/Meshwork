@@ -2,12 +2,10 @@ import { useState } from "react";
 import { useSession } from "../contexts/SessionContext";
 
 
-const CreateEvent = () => {
+const CreateEvent = ({ setEvents }) => {
 
-  const { user } = useSession();
-  const { token } = useSession();
-  console.log(token);
-
+  const { user, token} = useSession();
+    
  if (!user) {
   return <p>Loading user info...</p>; 
 }
@@ -20,7 +18,6 @@ const CreateEvent = () => {
   const [location, setEventLocation] = useState('');
   const [type, setEventType] = useState('');
   const [link, setEventLink] = useState('');
-   
   const [error, setError] = useState('');
 
   const displayError = (message) => {
@@ -64,8 +61,7 @@ const handleSubmit = async (e) => {
   };
 
   try {
-    console.log("Sending token:", token);
-    const response = await fetch("http://localhost:3001/api/events", {
+      const response = await fetch("http://localhost:3001/api/events", {
       method: "POST",
       headers: { "Content-Type": "application/json",
       'Authorization': `Bearer ${token}`,  
@@ -80,6 +76,14 @@ const handleSubmit = async (e) => {
       throw new Error(message);
     }
 
+     // Fetch updated events list
+    const eventsResponse = await fetch("http://localhost:3001/api/events", {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const updatedEvents = await eventsResponse.json();
+
+    setEvents(updatedEvents); // update parent
+
     console.log("Event created successfully:", data);
 
     // Reset form
@@ -91,6 +95,9 @@ const handleSubmit = async (e) => {
     setEventLocation('');
     setEventLink('');
 
+    // Update local state to include the new event
+   setEvents(prev => [...prev, data]);
+ 
   } catch (error) {
     console.error("Event creation failed", error.message);
     displayError(error.message);
