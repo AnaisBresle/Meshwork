@@ -1,4 +1,10 @@
-export default function PostCard({ post }) {
+import { useState } from "react";
+import NewComment from "./NewComment";
+
+
+export default function PostCard({ post, refreshPosts }) {
+
+  const [showCommentForm, setShowCommentForm] = useState(false);
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition">
       {/* header */}
@@ -26,12 +32,15 @@ export default function PostCard({ post }) {
           <span className="text-lg">♡</span> Like
         </button>
         <button className="flex items-center gap-1 text-gray-500 hover:text-[var(--brand-primary,#2563eb)] transition">
-          <span className="text-lg">💬</span> Comment
+         onClick={() => setShowCommentForm((prev) => !prev)}
+         <span className="text-lg">💬</span> Comment
         </button>
         <button className="flex items-center gap-1 text-gray-500 hover:text-[var(--brand-primary,#2563eb)] transition">
           <span className="text-lg">↗</span> Share
         </button>
       </div>
+      {/* show NewComment form */}
+      {showCommentForm && <NewComment parentPost={post} onCommentAdded={refreshPosts} />}
     </div>
   );
 }

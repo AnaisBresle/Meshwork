@@ -32,12 +32,12 @@ const handleSubmit = async (e) => {
     title: null,
     content,
     userId: user.id,
-    topicId: topicId, //link to the parent post somehow
-    parentId: post.id
+    topicId: parentPost.topicId, //link to the parent post somehow
+    parentId: parentPost.id
     };
 
   try {
-      const response = await fetch("http://localhost:3001/api/posts", {
+      const response = await fetch("http://localhost:3001/api/posts/${parentPost.id}/comments", {
       method: "POST",
       headers: { "Content-Type": "application/json",
       'Authorization': `Bearer ${token}`,  
