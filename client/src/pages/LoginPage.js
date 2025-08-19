@@ -13,27 +13,45 @@ export default function LoginPage({ onLogin }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ 
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3001/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
 
-      const data = await response.json();
+  try {
+    const response = await fetch("http://localhost:3001/api/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-        setUser({
-          id: data.user.id,
-          firstname: data.user.firstname,
-          lastname: data.user.lastname,
-          username: data.user.username,
-          email: data.user.email,
-        });
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert(errorData.message || "Login failed");
+      return;
+    }
+
+    const data = await response.json();
+
+    // Save token and user info
+    localStorage.setItem("token", data.token);
+    setUser({
+      id: data.user.id,
+      firstname: data.user.firstname,
+      lastname: data.user.lastname,
+      username: data.user.username,
+      email: data.user.email,
+    });
+
+    onLogin();
+    navigate("/");
+
+  } catch (err) {
+    console.error("Fetch failed", err);
+    alert("Cannot reach server");
+  }
+};
+
 
         onLogin();
         navigate("/");
@@ -45,6 +63,7 @@ export default function LoginPage({ onLogin }) {
       alert("Error during login");
     }
   };
+
 
   return (
     <div className="flex min-h-screen">

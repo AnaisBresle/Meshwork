@@ -1,12 +1,13 @@
 const express = require("express");
 const { Event, EventAttendee, User } = require("../models");
+const { authMiddleware } = require("../utils/auth");
 const router = express.Router();
 
 // Create event
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
     const event = await Event.create({ ...req.body, createdBy: req.user.id });
-    res.json(event);
+    res.status(201).json(event);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
