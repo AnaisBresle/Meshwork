@@ -69,9 +69,9 @@ export default function CreateProfilePage() {
 
       {/* Form card */}
       <div className="relative w-full max-w-2xl bg-white p-10 rounded-xl shadow-lg border border-gray-100">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
-         ✏ Create Your Profile
-        </h2>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+         ✏️ Create Your Profile
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Company */}
