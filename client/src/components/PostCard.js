@@ -31,8 +31,8 @@ export default function PostCard({ post, refreshPosts }) {
         <button className="flex items-center gap-1 text-gray-500 hover:text-[var(--brand-primary,#2563eb)] transition">
           <span className="text-lg">♡</span> Like
         </button>
-        <button className="flex items-center gap-1 text-gray-500 hover:text-[var(--brand-primary,#2563eb)] transition">
-         onClick={() => setShowCommentForm((prev) => !prev)}
+        <button className="flex items-center gap-1 text-gray-500 hover:text-[var(--brand-primary,#2563eb)] transition"
+         onClick={() => setShowCommentForm((prev) => !prev)}>
          <span className="text-lg">💬</span> Comment
         </button>
         <button className="flex items-center gap-1 text-gray-500 hover:text-[var(--brand-primary,#2563eb)] transition">
