@@ -1,7 +1,6 @@
 // App.js
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
-
 import NavBar from "./components/NavBar";
 import Sidebar from "./components/SideBar";
 import FilterBar from "./components/FilterBar";
@@ -58,7 +57,7 @@ function Layout() {
 }
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return ( <SessionProvider>
     <Routes>

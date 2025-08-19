@@ -61,11 +61,12 @@ const CreateEvent = () => {
       createdBy: user?.id || null, // safe fallback if no user
     };
 
-    try {    const response = await fetch("http://localhost:3001/api/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newEventData),
-    });
+    try { 
+    const response = await fetch("http://localhost:3001/api/events", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(newEventData),
+});
    
 
     if (!response.ok) {
@@ -73,8 +74,8 @@ const CreateEvent = () => {
     throw new Error(errMsg || "Failed to create event");
   }
 
-      const data = await response.json();
-      console.log('Event created successfully:', data);
+      const newEventId = data.id || data.event?.id; 
+      console.log("Event created successfully with ID:", newEventId, data);
 
       setTitle('');
       setDescription('');

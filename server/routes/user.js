@@ -49,6 +49,9 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Incorrect email or password" });
     }
 
+    // Update lastLogin timestamp
+    await userData.update({ lastLogin: new Date() });
+
     const token = signToken(userData);
 
     // Remove password before sending response
