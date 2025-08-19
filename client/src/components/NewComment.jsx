@@ -38,7 +38,7 @@ const handleSubmit = async (e) => {
     };
 
   try {
-      const response = await fetch("http://localhost:3001/api/posts/${parentPost.id}/comments", {
+      const response = await fetch(`http://localhost:3001/api/posts/${parentPost.id}/comments`, {
       method: "POST",
       headers: { "Content-Type": "application/json",
       'Authorization': `Bearer ${token}`,  
