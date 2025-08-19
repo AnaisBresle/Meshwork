@@ -58,24 +58,29 @@ const CreateEvent = () => {
       eventTime: formattedTime,
       ...(type === "in-person" && { location }),
       ...(type === "online" && { link }),
-      createdBy: user?.id || null, // safe fallback if no user
+      createdBy: user.id
     };
 
-    try {    const response = await fetch("http://localhost:3001/api/events", {
+    console.log("Submitting event:", newEventData);
+
+    try {    
+      const response = await fetch("http://localhost:3001/api/events", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEventData),
     });
    
+    const data = await response.json();
 
     if (!response.ok) {
-    const errMsg = await response.text(); // or .json() if server sends JSON error
+    
     throw new Error(errMsg || "Failed to create event");
   }
 
-      const data = await response.json();
+     
       console.log('Event created successfully:', data);
 
+      //reset
       setTitle('');
       setDescription('');
       setEventType ('');
@@ -83,9 +88,6 @@ const CreateEvent = () => {
       setEventTime ('');
       setEventLocation ('');
       setEventLink ('');
-
-
-
 
     } catch (error) {
       console.error('Event creation failed', error);
