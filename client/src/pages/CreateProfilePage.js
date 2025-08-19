@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import chatPattern from "../images/chat-pattern.png"; 
 
 export default function CreateProfilePage() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function CreateProfilePage() {
 
       if (response.ok) {
         alert("Profile created successfully!");
-        navigate(`/profile/${data.userId}`); // go to profile page
+        navigate(`/profile/${data.userId}`);
       } else {
         alert(data.message || "Failed to create profile");
       }
@@ -55,10 +56,21 @@ export default function CreateProfilePage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-6 py-12">
-      <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-          Create Your Profile
+    <div
+      className="relative flex min-h-screen items-center justify-center px-6 py-12 bg-white"
+      style={{
+        backgroundImage: `url(${chatPattern})`, 
+        backgroundRepeat: "repeat",
+        backgroundSize: "200px", 
+      }}
+    >
+      {/* Overlay for watermark effect */}
+      <div className="absolute inset-0 bg-white opacity-60"></div>
+
+      {/* Form card */}
+      <div className="relative w-full max-w-2xl bg-white p-10 rounded-xl shadow-lg border border-gray-100">
+        <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+         ✏ Create Your Profile
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -72,7 +84,7 @@ export default function CreateProfilePage() {
               name="company"
               value={formData.company}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 p-3 focus:ring-[#0071E3] focus:border-[#0071E3] sm:text-sm"
             />
           </div>
 
@@ -86,7 +98,7 @@ export default function CreateProfilePage() {
               name="jobTitle"
               value={formData.jobTitle}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 p-3 focus:ring-[#0071E3] focus:border-[#0071E3] sm:text-sm"
             />
           </div>
 
@@ -100,7 +112,7 @@ export default function CreateProfilePage() {
               name="industry"
               value={formData.industry}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 p-3 focus:ring-[#0071E3] focus:border-[#0071E3] sm:text-sm"
             />
           </div>
 
@@ -114,7 +126,7 @@ export default function CreateProfilePage() {
               rows="3"
               value={formData.bio}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 p-3 focus:ring-[#0071E3] focus:border-[#0071E3] sm:text-sm"
               placeholder="Tell us about yourself"
             />
           </div>
@@ -129,7 +141,7 @@ export default function CreateProfilePage() {
               name="location"
               value={formData.location}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 p-3 focus:ring-[#0071E3] focus:border-[#0071E3] sm:text-sm"
             />
           </div>
 
@@ -143,7 +155,7 @@ export default function CreateProfilePage() {
               name="website"
               value={formData.website}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 p-3 focus:ring-[#0071E3] focus:border-[#0071E3] sm:text-sm"
               placeholder="https://example.com"
             />
           </div>
@@ -158,7 +170,7 @@ export default function CreateProfilePage() {
               name="linkedIn"
               value={formData.linkedIn}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 p-3 focus:ring-[#0071E3] focus:border-[#0071E3] sm:text-sm"
               placeholder="https://linkedin.com/in/username"
             />
           </div>
@@ -168,7 +180,7 @@ export default function CreateProfilePage() {
             <button
               type="submit"
               disabled={loading}
-              className="rounded-md bg-indigo-600 px-4 py-2 text-white text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="rounded-md bg-[#0071E3] px-6 py-2 text-white text-sm font-semibold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#0071E3]"
             >
               {loading ? "Saving..." : "Save Profile"}
             </button>
