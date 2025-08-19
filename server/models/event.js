@@ -53,6 +53,16 @@ const Event = sequelize.define(
   {
     tableName: "events",
     timestamps: true,
+    validate: {
+      async locationOrLinkRequired() {
+        if (this.type === "in-person" && !this.location) {
+          throw new Error("Location is required for in-person events.");
+        }
+        if (this.type === "online" && !this.link) {
+          throw new Error("Link is required for online events.");
+        }
+  },
+},
   }
 );
 

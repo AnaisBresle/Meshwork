@@ -2,7 +2,13 @@
 import { useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 
+
+import { SessionProvider } from './contexts/SessionContext';
+
+import Header from "./components/Header";
+
 import NavBar from "./components/NavBar";
+
 import Sidebar from "./components/SideBar";
 import FilterBar from "./components/FilterBar";
 import Footer from "./components/Footer";
@@ -60,6 +66,8 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
+
+    <SessionProvider>
     <Routes>
       {!isLoggedIn ? (
         <>
@@ -90,5 +98,9 @@ export default function App() {
         </Route>
       )}
     </Routes>
+
+   </SessionProvider>
+
   );
 }
+

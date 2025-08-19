@@ -9,6 +9,7 @@ export default function MainFeed() {
   
   return (
     <div>
+
     <PostsList filters={filters} />
     </div>
   );
