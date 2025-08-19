@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useSession } from "../contexts/SessionContext";
 
 
-const NewComment = ( ) => {
+const NewComment = ( { parentPost }) => {
   const { user, token } = useSession();
 
   if (!user) return <p>Loading user info...</p>;
+  if (!parentPost) return null; // safety check
   
   const [content, setContent] = useState('');
   const [error, setError] = useState("");
@@ -60,7 +61,7 @@ const handleSubmit = async (e) => {
     
 console.log("comment created successfully:", data);
     } catch (error) {
-      console.error("Post creation failed", error.message);
+      console.error("Comment creation failed", error.message);
       displayError(error.message);
     }
   };
