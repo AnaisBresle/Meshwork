@@ -3,7 +3,7 @@ import React, { createContext, useState, useContext } from 'react';
 export const SessionContext = createContext();
 
 export function SessionProvider({ children }) {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   return (
     <SessionContext.Provider value={{ user, setUser }}>
@@ -13,3 +13,5 @@ export function SessionProvider({ children }) {
 }
 
 export const useSession = () => useContext(SessionContext);
+
+

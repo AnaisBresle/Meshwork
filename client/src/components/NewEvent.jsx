@@ -61,14 +61,12 @@ const CreateEvent = () => {
       createdBy: user.id
     };
 
-    console.log("Submitting event:", newEventData);
-
-    try {    
-      const response = await fetch("http://localhost:3001/api/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newEventData),
-    });
+    try { 
+    const response = await fetch("http://localhost:3001/api/events", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(newEventData),
+});
    
     const data = await response.json();
 
