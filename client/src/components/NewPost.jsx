@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "../contexts/SessionContext";
 
 
-const NewPost = ({ setPosts } ) => {
+const NewPost = ( ) => {
   const { user, token } = useSession();
 
   useEffect(() => {
@@ -69,8 +69,7 @@ const handleSubmit = async (e) => {
       throw new Error(message);
     }
 
-    // Update local posts list
-      setPosts((prev) => [...prev, data]);
+    
 
     // Reset form
       setTitle("");
