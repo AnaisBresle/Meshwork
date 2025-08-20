@@ -25,7 +25,7 @@ export default function Navbar() {
 
   const { user, logout } = useSession();
   
-    const picture = user.profile?.picture;
+  const picture = user?.profile?.picture;
     
 console.log(user)
   // Lightmode & Dark Mode
@@ -125,7 +125,7 @@ console.log(user)
               <button className="flex items-center space-x-2 focus:outline-none">
                 <img
                   src={picture || "/user-avatar.jpg"}
-                  alt={`${user.firstname} ${user.lastname}`}
+                  alt={`${user?.firstname || "User"} ${user?.lastname || ""}`}
                   className="w-8 h-8 rounded-full"
                 />
                 <span className="hidden md:inline text-[var(--text-primary)]">
@@ -146,9 +146,11 @@ console.log(user)
                   className="dropdown-item block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
                 >
                   Settings
-                </Link>
+                </Link> 
+                </div>
+                </div>
                 {/* logout button */}
-      {user && (
+        {user && (
         <button
           onClick={logout}
           style={{
@@ -166,8 +168,8 @@ console.log(user)
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        
+      
     </header>
   );
 }
