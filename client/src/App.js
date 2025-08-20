@@ -87,13 +87,13 @@ const [events, setEvents] = useState([]);
             <Route index element={<MainFeed />} />
 
             {/* Create routes */}
-            <Route path="/create-event" element={<CreateEvent setEvents={setEvents} />} />
+            <Route path="/create-event" element={<CreateEvent />} />
             <Route path="/create-post" element={<NewPost />} />
 
             {/* Other app pages */}
             <Route path="profile/:id" element={<ProfilePage />} />
             <Route path="directory" element={<DirectoryPage />} />
-            <Route path="events" element={<EventsPage events={events} />} />
+            <Route path="events" element={<EventsPage />} />
             <Route path="create-profile" element={<CreateProfilePage />} />
           </Route>
         )}

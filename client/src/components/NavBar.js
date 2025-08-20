@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useSession } from "../contexts/SessionContext";
-import { NavLink as RouterNavLink, Link } from "react-router-dom";
+import { NavLink as RouterNavLink, Link, useNavigate} from "react-router-dom";
 import {
   HomeIcon,
   MagnifyingGlassIcon,
@@ -14,6 +14,7 @@ import {
 import logo from "../images/logo.png";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [unreadCounts, setUnreadCounts] = useState({
     notifications: 5,
     messages: 2,
@@ -37,6 +38,11 @@ console.log(user)
       document.documentElement.classList.remove("dark-mode");
     }
   }, [darkMode]);
+
+  const handleLogout = () => {
+    logout();        // clear session
+    navigate("/login"); // send user to login page
+  };
 
   return (
     <header
@@ -152,7 +158,7 @@ console.log(user)
                 {/* logout button */}
         {user && (
         <button
-          onClick={logout}
+          onClick={handleLogout}
           style={{
             marginLeft: 8,
             padding: "6px 10px",
