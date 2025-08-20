@@ -17,7 +17,6 @@ export default function Sidebar() {
 
   const navItems = [
     { name: "Main Feed", to: "/", icon: HomeIcon },
-    { name: "Profile", to: "/profile/socialsavvy-studio", icon: UserCircleIcon },
     { name: "Directory", to: "/directory", icon: UsersIcon },
     { name: "Events", to: "/events", icon: CalendarDaysIcon },
   ];
