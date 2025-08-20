@@ -1,7 +1,5 @@
-
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
-
 
 export default function EventsList() {
   const [events, setEvents] = useState([]);
@@ -10,7 +8,7 @@ export default function EventsList() {
   const { filters } = useOutletContext(); // { topics, sort }
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/events") 
+    fetch("http://localhost:3001/api/events")
       .then((res) => {
         if (!res.ok) throw new Error("Network response was not ok");
         return res.json();
@@ -24,11 +22,10 @@ export default function EventsList() {
         setLoading(false);
       });
   }, []);
- 
-// loader UI
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
+  // loader UI
+  if (loading) return <div className="text-[var(--text-secondary)]">Loading...</div>;
+  if (error) return <div className="text-[var(--error)]">Error: {error}</div>;
 
   // Start with everything
   let list = [...events];
@@ -37,7 +34,6 @@ export default function EventsList() {
   if (filters?.type && filters.type !== "all") {
     list = list.filter((p) => p.type === filters.type);
   }
-
 
   // 2) Sort (newest/popular/nearby)
   if (filters?.sort === "newest") {
@@ -49,52 +45,52 @@ export default function EventsList() {
   }
 
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-     
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-          gap: 16,
-        }}
-      >
-
-          {list.map((ev) => (
+    <div className="grid gap-4">
+      <div className="grid gap-6 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
+        {list.map((ev) => (
           <article
             key={ev.id}
-            style={{
-              border: "1px solid #eee",
-              borderRadius: 12,
-              background: "white",
-              padding: 16,
-              display: "grid",
-              gap: 10,
-            }}
+            className="
+              bg-[var(--surface)] border border-[var(--border)] rounded-xl p-6 grid gap-3
+              shadow-sm hover:shadow-md hover:-translate-y-1
+              transition-transform duration-200
+            "
           >
+            {/* event image */}
+            <img
+              src={`/images/events/${ev.id}.jpg`}
+              onError={(e) => (e.currentTarget.src = "/images/events/default.jpg")}
+              alt={ev.title}
+              className="w-full h-40 object-cover rounded-lg"
+            />
 
-           <h2 style={{ margin: 0 }}>{ev.title}</h2>
-            <div style={{ fontSize: 14, color: "#666" }}>
-              <strong>Location:</strong> {ev.type === "online" ? "Online" : ev.location}
+            <h2 className="m-0 text-lg font-semibold text-[var(--text-primary)]">{ev.title}</h2>
+
+            <div className="text-sm text-[var(--text-secondary)]">
+              <strong>Location:</strong>{" "}
+              {ev.type === "online" ? "Online" : ev.location}
             </div>
-            <div style={{ fontSize: 14 }}>
+
+            <div className="text-sm text-[var(--text-primary)]">
               <strong>Date:</strong> {ev.eventDate} <br />
               <strong>Time:</strong> {ev.eventTime}
             </div>
-            <p style={{ fontSize: 14, margin: 0 }}>{ev.description}</p>
+
+            <p className="text-sm text-[var(--text-primary)] m-0">{ev.description}</p>
+
             {ev.link && (
               <a
                 href={ev.link}
                 target="_blank"
                 rel="noreferrer"
-                style={{ fontSize: 14 }}
+                className="text-sm text-[var(--primary)] hover:underline inline-flex items-center gap-1"
               >
-                Join Event →
+                Join Event <span aria-hidden>→</span>
               </a>
             )}
           </article>
-            ))}
-          </div>
+        ))}
+      </div>
     </div>
-    
   );
 }

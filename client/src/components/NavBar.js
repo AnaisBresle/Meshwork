@@ -20,6 +20,16 @@ export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
+  // Lightmode & Dark Mode
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark-mode");
+    } else {
+      document.documentElement.classList.remove("dark-mode");
+    }
+  }, [darkMode]);
+
   return (
     <header
       className={`sticky top-0 z-50 bg-[var(--surface)] border-b border-[var(--border)] shadow-sm`}
@@ -114,6 +124,7 @@ export default function Navbar() {
                   Username
                 </span>
               </button>
+              
               {/* Dropdown (placeholder – not hooked up yet) */}
               <div className="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-[var(--surface)] border border-[var(--border)]">
                 <Link
