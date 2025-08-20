@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import logo from "../images/logo.png"; 
 import placeholder2 from "../images/placeholder2.png"; 
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage({ onSignup }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -33,7 +35,9 @@ console.log("Submitting data:", formData);
       if (response.ok) {
         localStorage.setItem("token", data.token);
         onSignup?.(); // optional callback
-        Navigate("/CreateProfilePage");
+
+         navigate("/create-profile");
+        
       } else {
         alert(data.message || "Signup failed");
       }
