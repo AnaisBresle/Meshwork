@@ -11,12 +11,15 @@ export default function SignupPage({ onSignup }) {
     password: "",
   });
 
+  const [formKey, setFormKey] = useState(Date.now()); // avoids Chrome keeping old values. 
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+console.log("Submitting data:", formData);
 
     try {
       const response = await fetch("http://localhost:3001/api/users/signup", {
@@ -60,7 +63,7 @@ export default function SignupPage({ onSignup }) {
             </a>
           </p>
 
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <form className="mt-8 space-y-6" key={formKey} onSubmit={handleSubmit}>
             <div className="space-y-4">
               <input
                 name="firstname"

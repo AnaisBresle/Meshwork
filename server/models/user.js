@@ -40,18 +40,18 @@ User.init(
       },
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
       validate: {
-        len: [4,50],
+        len: [8, 255], // minimum 8, max 255 to fit hash
       },
     },
-    createdOn: {
+    created_on: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,
     },
-    lastLogin: {
+    last_login: {
       type: DataTypes.DATE,
     },
   },

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { User, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 const { Sequelize, Op } = require('sequelize');
+const bcrypt = require("bcrypt");
 
 
 // SIGNUP
@@ -9,17 +10,23 @@ router.post("/signup", async (req, res) => {
   try {
    const { firstname, lastname, username, email, password } = req.body;
   
-   console.log("Signup details:", req.body);
+    // Basic validation
+    if (!firstname || !lastname || !username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
    
-
+    if (password.length < 8) {
+  throw new Error("Password must be at least 8 characters");
+}
     // Check if email already exists
  const existingUser = await User.findOne({ where: { email } });
   
-
-
 if (existingUser) {
   return res.status(400).json({ message: "Email already registered" });
 }
+
+ // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const newUser = await User.create({
@@ -27,19 +34,25 @@ if (existingUser) {
       lastname,
       username,
       email,
-      password
+      password: hashedPassword
+
     });
 
-    // Generate JWT token
-    const token = signToken(newUser);
+     // Return only safe data
+    return res.status(201).json({
+      message: "User created successfully",
+      user: {
+        id: newUser.id,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        username: newUser.username,
+        email: newUser.email,
+      },
+    });
 
-    // Remove password before sending response
-    const userSafe = newUser.get({ plain: true });
-    delete userSafe.password;
-
-    res.status(201).json({ token, user: userSafe });
+  
   } catch (err) {
-    console.error(err);
+     console.log("Signup error:", err);
     res.status(400).json({ message: "Signup failed", error: err.message });
   }
 });
