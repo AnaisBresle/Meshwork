@@ -19,11 +19,12 @@ export function SessionProvider({ children }) {
     setToken(jwtToken);
   };
 
+
+
   const logout = () => {
     setUser(null);
     setToken(null);
   };
-
 
 
   return (

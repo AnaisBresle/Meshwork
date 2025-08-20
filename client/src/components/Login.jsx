@@ -31,7 +31,7 @@ const Login = ({ onLogin }) => {
     };
 
     setUser(loggedInUser);
-      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(loggedInUser));
 
 
