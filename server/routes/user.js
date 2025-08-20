@@ -1,23 +1,25 @@
 const router = require("express").Router();
 const { User, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
   try {
-
-     console.log("REQ.BODY:", req.body);
-    const { firstname, lastname, username, email, password } = req.body;
+   const { firstname, lastname, username, email, password } = req.body;
+  
+   console.log("Signup details:", req.body);
+   
 
     // Check if email already exists
-   const existingUser = await User.findOne({
-  where: Sequelize.where(
-    Sequelize.fn("LOWER", Sequelize.col("email")),
-    email.toLowerCase()
-  ),
-});
+ const existingUser = await User.findOne({ where: { email } });
+  
+
+
+if (existingUser) {
+  return res.status(400).json({ message: "Email already registered" });
+}
 
     // Create user
     const newUser = await User.create({
@@ -42,9 +44,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-if (existingUser) {
-  return res.status(400).json({ message: "Email already registered" });
-}
+
 
 // LOGIN
 router.post("/login", async (req, res) => {
