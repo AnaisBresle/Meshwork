@@ -17,7 +17,7 @@ import CreateProfilePage from "./pages/CreateProfilePage";
 import { SessionProvider } from "./contexts/SessionContext";
 
 // Layout = header + filters + (sidebar | page slot)
-function Layout() {
+function Layout(events, setEvents ) {
   const [filters, setFilters] = useState({
     category: "all",
     industry: "all",
@@ -47,7 +47,7 @@ function Layout() {
             max-w-4xl mx-auto
           "
         >
-          <Outlet context={{ filters }} />
+          <Outlet context={{ filters, events, setEvents }} />
         </main>
       </div>
 
@@ -59,7 +59,7 @@ function Layout() {
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 👈 force logged in while developing
-
+const [events, setEvents] = useState([]); 
   return (
     <SessionProvider>
       <Routes>
@@ -82,18 +82,18 @@ export default function App() {
             />
           </>
         ) : (
-          <Route element={<Layout />}>
+          <Route element={<Layout events={events} setEvents={setEvents}  />}>
             {/* Main feed */}
             <Route index element={<MainFeed />} />
 
             {/* Create routes */}
-            <Route path="/create-event" element={<CreateEvent />} />
+            <Route path="/create-event" element={<CreateEvent setEvents={setEvents} />} />
             <Route path="/create-post" element={<NewPost />} />
 
             {/* Other app pages */}
             <Route path="profile/:id" element={<ProfilePage />} />
             <Route path="directory" element={<DirectoryPage />} />
-            <Route path="events" element={<EventsPage />} />
+            <Route path="events" element={<EventsPage events={events} />} />
             <Route path="create-profile" element={<CreateProfilePage />} />
           </Route>
         )}

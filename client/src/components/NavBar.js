@@ -237,7 +237,7 @@ function CreateMenu() {
             </Link>
 
             <Link
-              to="/create-event"
+              to="/create-event" 
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 px-5 py-3 text-[15px] text-gray-700 hover:bg-gray-50 transition"
             >
