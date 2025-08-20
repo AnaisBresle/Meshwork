@@ -4,18 +4,21 @@ export default function FilterBar({ onChange }) {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
+    <div className="bg-[var(--surface)] border-b border-[var(--border)] px-4 py-3 shadow-sm">
       <div className="flex flex-wrap gap-4 items-center">
         {/* Category */}
         <div>
-          <label htmlFor="category" className="text-sm font-medium text-gray-700 mr-2">
+          <label
+            htmlFor="category"
+            className="text-sm font-medium text-[var(--text-primary)] mr-2"
+          >
             Category
           </label>
           <select
             id="category"
             name="category"
             onChange={handleChange}
-            className="rounded-md border-gray-300 text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+            className="rounded-md border-[var(--border)] text-[var(--text-primary)] shadow-sm focus:border-[var(--primary)] focus:ring focus:ring-[var(--primary)]/30 bg-[var(--background)]"
           >
             <option value="all">All</option>
             <option value="marketing">Marketing</option>
@@ -26,14 +29,17 @@ export default function FilterBar({ onChange }) {
 
         {/* Industry */}
         <div>
-          <label htmlFor="industry" className="text-sm font-medium text-gray-700 mr-2">
+          <label
+            htmlFor="industry"
+            className="text-sm font-medium text-[var(--text-primary)] mr-2"
+          >
             Industry
           </label>
           <select
             id="industry"
             name="industry"
             onChange={handleChange}
-            className="rounded-md border-gray-300 text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+            className="rounded-md border-[var(--border)] text-[var(--text-primary)] shadow-sm focus:border-[var(--primary)] focus:ring focus:ring-[var(--primary)]/30 bg-[var(--background)]"
           >
             <option value="all">All</option>
             <option value="retail">Retail</option>
@@ -44,14 +50,17 @@ export default function FilterBar({ onChange }) {
 
         {/* Sort */}
         <div>
-          <label htmlFor="sort" className="text-sm font-medium text-gray-700 mr-2">
+          <label
+            htmlFor="sort"
+            className="text-sm font-medium text-[var(--text-primary)] mr-2"
+          >
             Sort
           </label>
           <select
             id="sort"
             name="sort"
             onChange={handleChange}
-            className="rounded-md border-gray-300 text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+            className="rounded-md border-[var(--border)] text-[var(--text-primary)] shadow-sm focus:border-[var(--primary)] focus:ring focus:ring-[var(--primary)]/30 bg-[var(--background)]"
           >
             <option value="newest">Newest</option>
             <option value="popular">Popular</option>

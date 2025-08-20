@@ -5,8 +5,8 @@
 :root {
   /* Light mode variables */
   --primary: #0071E3;
-  --background: #F5F5F7;
-  --surface: #FFFFFF;
+   --background: #F5F5F7; 
+  --surface: #FFFFFF;    
   --text-primary: #1D1D1F;
   --text-secondary: #86868B;
   --accent: #34C759;
@@ -39,3 +39,4 @@ h1 {
   color: var(--primary); 
   margin-bottom: 1rem;
 }
+

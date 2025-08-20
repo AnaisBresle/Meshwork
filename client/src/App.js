@@ -37,7 +37,7 @@ function Layout() {
       <FilterBar onChange={handleFilters} />
 
       {/* Main section with sidebar + page content */}
-      <div className="flex flex-1 bg-white">
+      <div className="flex flex-1 bg-[var(--background)]">
         <Sidebar />
         <main
           className="
@@ -58,7 +58,7 @@ function Layout() {
 }
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // 👈 force logged in while developing
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 👈 force logged in while developing
 
   return (
     <SessionProvider>

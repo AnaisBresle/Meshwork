@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   HomeIcon,
-  UserCircleIcon,
   UsersIcon,
   CalendarDaysIcon,
   BookmarkIcon,
@@ -10,14 +9,31 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 
-import logo from "../images/logo.png";
+import logoLight from "../images/logo-light.png";
+import logoDark from "../images/logo-dark.png";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains("dark-mode")
+  );
+
+  // Watch for dark mode changes on <html>
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark-mode"));
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const navItems = [
     { name: "Main Feed", to: "/", icon: HomeIcon },
-    { name: "Profile", to: "/profile/socialsavvy-studio", icon: UserCircleIcon },
     { name: "Directory", to: "/directory", icon: UsersIcon },
     { name: "Events", to: "/events", icon: CalendarDaysIcon },
   ];
@@ -28,9 +44,7 @@ export default function Sidebar() {
     { name: "Saved Businesses", to: "/saved/businesses", icon: BuildingStorefrontIcon },
   ];
 
-  const accountItems = [
-    { name: "Settings", to: "/settings", icon: Cog6ToothIcon },
-  ];
+  const accountItems = [{ name: "Settings", to: "/settings", icon: Cog6ToothIcon }];
 
   return (
     <div>
@@ -72,7 +86,11 @@ export default function Sidebar() {
         <div>
           {/* Logo */}
           <div className="flex items-center justify-center mb-6">
-            <img src={logo} alt="Meshwork Logo" className="w-full max-h-16 object-contain" />
+            <img
+              src={isDark ? logoDark : logoLight}
+              alt="Meshwork Logo"
+              className="w-full max-h-16 object-contain"
+            />
           </div>
 
           {/* Main Nav */}
