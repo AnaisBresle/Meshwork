@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, Post } = require("../models");
+const { User, Profile, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 const { Sequelize, Op } = require('sequelize');
 const bcrypt = require("bcrypt");
@@ -58,11 +58,13 @@ if (existingUser) {
 });
 
 
-
 // LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
+    const userData = await User.findOne({ where: { email: req.body.email },
+    include: [{ model: Profile, attributes: ["picture"] }] // include profile pic 
+    });
+
     if (!userData) {
       return res.status(400).json({ message: "Incorrect email or password" });
     }
@@ -100,7 +102,9 @@ router.get("/me", authMiddleware, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {
       attributes: { exclude: ["password"] },
-      include: [{ model: Post }],
+      include: [{ model: Post },
+       { model: Profile, attributes: ["picture"] }
+      ],
     });
     if (!user) {
       return res.status(404).json({ message: "User not found" });

@@ -1,4 +1,19 @@
+import React from "react";
+import { useSession } from "../context/SessionContext";
+
 export default function Header() {
+
+  const { user } = useSession();
+
+  // Get profile picture (if available)
+  const picture = user?.Profile?.picture;
+
+ // Fallback to initials
+  const initials =
+    user?.firstname && user?.lastname
+      ? `${user.firstname[0]}${user.lastname[0]}`
+      : user?.username?.[0]?.toUpperCase() || "?";
+
   return (
     <header
       style={{
@@ -37,9 +52,31 @@ export default function Header() {
 
       {/* notifications + avatar */}
       <span aria-hidden>🔔</span>
-      <div
-        style={{ width: 32, height: 32, borderRadius: "50%", background: "#ddd" }}
+      {picture ? (
+      <img src={picture}
+          alt="Profile"
+        style={{ width: 32, height: 32, borderRadius: "50%",  objectFit: "cover" }}
       />
+ ) : (
+        <div
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: "50%",
+            background: "#ddd",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 14,
+            fontWeight: 600,
+            color: "#555",
+          }}
+        >
+          {initials}
+        </div>
+      )}
+
+
     </header>
   );
 }
