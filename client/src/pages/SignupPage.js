@@ -34,9 +34,8 @@ console.log("Submitting data:", formData);
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        navigate("/create-profile");
         onSignup?.(); // optional callback
-
-         navigate("/create-profile");
         
       } else {
         alert(data.message || "Signup failed");

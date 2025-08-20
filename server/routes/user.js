@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { User, Profile, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 const { Sequelize, Op } = require('sequelize');
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 
@@ -37,6 +38,12 @@ if (existingUser) {
       password: hashedPassword
 
     });
+
+    const token = jwt.sign(
+      { id: newUser.id, email: newUser.email },
+      process.env.SECRET_KEY,
+      { expiresIn: "1d" }
+    );
 
      // Return only safe data
     return res.status(201).json({
