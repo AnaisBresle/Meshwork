@@ -30,6 +30,7 @@ export default function SignupPage({ onSignup }) {
       if (response.ok) {
         localStorage.setItem("token", data.token);
         onSignup?.(); // optional callback
+        Navigate("/CreateProfilePage");
       } else {
         alert(data.message || "Signup failed");
       }
@@ -68,6 +69,7 @@ export default function SignupPage({ onSignup }) {
                 placeholder="First Name"
                 value={formData.firstname}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
@@ -77,6 +79,7 @@ export default function SignupPage({ onSignup }) {
                 placeholder="Last Name"
                 value={formData.lastname}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
@@ -86,6 +89,7 @@ export default function SignupPage({ onSignup }) {
                 placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
@@ -95,6 +99,7 @@ export default function SignupPage({ onSignup }) {
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
