@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import logo from "../images/logo.png"; 
 import placeholder2 from "../images/placeholder2.png"; 
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage({ onSignup }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     password: "",
   });
+
+  const [formKey, setFormKey] = useState(Date.now()); // avoids Chrome keeping old values. 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,6 +21,7 @@ export default function SignupPage({ onSignup }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+console.log("Submitting data:", formData);
 
     try {
       const response = await fetch("http://localhost:3001/api/users/signup", {
@@ -30,6 +35,9 @@ export default function SignupPage({ onSignup }) {
       if (response.ok) {
         localStorage.setItem("token", data.token);
         onSignup?.(); // optional callback
+
+         navigate("/create-profile");
+        
       } else {
         alert(data.message || "Signup failed");
       }
@@ -59,24 +67,26 @@ export default function SignupPage({ onSignup }) {
             </a>
           </p>
 
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <form className="mt-8 space-y-6" key={formKey} onSubmit={handleSubmit}>
             <div className="space-y-4">
               <input
-                name="first_name"
+                name="firstname"
                 type="text"
                 required
                 placeholder="First Name"
-                value={formData.first_name}
+                value={formData.firstname}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
-                name="last_name"
+                name="lastname"
                 type="text"
                 required
                 placeholder="Last Name"
-                value={formData.last_name}
+                value={formData.lastname}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
@@ -86,6 +96,7 @@ export default function SignupPage({ onSignup }) {
                 placeholder="Username"
                 value={formData.username}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input
@@ -95,6 +106,7 @@ export default function SignupPage({ onSignup }) {
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
+                autoComplete="off"
                 className="w-full rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-400 focus:border-[#0071E3] focus:ring-[#0071E3] sm:text-sm"
               />
               <input

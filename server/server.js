@@ -2,7 +2,6 @@
 require("dotenv").config();
 
 const express = require("express");
-const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 
@@ -12,11 +11,11 @@ const routes = require('./routes');
 
 // Initialize Express application
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS for any paths from the client
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000" }));
 
 const PORT = process.env.PORT || 3001;
 
@@ -25,6 +24,7 @@ const rebuild = process.argv[2] === "--rebuild";
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "../client/public")));
+
 
 // Handle GET request at the root route
 app.get("/", (req, res) => {
