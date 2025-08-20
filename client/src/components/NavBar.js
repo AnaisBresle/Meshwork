@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useSession } from "../contexts/SessionContext";
 import { NavLink as RouterNavLink, Link } from "react-router-dom";
 import {
   HomeIcon,
@@ -20,6 +21,13 @@ export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
+  //getting user details & profile pict
+
+  const { user, logout } = useSession();
+  
+    const picture = user.profile?.picture;
+    
+console.log(user)
   // Lightmode & Dark Mode
 
   useEffect(() => {
@@ -116,12 +124,12 @@ export default function Navbar() {
             <div className="relative">
               <button className="flex items-center space-x-2 focus:outline-none">
                 <img
-                  src="/user-avatar.jpg"
-                  alt="Profile"
+                  src={picture || "/user-avatar.jpg"}
+                  alt={`${user.firstname} ${user.lastname}`}
                   className="w-8 h-8 rounded-full"
                 />
                 <span className="hidden md:inline text-[var(--text-primary)]">
-                  Username
+                 {user?.firstname || "Username"}
                 </span>
               </button>
               
@@ -139,9 +147,22 @@ export default function Navbar() {
                 >
                   Settings
                 </Link>
-                <button className="dropdown-item block w-full text-left px-4 py-2 text-sm text-[var(--error)] hover:bg-[var(--background)]">
-                  Logout
-                </button>
+                {/* logout button */}
+      {user && (
+        <button
+          onClick={logout}
+          style={{
+            marginLeft: 8,
+            padding: "6px 10px",
+            borderRadius: 6,
+            border: "1px solid #ddd",
+            background: "#f5f5f5",
+            cursor: "pointer",
+          }}
+        >
+          Logout
+        </button>
+      )}
               </div>
             </div>
           </div>

@@ -1,18 +1,14 @@
-import React from "react";
+import React, { useEffect} from "react";
 import { useSession } from "../context/SessionContext";
 
 export default function Header() {
 
-  const { user } = useSession();
+   const { user, logout } = useSession();
 
-  // Get profile picture (if available)
-  const picture = user?.Profile?.picture;
-
- // Fallback to initials
-  const initials =
-    user?.firstname && user?.lastname
-      ? `${user.firstname[0]}${user.lastname[0]}`
-      : user?.username?.[0]?.toUpperCase() || "?";
+  const picture = user?.profile?.picture;
+  const initials = user?.firstname && user?.lastname
+    ? `${user.firstname[0]}${user.lastname[0]}`
+    : "?";
 
   return (
     <header
@@ -52,12 +48,15 @@ export default function Header() {
 
       {/* notifications + avatar */}
       <span aria-hidden>🔔</span>
+      {/* profile picture or initials */}
+      
       {picture ? (
-      <img src={picture}
-          alt="Profile"
-        style={{ width: 32, height: 32, borderRadius: "50%",  objectFit: "cover" }}
-      />
- ) : (
+        <img
+          src={user.picture.startsWith("/") ? user.picture : `/${user.picture}`}
+          alt={`${user.firstname} ${user.lastname}`}
+          style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
+        />
+      ) : (
         <div
           style={{
             width: 32,
@@ -72,11 +71,27 @@ export default function Header() {
             color: "#555",
           }}
         >
-          {initials}
+          {user?.firstname?.[0]}{user?.lastname?.[0] || "?"}
         </div>
       )}
 
-
+      {/* logout button */}
+      {user && (
+        <button
+          onClick={logout}
+          style={{
+            marginLeft: 8,
+            padding: "6px 10px",
+            borderRadius: 6,
+            border: "1px solid #ddd",
+            background: "#f5f5f5",
+            cursor: "pointer",
+          }}
+        >
+          Logout
+        </button>
+      )}
+ 
     </header>
   );
 }

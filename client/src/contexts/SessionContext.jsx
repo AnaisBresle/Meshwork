@@ -24,6 +24,19 @@ export function SessionProvider({ children }) {
     setToken(null);
   };
 
+  useEffect(() => {
+    if (!user) {
+      login(
+        {
+          firstname: "Anais",
+          lastname: "Doe",
+          username: "anais123",
+          profile: { picture: "/profile/userId-1.jpg" } // public folder
+        },
+        "dummy-token"
+      );
+    }
+  }, []);
 
   return (
     <SessionContext.Provider value={{ user, token, setUser, login, logout }}>
