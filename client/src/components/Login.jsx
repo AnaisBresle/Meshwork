@@ -18,7 +18,7 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/api/users/login', { email, password });
+      const response = await api.post('http://localhost:3001/api/users/login', { email, password });
       const data = response.data;
 
       
