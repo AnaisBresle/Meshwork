@@ -17,7 +17,7 @@ import CreateProfilePage from "./pages/CreateProfilePage";
 import { SessionProvider } from "./contexts/SessionContext";
 
 // Layout = header + filters + (sidebar | page slot)
-function Layout(events, setEvents ) {
+function Layout({ events, setEvents }) {
   const [filters, setFilters] = useState({
     category: "all",
     industry: "all",
