@@ -1,10 +1,27 @@
 import { useState } from "react";
 import NewComment from "./NewComment";
+import { useSession } from "../contexts/SessionContext";
 
 
-export default function PostCard({ post, refreshPosts }) {
+export default function PostCard({ post }) {
+  const { user } = useSession();
 
   const [showCommentForm, setShowCommentForm] = useState(false);
+  const [postComments, setPostComments] = useState(post.comments || []);
+
+
+  // Called when a new comment is successfully added
+  const handleNewComment = (comment) =>  {
+    const commentWithUser = {
+    ...comment,
+    id: Date.now(), // temporary unique id if backend doesn't provide one
+    user: { firstname: user.firstname, lastname: user.lastname }
+
+  };
+    setPostComments((prev) => [...prev, commentWithUser]);
+    setShowCommentForm(false); // close the form
+  };
+
   return (
     <div className="bg-[var(--surface)] rounded-xl shadow-sm border border-[var(--border)] p-5 hover:shadow-md transition">
       {/* header */}
@@ -43,13 +60,15 @@ export default function PostCard({ post, refreshPosts }) {
           <span className="text-lg">↗</span> Share
         </button>
       </div>
+
+      {/* comments list */}
       <div className="mt-4 space-y-3">
-{post.comments?.length > 0 && (
+{postComments.length > 0 && (
   <div className="mt-4 space-y-3">
-    {post.comments.map(comment => (
+    {postComments.map(comment =>  (
       <div key={comment.id} className="border-l-2 border-[var(--border)] pl-3 text-sm text-[var(--text-primary)]">
         <p className="font-semibold">
-          {post.user ? `${post.user.firstname} ${post.user.lastname}` : "Unknown User"}
+          {comment.user ? `${comment.user.firstname} ${comment.user.lastname}` : "Unknown User"}
         </p>
         <p>{comment.content}</p>
       </div>
@@ -58,7 +77,7 @@ export default function PostCard({ post, refreshPosts }) {
 )}
 </div>
       {/* show NewComment form */}
-      {showCommentForm && <NewComment parentPost={post} onCommentAdded={refreshPosts} />}
+      {showCommentForm && <NewComment parentPost={post} onCommentAdded={handleNewComment } />}
     </div>
   );
 }
