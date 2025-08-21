@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import chatPattern from "../images/chat-pattern.png"; 
+import { useSession } from '../contexts/SessionContext';
+
 
 export default function CreateProfilePage() {
   const navigate = useNavigate();
-
+const { setUser } = useSession();
   const [formData, setFormData] = useState({
     company: "",
     jobTitle: "",
@@ -24,13 +26,17 @@ export default function CreateProfilePage() {
 
   // Submit to backend
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     setLoading(true);
 
     try {
       const token = localStorage.getItem("token");
+      
+if (!token) console.error("No token found!");
+else console.log("Token OK:", token);
 
-      const response = await fetch("http://localhost:3001/api/profile", {
+      const response = await fetch("http://localhost:3001/api/profiles", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,17 +45,21 @@ export default function CreateProfilePage() {
         body: JSON.stringify(formData),
       });
 
+      
       const data = await response.json();
+      
 
       if (response.ok) {
-        alert("Profile created successfully!");
-        navigate(`/profile/${data.userId}`);
+        const userData = { id: data.userId, ...formData };
+        setUser(userData); // store in session
+  alert("Profile created successfully!");
+        navigate(`/`);
       } else {
         alert(data.message || "Failed to create profile");
       }
     } catch (err) {
-      console.error(err);
-      alert("Error creating profile");
+    console.error("Create profile error:", err);
+  alert(err.message || "Error creating profile");
     } finally {
       setLoading(false);
     }

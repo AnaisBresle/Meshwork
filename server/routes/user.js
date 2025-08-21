@@ -1,68 +1,50 @@
 const router = require("express").Router();
-const { User, Post } = require("../models");
+const { User, Profile, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 const { Sequelize, Op } = require('sequelize');
-const bcrypt = require("bcrypt");
-
+const jwt = require("jsonwebtoken");
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
   try {
-   const { firstname, lastname, username, email, password } = req.body;
-  
-    // Basic validation
+    const { firstname, lastname, username, email, password } = req.body;
+
     if (!firstname || !lastname || !username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-   
+
     if (password.length < 8) {
-  throw new Error("Password must be at least 8 characters");
-}
-    // Check if email already exists
- const existingUser = await User.findOne({ where: { email } });
-  
-if (existingUser) {
-  return res.status(400).json({ message: "Email already registered" });
-}
+      return res.status(400).json({ message: "Password must be at least 8 characters" });
+    }
 
- // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
 
-    // Create user
-    const newUser = await User.create({
+     const newUser = await User.create({
       firstname,
       lastname,
       username,
       email,
-      password: hashedPassword
-
+      password,
     });
 
-     // Return only safe data
-    return res.status(201).json({
-      message: "User created successfully",
-      user: {
-        id: newUser.id,
-        firstname: newUser.firstname,
-        lastname: newUser.lastname,
-        username: newUser.username,
-        email: newUser.email,
-      },
-    });
-
-  
+    res.status(201).json({ message: "Signup successful" }); // send confirmation only
   } catch (err) {
-     console.log("Signup error:", err);
-    res.status(400).json({ message: "Signup failed", error: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Server error", error: err.message  });
   }
 });
 
 
-
 // LOGIN
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => { console.log("Login request body:", req.body);
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
+    const userData = await User.findOne({ where: { email: req.body.email },
+    include: [{ model: Profile, attributes: ["picture"] }] // include profile pic 
+    });
+
     if (!userData) {
       return res.status(400).json({ message: "Incorrect email or password" });
     }
@@ -73,7 +55,10 @@ router.post("/login", async (req, res) => {
     }
 
     // Update lastLogin timestamp
-    await userData.update({ lastLogin: new Date() });
+    const firstLogin = !userData.last_login; // true if user had never logged in
+await userData.update({ last_login: new Date() });
+
+
 
     const token = signToken(userData);
 
@@ -81,7 +66,11 @@ router.post("/login", async (req, res) => {
     const userSafe = userData.get({ plain: true });
     delete userSafe.password;
 
-    res.status(200).json({ token, user: userSafe });
+    // Construct picture URL
+    userSafe.picture = userData.Profile
+      ? `${req.protocol}://${req.get('host')}/profile${userData.Profile.picture.startsWith('/') ? '' : '/'}${userData.Profile.picture}`
+  : null;
+    res.json({ user: userData, token, firstLogin });
 
   } catch (err) {
     console.error(err);
@@ -100,12 +89,22 @@ router.get("/me", authMiddleware, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {
       attributes: { exclude: ["password"] },
-      include: [{ model: Post }],
+      include: [{ model: Post },
+       { model: Profile, attributes: ["picture"] }
+      ],
     });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json(user);
+
+    const response = {
+      ...user.dataValues,
+      picture: user.Profile
+    ? `${req.protocol}://${req.get('host')}${user.Profile.picture}`
+    : null
+    }; //easier to use Navabar avatar
+
+    res.json(response);
   } catch (err) {
     console.error(err);
     res.status(500).json(err);

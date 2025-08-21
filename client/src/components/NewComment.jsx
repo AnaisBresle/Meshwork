@@ -5,7 +5,9 @@ import { useSession } from "../contexts/SessionContext";
 const NewComment = ( { parentPost }) => {
   const { user, token } = useSession();
 
-  if (!user) return <p>Loading user info...</p>;
+  console.log("Token being sent:", token);
+
+
   if (!parentPost) return null; // safety check
   
   const [content, setContent] = useState('');

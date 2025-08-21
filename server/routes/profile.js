@@ -1,11 +1,16 @@
 const express = require("express");
 const { Profile, User } = require("../models");
+const {authMiddleware } = require("../utils/auth");
 const router = express.Router();
 
+
+
 // Create Profile
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
-    const profile = await Profile.create({ ...req.body, userId: req.user.id });
+    const profile = await Profile.create({ 
+      ...req.body, 
+      userId: req.user.id });
     res.json(profile);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -44,7 +49,7 @@ router.get("/:userId", async (req, res) => {
     const profile = await Profile.findOne({ where: { userId: req.params.userId }, include: User });
    const profileWithPic = {
       ...profile.toJSON(),
-      picture: `/profile/userId-${profile.userId}.jpg`
+      picture: `${req.protocol}://${req.get('host')}/profile/userId-${p.userId}.jpg`
     };
 
     res.json(profileWithPic);

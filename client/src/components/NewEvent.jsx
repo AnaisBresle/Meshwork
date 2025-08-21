@@ -1,15 +1,20 @@
 
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSession } from "../contexts/SessionContext";
 
 
 const CreateEvent = ({ setEvents }) => {
 
+const currentLocation = useLocation();
+const navigate = useNavigate();
   const { user, token} = useSession();
     
  if (!user) {
  return <p>Loading user info...</p>; 
 }
+
+const eventsSetter = setEvents || currentLocation.state?.setEvents;
 
 
   const [title, setTitle] = useState('');
@@ -77,15 +82,10 @@ const handleSubmit = async (e) => {
       throw new Error(message);
     }
 
-     // Fetch updated events list
-    const eventsResponse = await fetch("http://localhost:3001/api/events", {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const updatedEvents = await eventsResponse.json();
+     // Update local state to include the new event
+    eventsSetter?.(prev => [...prev, data]);
 
-    setEvents(updatedEvents); // update parent
-
-    console.log("Event created successfully:", data);
+   
 
     // Reset form
     setTitle('');
@@ -96,8 +96,9 @@ const handleSubmit = async (e) => {
     setEventLocation('');
     setEventLink('');
 
-    // Update local state to include the new event
-   setEvents(prev => [...prev, data]);
+  console.log("Event created successfully:", data);
+
+  navigate('/events');
  
   } catch (error) {
     console.error("Event creation failed", error.message);
@@ -225,7 +226,8 @@ const handleSubmit = async (e) => {
         Create Event
       </button>
     </form>
+   
   );
 };
-
+ 
 export default CreateEvent;
