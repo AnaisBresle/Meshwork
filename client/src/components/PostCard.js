@@ -49,7 +49,7 @@ export default function PostCard({ post, refreshPosts }) {
     {post.comments.map(comment => (
       <div key={comment.id} className="border-l-2 border-[var(--border)] pl-3 text-sm text-[var(--text-primary)]">
         <p className="font-semibold">
-          {comment.user ? `${comment.user.firstname} ${comment.user.lastname}` : "Unknown User"}
+          {post.user ? `${post.user.firstname} ${post.user.lastname}` : "Unknown User"}
         </p>
         <p>{comment.content}</p>
       </div>
