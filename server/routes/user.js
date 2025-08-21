@@ -3,8 +3,6 @@ const { User, Profile, Post } = require("../models");
 const { signToken, authMiddleware } = require("../utils/auth");
 const { Sequelize, Op } = require('sequelize');
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
@@ -24,9 +22,7 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
+     const newUser = await User.create({
       firstname,
       lastname,
       username,
@@ -37,7 +33,7 @@ router.post("/signup", async (req, res) => {
     res.status(201).json({ message: "Signup successful" }); // send confirmation only
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error", error: err.message  });
   }
 });
 
@@ -59,7 +55,7 @@ router.post("/login", async (req, res) => { console.log("Login request body:", r
     }
 
     // Update lastLogin timestamp
-    await userData.update({ last_login: new Date() });
+    await userData.update({ lastLogin: new Date() });
 
     const token = signToken(userData);
 
@@ -102,7 +98,7 @@ router.get("/me", authMiddleware, async (req, res) => {
     const response = {
       ...user.dataValues,
       picture: user.Profile
-    ? `${req.protocol}://${req.get('host')}/profile/${user.Profile.picture}`
+    ? `${req.protocol}://${req.get('host')}${user.Profile.picture}`
     : null
     }; //easier to use Navabar avatar
 

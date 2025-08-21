@@ -32,10 +32,13 @@ useEffect(() => {
 
       if (!token) return console.log("No token, aborting fetch");
 
-      const res = await fetch("/api/users/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      const res = await fetch("http://localhost:3001/api/users/me", {
+        method: "GET",
+        headers: {
+    "Authorization": `Bearer ${token}`,
+    "Content-Type": "application/json",
+  },
+});
       console.log("Response received:", res);
 
       if (!res.ok) throw new Error("Failed to fetch user");
@@ -246,7 +249,7 @@ function UserCreateMenu({ user, handleLogout }) {
           className="flex items-center space-x-2 focus:outline-none"
         >
           <img
-            src={user.picture || "/profiles/default-avatar.png"}
+            src={user.picture ? user.picture: "/profile/default-avatar.png"}
             alt={`${user.firstname} ${user.lastname}`}
             className="w-8 h-8 rounded-full"
           />
