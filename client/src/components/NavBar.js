@@ -249,7 +249,7 @@ function UserCreateMenu({ user, handleLogout }) {
           className="flex items-center space-x-2 focus:outline-none"
         >
           <img
-            src={user.picture ? user.picture: "/profile/default-avatar.png"}
+            src={user.picture ? user.picture: "/profile/avatar.jpg"}
             alt={`${user.firstname} ${user.lastname}`}
             className="w-8 h-8 rounded-full"
           />
