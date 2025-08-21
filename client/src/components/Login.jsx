@@ -20,30 +20,44 @@ const Login = ({ onLogin }) => {
     try {
        const response = await api.post(
       'http://localhost:3001/api/users/login',
-      { email: email, password: password }, // must match backend keys
+      { email, password }, // must match backend keys
       { headers: { 'Content-Type': 'application/json' } } // explicit just in case
     );
-      const data = response.data;
+   
 
-      
-    const loggedInUser = {
-      id: data.user.id,
-      firstname: data.user.firstname,
-      lastname: data.user.lastname,
-      username: data.user.username,
-      email: data.user.email,
+    // Destructure the real data from Axios response
+    const { user, token, firstLogin } = response.data;
+
+
+      const loggedInUser = {
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      username: user.username,
+      email: user.email,
+       last_login: user.last_login, 
     };
 
     setUser(loggedInUser);
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(loggedInUser));
 
 
-    onLogin(); //Call onLogin passed from App.js
-    
+    //redirection logic
+
+      // REDIRECTION LOGIC: CHANGED
+if (firstLogin) {
+    navigate('/create-profile');
+} else {
     navigate('/');
+}
+
+
+
+      onLogin(); //Call onLogin passed from App.js
   } catch (error) {
     console.error('Login failed', error);
+    alert('Login failed. Check your credentials.');
   }
 };
 
