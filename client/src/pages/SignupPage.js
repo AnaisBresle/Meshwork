@@ -33,8 +33,8 @@ console.log("Submitting data:", formData);
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        navigate("/create-profile");
+        alert("Signup successful! Please log in.");
+        navigate("/login");
         onSignup?.(); // optional callback
         
       } else {
