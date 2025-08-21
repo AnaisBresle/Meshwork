@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import chatPattern from "../images/chat-pattern.png"; 
 import { useSession } from '../contexts/SessionContext';
@@ -32,6 +32,9 @@ const { setUser } = useSession();
 
     try {
       const token = localStorage.getItem("token");
+      
+if (!token) console.error("No token found!");
+else console.log("Token OK:", token);
 
       const response = await fetch("http://localhost:3001/api/profiles", {
         method: "POST",
@@ -44,6 +47,7 @@ const { setUser } = useSession();
 
       
       const data = await response.json();
+      
 
       if (response.ok) {
         const userData = { id: data.userId, ...formData };

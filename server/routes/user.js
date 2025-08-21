@@ -9,58 +9,35 @@ const bcrypt = require("bcrypt");
 // SIGNUP
 router.post("/signup", async (req, res) => {
   try {
-   const { firstname, lastname, username, email, password } = req.body;
-  
-    // Basic validation
+    const { firstname, lastname, username, email, password } = req.body;
+
     if (!firstname || !lastname || !username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-   
-    if (password.length < 8) {
-  throw new Error("Password must be at least 8 characters");
-}
-    // Check if email already exists
- const existingUser = await User.findOne({ where: { email } });
-  
-if (existingUser) {
-  return res.status(400).json({ message: "Email already registered" });
-}
 
- // Hash password
+    if (password.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters" });
+    }
+
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
     const newUser = await User.create({
       firstname,
       lastname,
       username,
       email,
-      password: hashedPassword
-
+      password,
     });
 
-    const token = jwt.sign(
-      { id: newUser.id, email: newUser.email },
-      process.env.SECRET_KEY,
-      { expiresIn: "1d" }
-    );
-
-     // Return only safe data
-    return res.status(201).json({
-      message: "User created successfully",
-      user: {
-        id: newUser.id,
-        firstname: newUser.firstname,
-        lastname: newUser.lastname,
-        username: newUser.username,
-        email: newUser.email,
-      },
-    });
-
-  
+    res.status(201).json({ message: "Signup successful" }); // send confirmation only
   } catch (err) {
-     console.log("Signup error:", err);
-    res.status(400).json({ message: "Signup failed", error: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -82,7 +59,7 @@ router.post("/login", async (req, res) => { console.log("Login request body:", r
     }
 
     // Update lastLogin timestamp
-    await userData.update({ lastLogin: new Date() });
+    await userData.update({ last_login: new Date() });
 
     const token = signToken(userData);
 

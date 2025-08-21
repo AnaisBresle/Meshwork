@@ -18,7 +18,11 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('http://localhost:3001/api/users/login', { email, password });
+       const response = await api.post(
+      'http://localhost:3001/api/users/login',
+      { email: email, password: password }, // must match backend keys
+      { headers: { 'Content-Type': 'application/json' } } // explicit just in case
+    );
       const data = response.data;
 
       
