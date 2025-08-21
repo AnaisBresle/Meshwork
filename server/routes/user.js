@@ -66,7 +66,7 @@ if (existingUser) {
 
 
 // LOGIN
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => { console.log("Login request body:", req.body);
   try {
     const userData = await User.findOne({ where: { email: req.body.email },
     include: [{ model: Profile, attributes: ["picture"] }] // include profile pic 
@@ -89,6 +89,11 @@ router.post("/login", async (req, res) => {
     // Remove password before sending response
     const userSafe = userData.get({ plain: true });
     delete userSafe.password;
+
+    // Construct picture URL
+    userSafe.picture = userData.Profile
+      ? `${req.protocol}://${req.get('host')}/profile/${userData.Profile.picture}`
+      : null;
 
     res.status(200).json({ token, user: userSafe });
 
@@ -116,7 +121,15 @@ router.get("/me", authMiddleware, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json(user);
+
+    const response = {
+      ...user.dataValues,
+      picture: user.Profile
+    ? `${req.protocol}://${req.get('host')}/profile/${user.Profile.picture}`
+    : null
+    }; //easier to use Navabar avatar
+
+    res.json(response);
   } catch (err) {
     console.error(err);
     res.status(500).json(err);

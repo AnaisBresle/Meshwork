@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect,useState, useRef } from "react";
 import { useSession } from "../contexts/SessionContext";
 import { NavLink as RouterNavLink, Link, useNavigate} from "react-router-dom";
 import {
@@ -15,6 +15,7 @@ import logo from "../images/logo.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { user, setUser, logout } = useSession();
   const [unreadCounts, setUnreadCounts] = useState({
     notifications: 5,
     messages: 2,
@@ -22,13 +23,35 @@ export default function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  //getting user details & profile pict
+useEffect(() => {
+  console.log("useEffect triggered");
 
-  const { user, logout } = useSession();
-  
-  const picture = user?.profile?.picture;
-    
-console.log(user)
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("Token found:", token);
+
+      if (!token) return console.log("No token, aborting fetch");
+
+      const res = await fetch("/api/users/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("Response received:", res);
+console.log("User picture:", user.picture);
+      if (!res.ok) throw new Error("Failed to fetch user");
+
+      const data = await res.json();
+      console.log("Fetched user data:", data);
+      setUser(data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  fetchUser();
+}, []); 
+
   // Lightmode & Dark Mode
 
   useEffect(() => {
@@ -43,6 +66,14 @@ console.log(user)
     logout();        // clear session
     navigate("/login"); // send user to login page
   };
+
+  if (!user) {
+    return (
+      <nav className="p-4">
+        <Link to="/login" className="text-[var(--primary)] font-medium">Login</Link>
+      </nav>
+    );
+  }
 
   return (
     <header
@@ -123,59 +154,11 @@ console.log(user)
               )}
             </button>
 
-            {/* Dropdown */}
-            <CreateMenu />
-
-            {/* User Menu */}
-            <div className="relative">
-              <button className="flex items-center space-x-2 focus:outline-none">
-                <img
-                  src={picture || "/user-avatar.jpg"}
-                  alt={`${user?.firstname || "User"} ${user?.lastname || ""}`}
-                  className="w-8 h-8 rounded-full"
-                />
-                <span className="hidden md:inline text-[var(--text-primary)]">
-                 {user?.firstname || "Username"}
-                </span>
-              </button>
-              
-              {/* Dropdown (placeholder – not hooked up yet) */}
-              <div className="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-[var(--surface)] border border-[var(--border)]">
-                <Link
-                  to="/profile"
-                  className="dropdown-item block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
-                >
-                  Your Profile
-                </Link>
-                <Link
-                  to="/settings"
-                  className="dropdown-item block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
-                >
-                  Settings
-                </Link> 
-                </div>
-                </div>
-                {/* logout button */}
-        {user && (
-        <button
-          onClick={handleLogout}
-          style={{
-            marginLeft: 8,
-            padding: "6px 10px",
-            borderRadius: 6,
-            border: "1px solid #ddd",
-            background: "#f5f5f5",
-            cursor: "pointer",
-          }}
-        >
-          Logout
-        </button>
-      )}
-              </div>
-            </div>
+             {/* Combined User + Create Menu */}
+            <UserCreateMenu user={user} handleLogout={handleLogout} />
           </div>
-        
-      
+        </div>
+      </div>
     </header>
   );
 }
@@ -204,16 +187,20 @@ function NavItem({ icon: Icon, text, to, active, badge }) {
   );
 }
 
-// Dropdown for Post + Event
-function CreateMenu() {
-  const [open, setOpen] = useState(false);
-  const menuRef = useRef(null);
+// Right: User Controls (Create + User menu separate)
+function UserCreateMenu({ user, handleLogout }) {
+  const [openCreate, setOpenCreate] = useState(false);
+  const [openUser, setOpenUser] = useState(false);
+  const createRef = useRef(null);
+  const userRef = useRef(null);
 
-  // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpen(false);
+      if (createRef.current && !createRef.current.contains(event.target)) {
+        setOpenCreate(false);
+      }
+      if (userRef.current && !userRef.current.contains(event.target)) {
+        setOpenUser(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -221,38 +208,77 @@ function CreateMenu() {
   }, []);
 
   return (
-    <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center px-4 py-2 bg-[var(--primary)] text-white rounded-full hover:opacity-90 transition shadow-md"
+    <div className="flex items-center space-x-3">
+      {/* Create Button */}
+<div className="relative" ref={createRef}>
+  <button
+    onClick={() => setOpenCreate(!openCreate)}
+    className="px-4 py-2 bg-[var(--primary)] text-white rounded-full hover:bg-[var(--primary-hover)] transition"
+  >
+    Create
+  </button>
+  {openCreate && (
+    <div className="absolute right-0 mt-2 w-56 bg-[var(--surface)] border border-[var(--border)] rounded-xl shadow-lg z-50 overflow-hidden">
+      <Link
+        to="/create-post"
+        onClick={() => setOpenCreate(false)}
+        className="flex items-center gap-3 px-5 py-3 text-[15px] text-gray-700 hover:bg-gray-50 transition"
       >
-        <PlusIcon className="h-5 w-5 mr-2" />
-        <span className="hidden md:inline font-medium">Create</span>
-      </button>
+        <ChatBubbleOvalLeftIcon className="h-5 w-5 text-[var(--primary)]" />
+        <span>Create Post</span>
+      </Link>
+      <Link
+        to="/create-event"
+        onClick={() => setOpenCreate(false)}
+        className="flex items-center gap-3 px-5 py-3 text-[15px] text-gray-700 hover:bg-gray-50 transition"
+      >
+        <BellIcon className="h-5 w-5 text-[var(--primary)]" />
+        <span>Create Event</span>
+      </Link>
+    </div>
+  )}
+</div>
 
-      {open && (
-        <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
-          <div className="divide-y divide-gray-100">
+      {/* User Menu */}
+      <div className="relative" ref={userRef}>
+        <button
+          onClick={() => setOpenUser(!openUser)}
+          className="flex items-center space-x-2 focus:outline-none"
+        >
+          <img
+            src={user.picture || ""} 
+            alt={`${user.firstname} ${user.lastname}`}
+            className="w-8 h-8 rounded-full"
+          />
+          <span className="hidden md:inline text-[var(--text-primary)]">
+            {user.firstname || "Username"}
+          </span>
+        </button>
+        {openUser && (
+          <div className="absolute right-0 mt-2 w-48 bg-[var(--surface)] border border-[var(--border)] rounded-xl shadow-lg z-50 overflow-hidden">
             <Link
-              to="/create-post"
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-5 py-3 text-[15px] text-gray-700 hover:bg-gray-50 transition"
+              to="/profile"
+              onClick={() => setOpenUser(false)}
+              className="block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
             >
-              <ChatBubbleOvalLeftIcon className="h-5 w-5 text-[var(--primary)]" />
-              <span>Create Post</span>
+              Your Profile
             </Link>
-
             <Link
-              to="/create-event" 
-              onClick={() => setOpen(false)}
-              className="flex items-center gap-3 px-5 py-3 text-[15px] text-gray-700 hover:bg-gray-50 transition"
+              to="/settings"
+              onClick={() => setOpenUser(false)}
+              className="block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
             >
-              <BellIcon className="h-5 w-5 text-[var(--primary)]" />
-              <span>Create Event</span>
+              Settings
             </Link>
+            <button
+              onClick={handleLogout}
+              className="w-full text-left block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
+            >
+              Logout
+            </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
