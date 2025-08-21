@@ -1,6 +1,6 @@
 import { useEffect,useState, useRef } from "react";
 import { useSession } from "../contexts/SessionContext";
-import { NavLink as RouterNavLink, Link, useNavigate} from "react-router-dom";
+import { NavLink as RouterNavLink, Link, useNavigate } from "react-router-dom";
 import {
   HomeIcon,
   MagnifyingGlassIcon,
@@ -8,7 +8,6 @@ import {
   ChatBubbleOvalLeftIcon,
   SunIcon,
   MoonIcon,
-  PlusIcon,
 } from "@heroicons/react/24/outline";
 
 import logo from "../images/logo.png";
@@ -38,12 +37,13 @@ useEffect(() => {
       });
 
       console.log("Response received:", res);
-console.log("User picture:", user.picture);
+
       if (!res.ok) throw new Error("Failed to fetch user");
 
       const data = await res.json();
       console.log("Fetched user data:", data);
       setUser(data);
+      console.log("User picture:", data.picture);
     } catch (error) {
       console.error("Error fetching user:", error);
     }
@@ -213,7 +213,7 @@ function UserCreateMenu({ user, handleLogout }) {
 <div className="relative" ref={createRef}>
   <button
     onClick={() => setOpenCreate(!openCreate)}
-    className="px-4 py-2 bg-[var(--primary)] text-white rounded-full hover:bg-[var(--primary-hover)] transition"
+    className="px-4 py-2 bg-[var(--primary)] text-white rounded-full hover:bg-blue-300 transition"
   >
     Create
   </button>
@@ -246,7 +246,7 @@ function UserCreateMenu({ user, handleLogout }) {
           className="flex items-center space-x-2 focus:outline-none"
         >
           <img
-            src={user.picture || ""} 
+            src={user.picture || "/profiles/default-avatar.png"}
             alt={`${user.firstname} ${user.lastname}`}
             className="w-8 h-8 rounded-full"
           />
