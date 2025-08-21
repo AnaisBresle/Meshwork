@@ -38,7 +38,7 @@ router.get("/:id/comments", async (req, res) => {
     const comments = await Post.findAll({
       where: { parentId: req.params.id }, /// only postst that are in fact comments will have a parentId
       include: [
-        { model: User, attributes: ["id", "username"] },
+        { model: User,  as: "user", attributes: ["id", "username", "firstname", "lastname"] },
         { model: Reaction }
       ],
       order: [["createdAt", "ASC"]],

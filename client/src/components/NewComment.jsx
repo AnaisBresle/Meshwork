@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSession } from "../contexts/SessionContext";
 
 
-const NewComment = ( { parentPost }) => {
+const NewComment = ( { parentPost, onCommentAdded}) => {
   const { user, token } = useSession();
 
   console.log("Token being sent:", token);
@@ -48,20 +48,24 @@ const handleSubmit = async (e) => {
       body: JSON.stringify(newCommentData),
     });
 
-    const data = await response.json().catch(() => ({})); // never fails
+    const createdComment = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-      const message = data.error || data.message || "Failed to post comment";
+      const message = createdComment.error || createdComment.message || "Failed to post comment";
       throw new Error(message);
     }
 
-    
-
-    // Reset form
+        // Reset form
       setContent("");
     
+
     
-console.log("comment created successfully:", data);
+console.log("comment created successfully:");
+
+// pass the new comment back to PostCard
+      onCommentAdded?.(createdComment);
+
+
     } catch (error) {
       console.error("Comment creation failed", error.message);
       displayError(error.message);
