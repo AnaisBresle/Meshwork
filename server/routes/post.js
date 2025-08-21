@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     const posts = await Post.findAll({
       where: { parentId: null },
       include: [
-        { model: User, attributes: ["id", "username"] },
+        { model: User, as: "user", attributes: ["id", "username", "firstname", "lastname"] },
         { model: Topic, attributes: ["id", "name"] },
         { model: Post, as: "comments" },
         { model: Reaction }

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../images/logo.png"; 
 import placeholder2 from "../images/placeholder2.png"; 
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function SignupPage({ onSignup }) {
   const navigate = useNavigate();
@@ -57,14 +58,11 @@ console.log("Submitting data:", formData);
             Create your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Already a member?{" "}
-            <a
-              href="/login"
-              className="font-medium text-[#0071E3] hover:opacity-80"
-            >
-              Sign in
-            </a>
-          </p>
+  Already a member?{" "}
+  <Link to="/login" className="font-medium text-[#0071E3] hover:opacity-80">
+    Sign in
+  </Link>
+</p>
 
           <form className="mt-8 space-y-6" key={formKey} onSubmit={handleSubmit}>
             <div className="space-y-4">

@@ -55,7 +55,10 @@ router.post("/login", async (req, res) => { console.log("Login request body:", r
     }
 
     // Update lastLogin timestamp
-    await userData.update({ lastLogin: new Date() });
+    const firstLogin = !userData.last_login; // true if user had never logged in
+await userData.update({ last_login: new Date() });
+
+
 
     const token = signToken(userData);
 
@@ -65,10 +68,9 @@ router.post("/login", async (req, res) => { console.log("Login request body:", r
 
     // Construct picture URL
     userSafe.picture = userData.Profile
-      ? `${req.protocol}://${req.get('host')}/profile/${userData.Profile.picture}`
-      : null;
-
-    res.status(200).json({ token, user: userSafe });
+      ? `${req.protocol}://${req.get('host')}/profile${userData.Profile.picture.startsWith('/') ? '' : '/'}${userData.Profile.picture}`
+  : null;
+    res.json({ user: userData, token, firstLogin });
 
   } catch (err) {
     console.error(err);

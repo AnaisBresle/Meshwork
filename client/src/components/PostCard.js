@@ -14,7 +14,7 @@ export default function PostCard({ post, refreshPosts }) {
         </div>
         <div>
           <p className="font-semibold text-[var(--text-primary)]">
-            {post.businessName || "Business Name"}
+            {post.user ? `${post.user.firstname} ${post.user.lastname}` : "Unknown User"}
           </p>
           <p className="text-xs text-[var(--text-secondary)]">
             {new Date(post.created_date).toLocaleDateString()}
@@ -43,6 +43,20 @@ export default function PostCard({ post, refreshPosts }) {
           <span className="text-lg">↗</span> Share
         </button>
       </div>
+      <div className="mt-4 space-y-3">
+{post.comments?.length > 0 && (
+  <div className="mt-4 space-y-3">
+    {post.comments.map(comment => (
+      <div key={comment.id} className="border-l-2 border-[var(--border)] pl-3 text-sm text-[var(--text-primary)]">
+        <p className="font-semibold">
+          {comment.user ? `${comment.user.firstname} ${comment.user.lastname}` : "Unknown User"}
+        </p>
+        <p>{comment.content}</p>
+      </div>
+    ))}
+  </div>
+)}
+</div>
       {/* show NewComment form */}
       {showCommentForm && <NewComment parentPost={post} onCommentAdded={refreshPosts} />}
     </div>

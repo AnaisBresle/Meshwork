@@ -3,6 +3,8 @@ const { Profile, User } = require("../models");
 const {authMiddleware } = require("../utils/auth");
 const router = express.Router();
 
+
+
 // Create Profile
 router.post("/", authMiddleware, async (req, res) => {
   try {
@@ -47,7 +49,7 @@ router.get("/:userId", async (req, res) => {
     const profile = await Profile.findOne({ where: { userId: req.params.userId }, include: User });
    const profileWithPic = {
       ...profile.toJSON(),
-      picture: `/profile/userId-${profile.userId}.jpg`
+      picture: `${req.protocol}://${req.get('host')}/profile/userId-${p.userId}.jpg`
     };
 
     res.json(profileWithPic);
