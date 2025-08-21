@@ -259,13 +259,9 @@ function UserCreateMenu({ user, handleLogout }) {
         </button>
         {openUser && (
           <div className="absolute right-0 mt-2 w-48 bg-[var(--surface)] border border-[var(--border)] rounded-xl shadow-lg z-50 overflow-hidden">
-            <Link
-              to="/profile"
-              onClick={() => setOpenUser(false)}
-              className="block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
-            >
-              Your Profile
-            </Link>
+            <Link to={`/profile/${user.id}`}
+            className="block px-4 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--background)]"
+            >Your Profile</Link>
             <Link
               to="/settings"
               onClick={() => setOpenUser(false)}
