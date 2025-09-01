@@ -70,7 +70,7 @@ await userData.update({ last_login: new Date() });
     userSafe.picture = userData.Profile
       ? `${req.protocol}://${req.get('host')}/profile${userData.Profile.picture.startsWith('/') ? '' : '/'}${userData.Profile.picture}`
   : null;
-    res.json({ user: userData, token, firstLogin });
+    res.json({ user: userSafe, token, firstLogin });
 
   } catch (err) {
     console.error(err);
@@ -87,6 +87,7 @@ router.post("/logout", authMiddleware, (req, res) => {
 // GET Current User
 router.get("/me", authMiddleware, async (req, res) => {
   try {
+    
     const user = await User.findByPk(req.user.id, {
       attributes: { exclude: ["password"] },
       include: [{ model: Post },
@@ -95,6 +96,8 @@ router.get("/me", authMiddleware, async (req, res) => {
     });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
+
+      
     }
 
     const response = {
@@ -107,6 +110,7 @@ router.get("/me", authMiddleware, async (req, res) => {
     res.json(response);
   } catch (err) {
     console.error(err);
+    console.log("Profile picture URL:", getProfilePictureUrl(req, user.Profile?.picture));
     res.status(500).json(err);
   }
 });
