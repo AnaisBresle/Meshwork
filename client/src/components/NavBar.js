@@ -70,99 +70,41 @@ useEffect(() => {
     navigate("/login"); // send user to login page
   };
 
-  if (!user) {
-    return (
+
+  return (
+  <header className="sticky top-0 z-50 bg-[var(--surface)] border-b border-[var(--border)] shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+
+    {/* Left: Brand + Navigation */}
+    <Link to="/" className="flex-shrink-0 font-bold text-xl text-[var(--primary)]">Meshwork</Link>
+
+    {user ? (
+      <>
+        <nav className="hidden md:flex space-x-1">
+          <NavItem icon={HomeIcon} text="Home" to="/" active />
+          <NavItem icon={MagnifyingGlassIcon} text="Explore" to="/explore" />
+          <NavItem icon={BellIcon} text="Notifications" to="/notifications" badge={unreadCounts.notifications} />
+          <NavItem icon={ChatBubbleOvalLeftIcon} text="Messages" to="/messages" badge={unreadCounts.messages} />
+        </nav>
+
+        <div className="flex items-center space-x-4">
+          {/* Dark mode toggle */}
+          <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-[var(--background)]">
+            {darkMode ? <SunIcon className="h-5 w-5 text-[var(--primary)]"/> : <MoonIcon className="h-5 w-5 text-[var(--text-secondary)]"/>}
+          </button>
+
+          {/* User menu */}
+          <UserCreateMenu user={user} handleLogout={handleLogout} />
+        </div>
+      </>
+    ) : (
       <nav className="p-4">
         <Link to="/login" className="text-[var(--primary)] font-medium">Login</Link>
       </nav>
-    );
-  }
+    )}
+  </div>
+</header>
 
-  return (
-    <header
-      className={`sticky top-0 z-50 bg-[var(--surface)] border-b border-[var(--border)] shadow-sm`}
-    >
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Left: Brand + Navigation */}
-          <div className="flex items-center space-x-6">
-            <Link
-              to="/"
-              className="flex-shrink-0 font-bold text-xl text-[var(--primary)]"
-            >
-              {/* Desktop: text / Mobile: logo */}
-              <span className="hidden md:inline">Meshwork</span>
-              <img src={logo} alt="Meshwork Logo" className="h-8 md:hidden" />
-            </Link>
-            <nav className="hidden md:flex space-x-1">
-              <NavItem icon={HomeIcon} text="Home" to="/" active />
-              <NavItem
-                icon={MagnifyingGlassIcon}
-                text="Explore"
-                to="/explore"
-              />
-              <NavItem
-                icon={BellIcon}
-                text="Notifications"
-                to="/notifications"
-                badge={unreadCounts.notifications}
-              />
-              <NavItem
-                icon={ChatBubbleOvalLeftIcon}
-                text="Messages"
-                to="/messages"
-                badge={unreadCounts.messages}
-              />
-            </nav>
-          </div>
-
-          {/* Center: Search */}
-          <div className="flex-1 max-w-xl mx-4">
-            {showSearch ? (
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search people, posts, #tags..."
-                  className="w-full pl-4 pr-10 py-2 rounded-full bg-[var(--background)] text-[var(--text-primary)] focus:outline-none"
-                />
-                <button
-                  onClick={() => setShowSearch(false)}
-                  className="absolute right-3 top-2.5 text-[var(--text-secondary)]"
-                >
-                  ✕
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowSearch(true)}
-                className="md:hidden p-2 text-[var(--text-secondary)]"
-              >
-                <MagnifyingGlassIcon className="h-5 w-5" />
-              </button>
-            )}
-          </div>
-
-          {/* Right: User Controls */}
-          <div className="flex items-center space-x-4">
-            {/* Dark mode toggle */}
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-full hover:bg-[var(--background)]"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? (
-                <SunIcon className="h-5 w-5 text-[var(--primary)]" />
-              ) : (
-                <MoonIcon className="h-5 w-5 text-[var(--text-secondary)]" />
-              )}
-            </button>
-
-             {/* Combined User + Create Menu */}
-            <UserCreateMenu user={user} handleLogout={handleLogout} />
-          </div>
-        </div>
-      </div>
-    </header>
   );
 }
 
