@@ -55,10 +55,7 @@ router.post("/login", async (req, res) => { console.log("Login request body:", r
     }
 
     // Update lastLogin timestamp
-    const firstLogin = !userData.last_login; // true if user had never logged in
-await userData.update({ last_login: new Date() });
-
-
+    await userData.update({ lastLogin: new Date() });
 
     const token = signToken(userData);
 
@@ -68,9 +65,10 @@ await userData.update({ last_login: new Date() });
 
     // Construct picture URL
     userSafe.picture = userData.Profile
-      ? `${req.protocol}://${req.get('host')}/profile${userData.Profile.picture.startsWith('/') ? '' : '/'}${userData.Profile.picture}`
-  : null;
-    res.json({ user: userSafe, token, firstLogin });
+      ? `${req.protocol}://${req.get('host')}/profile/${userData.Profile.picture}`
+      : null;
+
+    res.status(200).json({ token, user: userSafe });
 
   } catch (err) {
     console.error(err);
@@ -87,7 +85,6 @@ router.post("/logout", authMiddleware, (req, res) => {
 // GET Current User
 router.get("/me", authMiddleware, async (req, res) => {
   try {
-    
     const user = await User.findByPk(req.user.id, {
       attributes: { exclude: ["password"] },
       include: [{ model: Post },
@@ -96,8 +93,6 @@ router.get("/me", authMiddleware, async (req, res) => {
     });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
-
-      
     }
 
     const response = {
@@ -110,7 +105,6 @@ router.get("/me", authMiddleware, async (req, res) => {
     res.json(response);
   } catch (err) {
     console.error(err);
-    console.log("Profile picture URL:", getProfilePictureUrl(req, user.Profile?.picture));
     res.status(500).json(err);
   }
 });

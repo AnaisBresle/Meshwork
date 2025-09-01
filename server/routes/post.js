@@ -1,5 +1,5 @@
 const express = require("express");
-const { Post, Topic, User, Reaction } = require("../models");
+const { Post, Topic, User, Reaction, Profile } = require("../models");
 const { authMiddleware } = require("../utils/auth"); // JWT authentication middleware - Needed to get post deleted by their owners only. 
 const router = express.Router();
 
@@ -11,7 +11,9 @@ router.get("/", async (req, res) => {
     const posts = await Post.findAll({
       where: { parentId: null },
       include: [
-        { model: User, as: "user", attributes: ["id", "username", "firstname", "lastname"] },
+        { model: User, as: "user", attributes: ["id", "username", "firstname", "lastname"],
+          include: [{ model: Profile, attributes: ["picture"] }]
+         },
         { model: Topic, attributes: ["id", "name"] },
         { model: Post, as: "comments" },
         { model: Reaction }
@@ -24,6 +26,7 @@ const formattedPosts = posts.map(post => ({
   created_date: post.createdAt.toISOString().split("T")[0] // YYYY-MM-DD
 }));
 
+console.log("Posts with users:", JSON.stringify(formattedPosts, null, 2));
 res.json(formattedPosts);
 
   } catch (err) {
@@ -32,19 +35,31 @@ res.json(formattedPosts);
 });
 
 /// Get all comments for a given post
-
 router.get("/:id/comments", async (req, res) => {
+
+  console.log("HIT /:id/comments route with id:", req.params.id);
   try {
     const comments = await Post.findAll({
-      where: { parentId: req.params.id }, /// only postst that are in fact comments will have a parentId
+      where: { parentId: req.params.id },
       include: [
-        { model: User,  as: "user", attributes: ["id", "username", "firstname", "lastname"] },
-        { model: Reaction }
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "username", "firstname", "lastname"],
+          include: [
+            { model: Profile, attributes: ["picture"] }
+          ],
+        },
+        { model: Reaction },
       ],
       order: [["createdAt", "ASC"]],
     });
+
+    
+console.log("Comments with users:", JSON.stringify(comments, null, 2));
     res.json(comments);
   } catch (err) {
+    console.error("Error fetching comments:", err); // log the actual error
     res.status(500).json({ error: err.message });
   }
 });

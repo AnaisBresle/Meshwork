@@ -5,18 +5,24 @@ import { useSession } from "../contexts/SessionContext";
 export default function PostCard({ post }) {
   const { user } = useSession();
 
-  const [showCommentForm, setShowCommentForm] = useState(false);
-  const [postComments, setPostComments] = useState(
-    post.comments.map(c => ({
-      ...c,
-      user: {
-        firstname: c.user?.firstname || "Unknown",
-        lastname: c.user?.lastname || "User",
-        profile: { picture: c.user?.profile?.picture || "/profile/default-avatar.png" }
-      }
-    }))
-  );
+  console.log("Post user:", post.user);
 
+  const normalizeUser = (user) => ({
+  firstname: user.firstname || "Unknown",
+  lastname: user.lastname || "User",
+  Profile: {
+    picture: user?.Profile?.picture
+      ? user.Profile.picture.startsWith("http")
+        ? user.Profile.picture
+        : `http://localhost:3001${user.Profile.picture}`
+      : "/profile/default-avatar.png"
+  }
+});
+
+  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [postComments, setPostComments] = useState([]);
+
+  // Fetch comments for this post
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -24,16 +30,10 @@ export default function PostCard({ post }) {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
 
-        setPostComments(
-          data.map(c => ({
-            ...c,
-            user: {
-              firstname: c.user?.firstname || "Unknown",
-              lastname: c.user?.lastname || "User",
-              profile: { picture: c.user?.profile?.picture || "/profile/default-avatar.png" }
-            }
-          }))
-        );
+        console.log("Fetched comments:", data); // <--- log the full data
+      setPostComments(data);
+
+        setPostComments(data);
       } catch (err) {
         console.error("Failed to fetch comments:", err);
       }
@@ -41,35 +41,33 @@ export default function PostCard({ post }) {
     fetchComments();
   }, [post.id]);
 
-  // Called when a new comment is successfully added
+  // Add a new comment locally after posting
   const handleNewComment = (comment) => {
     const commentWithUser = {
       ...comment,
-      id: Date.now(), // temporary unique id if backend doesn't provide one
+      id: Date.now(),
       user: {
         firstname: user.firstname,
         lastname: user.lastname,
-        profile: { picture: user.picture || "/profile/default-avatar.png" }
-      }
+        Profile: { picture: user.picture || "/profile/default-avatar.png" },
+      },
     };
     setPostComments((prev) => [...prev, commentWithUser]);
-    setShowCommentForm(false); // close the form
+    setShowCommentForm(false);
   };
 
+  // Render avatar from Profile
   const renderAvatar = (user) => (
-    <img
-      src={user?.profile?.picture || "/profile/default-avatar.png"}
-      alt={`${user?.firstname || "Unknown"} ${user?.lastname || "User"}`}
-      className="h-full w-full object-cover"
-    />
-  );
+  <img
+    src={user?.Profile?.picture || "/profile/default-avatar.png"}
+    alt={`${user?.firstname || "Unknown"} ${user?.lastname || "User"}`}
+    className="h-full w-full object-cover"
+  />
+);
 
-  // Ensure post user has a profile picture
-  const postUser = {
-    firstname: post.user?.firstname || "Unknown",
-    lastname: post.user?.lastname || "User",
-    profile: { picture: post.user?.profile?.picture || "/profile/default-avatar.png" }
-  };
+  
+  // Header user info
+  const postUser = normalizeUser(post.user);
 
   return (
     <div className="bg-[var(--surface)] rounded-xl shadow-sm border border-[var(--border)] p-5 hover:shadow-md transition">
@@ -113,19 +111,23 @@ export default function PostCard({ post }) {
       {/* comments list */}
       {postComments.length > 0 && (
         <div className="mt-4 space-y-3">
-          {postComments.map(comment => (
-            <div key={comment.id} className="border-l-2 border-[var(--border)] pl-3 text-sm text-[var(--text-primary)]">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="h-6 w-6 rounded-full overflow-hidden">{renderAvatar(comment.user)}</div>
-                <p className="font-semibold">{`${comment.user.firstname} ${comment.user.lastname}`}</p>
-              </div>
-              <p>{comment.content}</p>
-            </div>
-          ))}
+         {postComments.map((comment) => {
+  const commentUser = normalizeUser(comment.user);
+  return (
+    <div key={comment.id} className="border-l-2 border-[var(--border)] pl-3 text-sm text-[var(--text-primary)]">
+      <div className="flex items-center gap-2 mb-1">
+        <div className="h-6 w-6 rounded-full overflow-hidden">
+          {renderAvatar(commentUser)}
+        </div>
+        <p className="font-semibold">{`${commentUser.firstname} ${commentUser.lastname}`}</p>
+      </div>
+      <p>{comment.content}</p>
+    </div>
+  );
+})}
         </div>
       )}
 
-      {/* show NewComment form */}
       {showCommentForm && <NewComment parentPost={post} onCommentAdded={handleNewComment} />}
     </div>
   );
